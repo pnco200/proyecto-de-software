@@ -6,6 +6,3 @@ def suma(_numberA, _numberB):
 
 def resta(_numberA, _numberB):
     return _numberA - _numberB
-
-def division(_numbreA,_numberB):
-    return _numbreA/_numberB
