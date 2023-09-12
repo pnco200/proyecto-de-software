@@ -2,8 +2,8 @@ from flask import Flask, render_template
 from src.web import error
 
 
-def create_app():
-    app = Flask(__name__)
+def create_app(env="development", static_folder="../../static"):
+    app = Flask(__name__, static_folder=static_folder)
 
     @app.get("/")
     def home():
