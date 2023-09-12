@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Error!</title>
+    <style>
+          p {
+            background-color: lightgreen; /* Fondo verde claro */
+            color: white; /* Texto blanco */
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ error_name }}</h1>
+    <p><b>Error!</b> {{ error_description }}</p>
+    <a href="{{url_for('home')}}">Back to the homepage</a>
+</body>
+</html>
