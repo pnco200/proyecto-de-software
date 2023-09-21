@@ -10,7 +10,6 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     """Development configuration."""
-
     DB_USER = "postgres"
     DB_PASS = "1234"
     DB_HOST = "localhost"
@@ -20,6 +19,13 @@ class DevelopmentConfig(Config):
         f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"
     )
 
+class TestingConfig(Config):
+    """Testing configuration."""
+    TESTING = True
+
+
 config = {
+    "production": ProductionConfig,
     "development": DevelopmentConfig,
+    "testing": TestingConfig,
 }
