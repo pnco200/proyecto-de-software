@@ -3,6 +3,7 @@ from src.web import error
 from src.core import database
 from src.web.config import config
 from src.web import error
+from src.web.controllers.test import test_bp
 #from src.web.controllers.issues import issues
 
 def create_app(env="development", static_folder="../../static"):
@@ -11,6 +12,8 @@ def create_app(env="development", static_folder="../../static"):
     app.config.from_object(config[env])
 
     database.init_app(app)
+
+    app.register_blueprint(test_bp)
 
     @app.get("/")
     def home():
