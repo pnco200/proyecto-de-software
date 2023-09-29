@@ -7,3 +7,25 @@
     max-width: 2rem;
     max-height: 2rem;
 }
+
+p.flash{
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    border-radius: 25px;
+}
+
+p.flash.error{
+    color: red;
+    background-color: #ffcccc;
+}
+
+p.flash.success{
+    color: green;
+    background-color: #ccffcc;
+}
+
+p.flash.info{
+    color: blue;
+    background-color: #ccccff;
+}
