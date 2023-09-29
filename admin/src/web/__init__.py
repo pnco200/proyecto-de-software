@@ -18,7 +18,7 @@ def create_app(env="development", static_folder="../../static"):
 
     @app.get("/")
     def home():
-        return render_template("home.html")
+        return render_template("home.html", user={"is_authenticated":False}) #Hay que mandarle si el usuario esta logeado o no
     
     @app.get("/sendmailtest")
     def mail_test():
