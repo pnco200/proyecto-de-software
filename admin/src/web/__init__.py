@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 from src.web import error
 from src.core import database
 from src.web.config import config
@@ -18,6 +18,7 @@ def create_app(env="development", static_folder="../../static"):
 
     @app.get("/")
     def home():
+        flash("Esto es una prueba", 'info')
         return render_template("home.html", user={"is_authenticated":False}) #Hay que mandarle si el usuario esta logeado o no
     
     @app.get("/sendmailtest")
