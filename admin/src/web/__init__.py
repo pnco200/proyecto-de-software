@@ -17,6 +17,14 @@ def create_app(env="development", static_folder="../../static"):
 
     @app.get("/")
     def home():
+<<<<<<< Updated upstream
+=======
+        return render_template("home.html", user={"is_authenticated":False}) #Hay que mandarle si el usuario esta logeado o no
+    
+    @app.get("/sendmailtest")
+    def mail_test():
+        email_utils.send_email("Prueba",["nicolaspanico2002@gmail.com"],"Esto es una prueba. </br> Funciono?")
+>>>>>>> Stashed changes
         return render_template("home.html")
 
     app.register_error_handler(404,error.not_found_error404)
