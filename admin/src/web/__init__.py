@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 from src.web import error
 from src.core import database
 from src.core import bcrypt
@@ -32,7 +32,8 @@ def create_app(env="development", static_folder="../../static"):
     # URLS
     @app.get("/")
     def home():
-        return render_template("home.html")
+        flash("Esto es una prueba", 'info')
+        return render_template("home.html", user={"is_authenticated":False}) #Hay que mandarle si el usuario esta logeado o no
     
     @app.get("/sendmailtest")
     def mail_test():
