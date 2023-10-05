@@ -3,7 +3,7 @@
 {% block content %}
 <body>
     <h2 class="h2" align="center">Iniciar Sesión</h2>
-    <form method="POST" action="/login">
+    <form method="POST" action="{{url_for('auth.authenticate')}}">
         <div class="mb-3">
             <label for="email" class="form-label">Correo Electrónico</label>
             <input type="email" class="form-control" id="email" name="email" required>

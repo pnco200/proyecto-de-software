@@ -1,0 +1,26 @@
+{% extends "layout_navbar.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+ <style>
+        .centered-content {
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            text-align: center;
+        }
+    </style>
+    <h1 class="centered-content">Usuarios</h1>
+    <ul>
+        {% for user in users %}
+        <li>ID: {{ user.id }}  EMAIL: {{ user.email }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 from src.core.test.test import Test
+from src.core.auth.user import User
 
 def init_app(app):
     """"Iniciar la base de datos"""
