@@ -1,12 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect,  url_for, session
-from src.core import test
 from src.core import auth
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.get('/')
 def login():
     """"Muestra el form de login"""
-    return render_template("template login") ##TO DO!
+    return render_template("login.html") ##TO DO!
 
 @auth_bp.post('/authenticate')
 def authenticate():
@@ -19,6 +18,8 @@ def authenticate():
     session["user"] = user.email
     flash("La sesion se inicio correctamente, success")
     return redirect(url_for("home"))
+
+
 
 @auth_bp.get('/logout')
 def logout():

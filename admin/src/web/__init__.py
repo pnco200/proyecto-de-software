@@ -32,8 +32,7 @@ def create_app(env="development", static_folder="../../static"):
     # URLS
     @app.get("/")
     def home():
-        flash("Esto es una prueba", 'info')
-        return render_template("home.html", user={"is_authenticated":False}) #Hay que mandarle si el usuario esta logeado o no
+        return render_template("home.html") #Hay que mandarle si el usuario esta logeado o no
     
     @app.get("/sendmailtest")
     def mail_test():

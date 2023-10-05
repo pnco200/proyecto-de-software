@@ -45,7 +45,7 @@
                     <img src="../../../static/img/pfp.png" alt="prfpct" class="profilePic">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                    {% if user.is_authenticated %}
+                    {% if is_authenticated(session) %}
                     <li><a class="dropdown-item" href="#">Ver perfil</a></li>
                     <li><a class="dropdown-item" href="#">Cerrar sesion</a></li>
                     {% else %}
