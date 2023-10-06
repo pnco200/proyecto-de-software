@@ -1,0 +1,35 @@
+
+{% extends "layout_navbar.html" %}
+{% block content %}
+<body>
+    <h2 class="h2" align="center">Iniciar Sesión</h2>
+    <form method="POST" action="{{url_for('auth.authenticate')}}">
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>     
+    </form>
+    
+    <form method="GET" action="/login_with_google">
+        <div class="mb-3">
+        <button type="button" class="btn btn-outline-secondary">
+            <img src="/static/img/googleImage.jpg" alt="Botón de Imagen" class="img-fluid" style="max-width: 30px;">
+        </button>
+    </div>    
+    </form>
+
+    
+</body>
+{% endblock %}
+
+
+
+
+
+
+

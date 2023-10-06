@@ -1,5 +1,7 @@
 {% extends "layout_navbar.html" %}
-
+{% block head %}
+{{ super() }}
+{% endblock %}
 {% block content %}
  <style>
         .centered-content {
@@ -15,11 +17,10 @@
             text-align: center;
         }
     </style>
-    <h1 class="centered-content">Grupo 25 <br> Proyecto de Software</h1>
+    <h1 class="centered-content">Usuarios</h1>
     <ul>
-        <li>Amantea Gaston</li>
-        <li>Panico Nicolas</li>
-        <li>Gutierrez Paulos Ramiro</li>
-        <li>Mariano Ignacio</li>
+        {% for user in users %}
+        <li>ID: {{ user.id }}  EMAIL: {{ user.email }}</li>
+        {% endfor %}
     </ul>
 {% endblock %}
