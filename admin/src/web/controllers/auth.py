@@ -19,8 +19,6 @@ def authenticate():
     flash("La sesion se inicio correctamente, success")
     return redirect(url_for("home"))
 
-
-
 @auth_bp.get('/logout')
 def logout():
     """"Me permite cerrar sesion"""
@@ -32,4 +30,23 @@ def logout():
         flash("No hay sesion iniciada.", "info")
     return redirect(url_for("auth.login"))
 
+@auth_bp.get('/register')
+def register_form():
+    """"Muestra el form de registro"""
+    return render_template("register.html")
 
+@auth_bp.post('/register')
+def register():
+    """"Me permite registrarme"""
+    params = request.form
+
+    existing_user = auth.find_user_by_email(params["email"])
+
+    if existing_user:
+        flash("El usuario ya existe.", "error")
+        return redirect(url_for("auth.register"))
+    
+    auth.create_user(**params)
+    flash("El usuario se creo correctamente.", "success")
+    #TODO: Enviar mail de confirmacion
+    return redirect(url_for("auth.login"))

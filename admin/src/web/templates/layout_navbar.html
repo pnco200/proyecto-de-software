@@ -47,10 +47,10 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                     {% if is_authenticated(session) %}
                     <li><a class="dropdown-item" href="#">Ver perfil</a></li>
-                    <li><a class="dropdown-item" href="#">Cerrar sesion</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Cerrar sesion</a></li>
                     {% else %}
-                    <li><a class="dropdown-item" href="#">Iniciar sesion</a></li>
-                    <li><a class="dropdown-item" href="#">Registrarse</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('auth.login')}}">Iniciar sesion</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('auth.register')}}">Registrarse</a></li>
                     {% endif %}
                 </ul>
             </li>
