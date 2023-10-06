@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect,  url_for, session
 from src.core import auth
 from src.core.email import email_utils
+from src.web.helpers import utils
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -58,13 +59,18 @@ def register_form():
 def register():
     """"Me permite registrarme"""
     params = request.form
-
+    
+    if not utils.is_valid_email(params["email"]):
+        flash("El email ingresado no es valido.", "error")
+        return redirect(url_for("auth.register"))
+    
     existing_user = auth.find_user_by_email_or_username(params["email"], params["username"])
 
     if existing_user:
         flash("El mail o nombre de usuario ya esta registrado.", "error")
         return redirect(url_for("auth.register"))
     token = email_utils.send_confirmation_email(params["email"])
+
     if not token:
         flash("Ocurrio un error al crear el email de confirmacion.", "error")
         return redirect(url_for("auth.register"))
