@@ -36,7 +36,7 @@ def create_app(env="development", static_folder="../../static"):
     
     @app.get("/sendmailtest")
     def mail_test():
-        email_utils.send_email("Prueba",["nicolaspanico2002@gmail.com"],"Esto es una prueba. </br> Funciono?")
+        email_utils.send_email("Prueba",["ramagp00@gmail.com"],"Esto es una prueba. </br> Funciono?")
         return render_template("home.html")
     
     #ERRORS

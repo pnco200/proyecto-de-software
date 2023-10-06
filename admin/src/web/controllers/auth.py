@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect,  url_for, session
 from src.core import auth
+from src.core.email import email_utils
+
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.get('/')
@@ -48,5 +50,5 @@ def register():
     
     auth.create_user(**params)
     flash("El usuario se creo correctamente.", "success")
-    #TODO: Enviar mail de confirmacion
+    email_utils.send_email("Prueba",[params["email"]],"Email de confirmacion")
     return redirect(url_for("auth.login"))
