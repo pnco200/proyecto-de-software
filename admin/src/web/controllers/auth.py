@@ -17,8 +17,14 @@ def authenticate():
     if not user:
         flash("Email o clave incorrecta.", "error")
         return redirect(url_for("auth.login"))
+    if not user.is_confirmed:
+        flash("Su cuenta no esta confirmada. Dirigase a su bandeja de entrada y continue el proceso de registro", "info")
+        return redirect(url_for("auth.login"))
+    if not user.is_active:
+        flash("Su cuenta se encuentra bloqueada!", "error")
+        return redirect(url_for("auth.login"))
     session["user"] = user.email
-    flash("La sesion se inicio correctamente, success")
+    flash("La sesion se inicio correctamente.", "success")
     return redirect(url_for("home"))
 
 @auth_bp.get('/logout')
@@ -32,6 +38,17 @@ def logout():
         flash("No hay sesion iniciada.", "info")
     return redirect(url_for("auth.login"))
 
+
+@auth_bp.get('/confirmemail')
+def confirm_email():
+    token = request.args.get('token')
+    user = auth.confirm_email(token)
+    if user:
+        flash("El correo fue exitosamente confirmado.", "success")
+    else:
+        flash("No se pudo confirmar el correo.", "error")
+    return redirect(url_for("auth.login"))
+
 @auth_bp.get('/register')
 def register_form():
     """"Muestra el form de registro"""
@@ -42,13 +59,16 @@ def register():
     """"Me permite registrarme"""
     params = request.form
 
-    existing_user = auth.find_user_by_email(params["email"])
+    existing_user = auth.find_user_by_email_or_username(params["email"], params["username"])
 
     if existing_user:
-        flash("El usuario ya existe.", "error")
+        flash("El mail o nombre de usuario ya esta registrado.", "error")
+        return redirect(url_for("auth.register"))
+    token = email_utils.send_confirmation_email(params["email"])
+    if not token:
+        flash("Ocurrio un error al crear el email de confirmacion.", "error")
         return redirect(url_for("auth.register"))
     
-    auth.create_user(**params)
-    flash("El usuario se creo correctamente.", "success")
-    email_utils.send_email("Prueba",[params["email"]],"Email de confirmacion")
+    auth.create_user(name=params["name"], email=params["email"], password=params["password"],username=params["username"],confirm_token=token, lastname=params["lastname"])
+    flash("El usuario se creo correctamente. Revise su bandeja de entrada para terminar el registro.", "success")
     return redirect(url_for("auth.login"))
