@@ -64,7 +64,7 @@ def register():
         flash("El email ingresado no es valido.", "error")
         return redirect(url_for("auth.register"))
     
-    existing_user = auth.find_user_by_email_or_username(params["email"], params["username"])
+    existing_user = auth.find_user_by_email(params["email"]) or auth.find_user_by_username(params["username"])
 
     if existing_user:
         flash("El mail o nombre de usuario ya esta registrado.", "error")

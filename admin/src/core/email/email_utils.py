@@ -19,7 +19,7 @@ def send_confirmation_email(email : str):
     """"Envio de Mail de confirmacion"""
     try:
         token = str(uuid.uuid4())
-        final_url = "http://localhost:5000/auth/confirmemail?token=" + token
+        final_url = "http://127.0.0.1:5000/auth/confirmemail?token=" + token
         message = Message("Mail de confirmacion para tu cuenta de CIDEPINT", recipients=[email])
         message.body = "Hola! Para terminar el registro, debes confirmar tu cuenta de CIDEPINT Clickea en el siguiente link para terminar el proceso: " + final_url
         message.sender = "Grupo CIDEPINT <grupo25ps@gmail.com>"
