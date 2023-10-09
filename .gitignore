@@ -164,3 +164,4 @@ cython_debug/
 admin/src/web/config.py
 config.py
 /.vscode
+/flask_session
