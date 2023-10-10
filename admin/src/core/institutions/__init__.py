@@ -1,5 +1,5 @@
 from src.core.database import db
-from admin.src.core.institutions.institution import Institution
+from src.core.institutions.institution import Institution
 from sqlalchemy import or_
 
 def list_institutions():
