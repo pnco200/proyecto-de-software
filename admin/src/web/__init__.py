@@ -4,7 +4,6 @@ from src.core import database
 from src.core import bcrypt
 from src.web.config import config
 from src.web import error
-from src.web.controllers.test import test_bp
 from src.web.controllers.auth import auth_bp
 from src.web.controllers.users import user_bp
 from src.web.helpers import auth
@@ -25,7 +24,6 @@ def create_app(env="development", static_folder="../../static"):
     email_utils.init_app(app)
 
     # BLUEPRINTS
-    app.register_blueprint(test_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
 
