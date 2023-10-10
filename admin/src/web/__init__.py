@@ -6,6 +6,8 @@ from src.web.config import config
 from src.web import error
 from src.web.controllers.auth import auth_bp
 from src.web.controllers.users import user_bp
+from src.web.controllers.configuration import config_bp
+
 from admin.src.web.controllers.institution import institutions_bp
 from src.web.helpers import auth
 from flask_session import Session
@@ -27,6 +29,7 @@ def create_app(env="development", static_folder="../../static"):
     # BLUEPRINTS
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(config_bp)
     app.register_blueprint(institutions_bp)
 
     # URLS
