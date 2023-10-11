@@ -8,6 +8,14 @@ def get_configuration():
     """
     return Configuration.query.first()
 
+def get_rows_per_page():
+    """Devuelve la configuracion actual del sitio para cuantas filas mostrar por pagina
+
+    Returns:
+        int: rows_per_page
+    """
+    return Configuration.query.first().rows_per_page
+
 def update_configuration(rows_per_page=None, contact_information=None, is_maintenance=None, maintenance_message=None):
     """Actualiza la configuracion de la pagina
 

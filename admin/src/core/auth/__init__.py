@@ -1,5 +1,6 @@
 from src.core.database import db
 from src.core.auth.user import User
+from src.core.configuration import get_rows_per_page
 from src.core.bcrypt import bcrypt
 def list_users():
     return User.query.all()
@@ -48,4 +49,7 @@ def confirm_email(token):
         return user  
     else:
         return None
-        
+
+def list_users_paged(page):
+    per_page = get_rows_per_page()
+    return User.query.paginate(page=page, per_page=per_page, error_out=False)
