@@ -9,14 +9,15 @@ def home():
     """"Muestra un listado de los usuarios si el usuario esta logeado"""
     page = request.args.get('page', type=int, default=1)
     only_blocked = request.args.get('blocked',default=None)
+    email = request.args.get('email',type=str,default='')
     if only_blocked == "False":
         only_blocked = False
     elif only_blocked == "True":
         only_blocked = True
     else:
         only_blocked = None
-    users = auth.list_users_paged(page,only_blocked)
-    return render_template("users/index.html", users=users, page=page, blocked=only_blocked)
+    users = auth.list_users_paged(page,only_blocked,email)
+    return render_template("users/index.html", users=users, page=page, blocked=only_blocked, email=email)
 
 @user_bp.route('/update_user_status/<int:user_id>') ## TO DO--> Proteger para superADMIN
 def update_user_status(user_id):

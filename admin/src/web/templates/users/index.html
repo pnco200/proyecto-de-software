@@ -5,11 +5,20 @@
 <body>
     <div class="container mt-5">
         <div class="user-list">
-            <h1 class="mb-4">User List</h1>
+            <h1 class="mb-4">Listado de Usuarios</h1>
+            <form method="GET" action="{{ url_for('user.home') }}" class="mb-3">
+                <div class="input-group">
+                    <input type="hidden" name="blocked" value="{{ blocked }}">
+                    <input type="text" name="email" class="form-control" style="max-width: 20rem;" value="{{ email }}" placeholder="Buscar por Email">
+                    <div class="input-group-append ml-5">
+                        <button type="submit" class="btn btn-primary" style="margin-left: 0.5rem;">Search</button>
+                    </div>
+                </div>
+            </form>
             {% if blocked == true %}
-            <a href="?blocked=False" class="btn btn-primary float-right mb-3">Mostrar Bloqueados</a>
+            <a href="?blocked=False&email={{email}}" class="btn btn-primary float-right mb-3">Mostrar No Activos</a>
             {% else %}
-                <a href="?blocked=True" class="btn btn-primary float-right mb-3">Mostrar Desbloqueados</a>
+                <a href="?blocked=True&email={{email}}" class="btn btn-primary float-right mb-3">Mostrar Activos</a>
             {% endif %}
 
             <a href="{{ url_for('user.home') }}" class="btn btn-primary float-right mb-3">Mostrar todos</a>
@@ -19,9 +28,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Email</th>
-                        <th>Name</th>
-                        <th>Lastname</th>
-                        <th>Username</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Usuario</th>
                         <th>Activo</th>
                         <th class="text-center">Accion</th>
                     </tr>

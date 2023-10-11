@@ -50,13 +50,14 @@ def confirm_email(token):
     else:
         return None
 
-def list_users_paged(page, only_blocked=None):
+def list_users_paged(page, only_blocked=None, email=None):
     per_page = get_rows_per_page()
     query = User.query
 
     if only_blocked is not None:
         query = query.filter_by(is_active=only_blocked)
-
+    if email is not None:
+        query = query.filter(User.email.ilike(f"%{email}%"))
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def change_user_status(user_id):
