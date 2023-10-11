@@ -27,7 +27,11 @@
                             <td>{{ user.lastname }}</td>
                             <td>{{ user.username }}</td>
                             <td>
-                                <input type="checkbox" disabled {% if user.is_active %}checked{% endif %}>
+                                {% if user.is_active %}
+                                   Si
+                                {% else %}
+                                   No
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
