@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, session, abort, request, url_for, redirect, flash
 from src.core import institutions
+from src.web.helpers.utils import is_valid_length, is_valid_email
 
 institution_bp = Blueprint('institution', __name__, url_prefix='/institution')
 
@@ -16,7 +17,7 @@ def register_form():
 
 @institution_bp.post('/register')
 def register():
-    """"Me permite registrarme"""
     params = request.form
+    
     print(params)
     return redirect(url_for("home"))
