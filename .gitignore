@@ -27,7 +27,6 @@ share/python-wheels/
 *.egg
 MANIFEST
 *.pyc
-
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -165,4 +164,4 @@ cython_debug/
 admin/src/web/config.py
 config.py
 /.vscode
-/flask_session
+admin/flask_session
