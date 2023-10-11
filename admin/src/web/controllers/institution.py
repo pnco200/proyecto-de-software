@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, abort
+from flask import Blueprint, render_template, session, abort, request, url_for, redirect, flash
 from src.core import institutions
 
 institution_bp = Blueprint('institution', __name__, url_prefix='/institution')
@@ -9,3 +9,14 @@ def home():
     listadoInstituciones = institutions.list_institutions()
     return render_template("institutions/index.html", institutions=listadoInstituciones)
     
+@institution_bp.get('/register')
+def register_form():
+    """"Muestra el form de registro"""
+    return render_template("institutions/register.html")
+
+@institution_bp.post('/register')
+def register():
+    """"Me permite registrarme"""
+    params = request.form
+    print(params)
+    return redirect(url_for("home"))

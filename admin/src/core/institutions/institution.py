@@ -8,7 +8,7 @@ class Institution(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(50), unique=True)
     information = db.Column(db.String(250), unique=False)
-    direction = db.Column(db.String(250), unique=False)
+    adress = db.Column(db.String(250), unique=False)
     localization = db.Column(db.String(250), unique=False)
     web = db.Column(db.String(250), unique=False)
     keywords = db.Column(db.String(250), unique=False)
