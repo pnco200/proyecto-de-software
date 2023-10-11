@@ -6,6 +6,14 @@
     <div class="container mt-5">
         <div class="user-list">
             <h1 class="mb-4">User List</h1>
+            {% if blocked == true %}
+            <a href="?blocked=False" class="btn btn-primary float-right mb-3">Mostrar Bloqueados</a>
+            {% else %}
+                <a href="?blocked=True" class="btn btn-primary float-right mb-3">Mostrar Desbloqueados</a>
+            {% endif %}
+
+            <a href="{{ url_for('user.home') }}" class="btn btn-primary float-right mb-3">Mostrar todos</a>
+
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -15,7 +23,7 @@
                         <th>Lastname</th>
                         <th>Username</th>
                         <th>Activo</th>
-
+                        <th class="text-center">Accion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,6 +41,15 @@
                                    No
                                 {% endif %}
                             </td>
+                            <td class="text-center">
+                                <a href="{{ url_for('user.update_user_status', user_id=user.id) }}" class="btn btn-primary">
+                                 {% if user.is_active %}
+                                    Bloquear
+                                 {% else %}
+                                    Desbloquear
+                                 {% endif %}
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -43,7 +60,7 @@
             <ul class="pagination">
                 {% if users.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ users.prev_num }}" aria-label="Previous">&laquo; Anterior</a>
+                        <a class="page-link" href="?page={{ users.prev_num }}&blocked={{ blocked }}" aria-label="Previous">&laquo; Anterior</a>
                     </li>
                 {% endif %}
 
@@ -51,9 +68,9 @@
                     <li class="page-item">
                         {% if page_num %}
                             {% if page_num == users.page %}
-                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                <a class="page-link" href="?page={{ page_num }}&blocked={{ blocked }}">{{ page_num }}</a>
                             {% else %}
-                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                <a class="page-link" href="?page={{ page_num }}&blocked={{ blocked }}">{{ page_num }}</a>
                             {% endif %}
                         {% else %}
                             <span class="page-link">...</span>
@@ -63,7 +80,7 @@
 
                 {% if users.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ users.next_num }}" aria-label="Next">Siguiente &raquo;</a>
+                        <a class="page-link" href="?page={{ users.next_num }}&blocked={{ blocked }}" aria-label="Next">Siguiente &raquo;</a>
                     </li>
                 {% endif %}
             </ul>

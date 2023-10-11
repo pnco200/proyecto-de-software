@@ -8,7 +8,7 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 @auth_bp.get('/')
 def login():
     """"Muestra el form de login"""
-    return render_template("auth/login.html") ##TO DO!
+    return render_template("auth/login.html")
 
 @auth_bp.post('/authenticate')
 def authenticate():

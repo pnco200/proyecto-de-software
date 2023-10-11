@@ -50,6 +50,27 @@ def confirm_email(token):
     else:
         return None
 
-def list_users_paged(page):
+def list_users_paged(page, only_blocked=None):
     per_page = get_rows_per_page()
-    return User.query.paginate(page=page, per_page=per_page, error_out=False)
+    query = User.query
+
+    if only_blocked is not None:
+        query = query.filter_by(is_active=only_blocked)
+
+    return query.paginate(page=page, per_page=per_page, error_out=False)
+
+def change_user_status(user_id):
+    """Change user status
+
+    Args:
+        user_id (integer): id of the user
+
+    Returns:
+        boolean: True if was changed, else False
+    """
+    user = User.query.filter_by(id=user_id).first()
+    if(not user): ## TO DO--> ADD OR IF USER IS SUPER ADMIN
+        return False
+    user.is_active = not user.is_active
+    db.session.commit()
+    return True
