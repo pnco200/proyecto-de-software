@@ -25,3 +25,22 @@ def update_user_status(user_id):
     if not user:
         flash("No se puede cambiar el estado de ese usuario", "error")
     return redirect(url_for('user.home'))
+
+@user_bp.post('/create_institution_owner') ## TO DO--> Proteger para superADMIN
+def create_institution_owner():
+    institution_id = request.args.get('institution_id',type=int,default=None)
+    user_id = request.args.get('user_id',type=int,default=None)
+
+    user = auth.assign_institution_owner(user_id, institution_id)
+    if not user:
+        flash("No se pudo asignar el usuario como dueño de la institucion", "error")
+    return redirect(url_for('user.home'))
+
+@user_bp.post('/delete_institution_owner') ## TO DO--> Proteger para superADMIN
+def delete_institution_owner():
+    institution_id = request.args.get('institution_id',type=int,default=None)
+    user_id = request.args.get('user_id',type=int,default=None)
+    user = auth.delete_institution_owner(user_id, institution_id)
+    if not user:
+        flash("No se pudo eliminar el usuario como dueño de la institucion", "error")
+    return redirect(url_for('user.home'))
