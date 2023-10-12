@@ -20,24 +20,24 @@ class User(db.Model):
     inserted_at= db.Column(db.DateTime, default=datetime.utcnow)
     
 
-class UserRole(db.model):
+class UserRole(db.Model):
     __tablename__ = "user_roles"
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     institucion = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
-class Role(db.model):
+class Role(db.Model):
     __tablename__ = "roles"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(50), unique=True)
     permissions = db.relationship('Permission', secondary='role_permissions')
 
-class RolePermission(db.model):
+class RolePermission(db.Model):
     __tablename__ = "role_permissions"
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'))
 
-class Permission(db.model):
+class Permission(db.Model):
     __tablename__ = "permissions"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(50), unique=True)
