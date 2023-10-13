@@ -7,8 +7,10 @@ institution_bp = Blueprint('institution', __name__, url_prefix='/institution')
 @institution_bp.get('/')
 def home():
     """"Muestra un listado de todas las instituciones"""
-    listadoInstituciones = institutions.list_institutions()
-    return render_template("institutions/index.html", institutions=listadoInstituciones)
+    page = request.args.get('page', type=int, default=1)
+    institutionsList = institutions.list_institutions_paged(page)
+    print(institutionsList)
+    return render_template("institutions/index.html", institutions=institutionsList, page=page)
     
 @institution_bp.get('/register')
 def register_form():
