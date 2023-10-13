@@ -1,6 +1,5 @@
 from src.core.database import db
-from src.core.auth.user import User
-from src.core.auth.user import list_permissions_by_user as permissions 
+from src.core.auth.user import User,Role,RolePermission,UserRole,Institution,Permission 
 from src.core.bcrypt import bcrypt
 from sqlalchemy import or_
 def list_users():
@@ -37,4 +36,12 @@ def confirm_email(token):
         return None
         
 def list_permissions_by_user_id(user_id):
-    return permissions(user_id)    
+    # Hacer una consulta JOIN para obtener los permisos del usuario
+    nombres_permisos = (
+        db.session.query(Permission.name)
+        .join(RolePermission, Role, UserRole)
+        .filter(UserRole.user_id == user_id)
+        .all()
+    )
+    return nombres_permisos          
+        

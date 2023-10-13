@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash
 from src.web import error
 from src.core import database
 from src.core import bcrypt
-from src.web.config import config
+from src.web.config  import config
 from src.web import error
 from src.web.controllers.test import test_bp
 from src.web.controllers.auth import auth_bp

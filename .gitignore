@@ -26,6 +26,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.pyc
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -164,3 +165,4 @@ cython_debug/
 admin/src/web/config.py
 config.py
 /.vscode
+/flask_session

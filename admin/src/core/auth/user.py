@@ -22,9 +22,10 @@ class User(db.Model):
 
 class UserRole(db.Model):
     __tablename__ = "user_roles"
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    institucion = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    institucion = db.Column(db.Integer, db.ForeignKey('institucion_prueba'))
 
 class Role(db.Model):
     __tablename__ = "roles"
@@ -34,6 +35,7 @@ class Role(db.Model):
 
 class RolePermission(db.Model):
     __tablename__ = "role_permissions"
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'))
 
@@ -42,16 +44,10 @@ class Permission(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(50), unique=True)
 
-def list_permissions_by_user(user_id):
-    # Hacer una consulta JOIN para obtener los permisos del usuario
-    nombres_permisos = (
-        db.session.query(Permission.name)
-        .join(RolePermission, Role, UserRole)
-        .filter(UserRole.user_id == user_id)
-        .all()
-    )
+class Institution(db.Model):
+    __tablename__ = "institucion_prueba"
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    nombre = db.Column(db.String(255),unique=True)
+  
+    
 
-    #hacer una lista con solo los nombres de los permisos
-    nombres_permisos = [name for name , in nombres_permisos]
-
-    return nombres_permisos  
