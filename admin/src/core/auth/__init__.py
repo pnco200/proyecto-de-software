@@ -75,3 +75,30 @@ def change_user_status(user_id):
     user.is_active = not user.is_active
     db.session.commit()
     return True
+
+def assign_institution_owner(user_id, institution_id):
+    """Assign user as institution owner
+
+    Args:
+        user_id (int): Id of the user
+        institution_id (int): Id of the institution
+
+    Returns:
+        boolean: True if was assigned, else False
+    """
+    ###TO DO
+    return True
+
+
+def delete_institution_owner(user_id, institution_id):
+    """Remove user as institution owner
+
+    Args:
+        user_id (int): Id of the user
+        institution_id (int): Id of the institution
+
+    Returns:
+        boolean: True if was removed, else False
+    """
+    ###TO DO
+    return True
