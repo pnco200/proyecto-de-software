@@ -8,7 +8,7 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 @auth_bp.get('/')
 def login():
     """"Muestra el form de login"""
-    return render_template("login.html") ##TO DO!
+    return render_template("auth/login.html") ##TO DO!
 
 @auth_bp.post('/authenticate')
 def authenticate():
@@ -53,7 +53,7 @@ def confirm_email():
 @auth_bp.get('/register')
 def register_form():
     """"Muestra el form de registro"""
-    return render_template("register.html")
+    return render_template("auth/register.html")
 
 @auth_bp.post('/register')
 def register():
@@ -64,7 +64,7 @@ def register():
         flash("El email ingresado no es valido.", "error")
         return redirect(url_for("auth.register"))
     
-    existing_user = auth.find_user_by_email_or_username(params["email"], params["username"])
+    existing_user = auth.find_user_by_email(params["email"]) or auth.find_user_by_username(params["username"])
 
     if existing_user:
         flash("El mail o nombre de usuario ya esta registrado.", "error")
