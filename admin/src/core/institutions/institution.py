@@ -11,10 +11,10 @@ class Institution(db.Model):
     address = db.Column(db.String(250), unique=False)
     localization = db.Column(db.String(50), unique=False)
     web = db.Column(db.String(250), unique=False)
-    keywords = db.Column(db.String(250), unique=False)
+    keywords = db.Column(db.String(500), unique=False)
     attention_time = db.Column(db.String(250), unique=False)
     contact = db.Column(db.String(250), unique=False)
-    is_active = db.Column(db.Boolean, unique=False, default=False)
+    is_active = db.Column(db.Boolean, unique=False)
     updated_at=db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )

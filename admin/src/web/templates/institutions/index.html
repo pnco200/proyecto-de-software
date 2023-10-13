@@ -1,1 +1,9 @@
-as
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+    <div class="mb-3">
+        <h1 class="h1" align="center">Elija una opcion</h1>
+    </div>
+    <div class="mb-3">
+        <a href="{{url_for('institution.register')}}" class="btn btn-primary">Registrar Institucion</a>
+    </div>
+{%endblock%}
