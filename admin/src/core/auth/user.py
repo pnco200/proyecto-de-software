@@ -6,6 +6,7 @@ from src.core.database import db
 class User(db.Model):
     __tablename__= "users"
     id = db.Column(db.Integer, primary_key=True, unique=True)
+    selected_institution_id = db.Column(db.Integer, default=None, unique=False)
     email = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50), unique=False)
     lastname = db.Column(db.String(50), unique=False)

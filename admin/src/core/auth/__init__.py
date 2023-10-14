@@ -53,7 +53,6 @@ def confirm_email(token):
 def list_users_paged(page, only_blocked=None, email=None):
     per_page = get_rows_per_page()
     query = User.query
-
     if only_blocked is not None:
         query = query.filter_by(is_active=only_blocked)
     if email is not None:
@@ -97,6 +96,32 @@ def delete_institution_owner(user_id, institution_id):
         user_id (int): Id of the user
         institution_id (int): Id of the institution
 
+    Returns:
+        boolean: True if was removed, else False
+    """
+    ###TO DO
+    return True
+
+def assign_institution_member(user_id, permission_id):
+    """Assign user as institution member
+
+    Args:
+        user_id (int): Id of the user
+        permission_id (int): Role of member
+
+    Returns:
+        boolean: True if was assigned, else False
+    """
+    ###TO DO
+    return True
+
+
+def delete_institution_member(user_id, permission_id):
+    """Remove user as institution member
+
+    Args:
+        user_id (int): Id of the user
+        permission_id (int): Role of member
     Returns:
         boolean: True if was removed, else False
     """
