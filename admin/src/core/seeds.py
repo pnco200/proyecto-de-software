@@ -123,6 +123,14 @@ def run():
             is_confirmed=True,
             is_active=True
         )
+    def create_configurations():
+        configuration.create_configuration(
+            rows_per_page=5,
+            contact_information="11 3091-6149",
+            is_maintenance=False,
+            maintenance_message="",
+        )
+    create_configurations()
     create_institutions()
     create_users()
 

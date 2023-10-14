@@ -55,4 +55,5 @@ def create_app(env="development", static_folder="../../static"):
     @app.cli.command(name="seeddb")
     def seeddb():
         seeds.run()
+        print("Seeds ejecutados")
     return app
