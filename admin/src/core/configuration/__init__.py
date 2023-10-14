@@ -1,5 +1,28 @@
 from src.core.database import db
 from src.core.configuration.configuration import Configuration
+
+def create_configuration(rows_per_page, contact_information, is_maintenance, maintenance_message):
+    """Crea la configuracion inicial del sitio
+
+    Args:
+        rows_per_page (integer): Elementos por pagina
+        contact_information (string): Informacion de contacto
+        is_maintenance (boolean): Determina si la pagina esta en mantenimiento o no
+        maintenance_message (string): Mensaje para mostrar si la pagina esta en mantenmiento
+
+    Returns:
+        Configuration: Devuelve un objeto Configuration(rows_per_page, contact_information, is_maintenance, maintenance_message)
+    """
+    config = Configuration(
+        rows_per_page=rows_per_page,
+        contact_information=contact_information,
+        is_maintenance=is_maintenance,
+        maintenance_message=maintenance_message
+    )
+    db.session.add(config)
+    db.session.commit()
+    return config
+
 def get_configuration():
     """Devuelve la configuracion actual del sitio
 

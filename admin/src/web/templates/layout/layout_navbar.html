@@ -33,19 +33,19 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li><a class="dropdown-item" href="{{url_for('user.admin_home')}}">Administracion de usuario</a></li>
                     <li><a class="dropdown-item" href="{{url_for('configuration.index')}}">Configuracion del Sitio</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('institution.home')}}">Administracion de Instituciones</a></li>
                     <li><a class="dropdown-item" href="#">....</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown" data-bs-toggle="dropdown1">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Institucion
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">CIDEPINT</a></li>
-                    <li><a class="dropdown-item" href="#">X</a></li>
-                    <li><a class="dropdown-item" href="#">Y</a></li>
-                </ul>
+                <!--TODO :::: Mostrar las instituciones a las que pertenece el usuario-->
+                <select class="form-select" aria-labelledby="navbarDropdownMenuLink">
+                    <!--RENDEREAR LA ULTIMA INSTITUCION SELECCIONADA QUE SE ALMACENA EN LA DB-->
+                    <option selected>Seleccionar Institucion</option>
+                    <option value="1">Cidepint</option>
+                    <option value="2">Lucrus</option>
+                    <option value="3">MANDIN</option>
+                </select>
             </li>
 			<li class="nav-item dropdown" data-bs-toggle="dropdown2">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
