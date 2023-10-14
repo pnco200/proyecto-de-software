@@ -50,6 +50,55 @@ def confirm_email(token):
     else:
         return None
 
-def list_users_paged(page):
+def list_users_paged(page, only_blocked=None, email=None):
     per_page = get_rows_per_page()
-    return User.query.paginate(page=page, per_page=per_page, error_out=False)
+    query = User.query
+
+    if only_blocked is not None:
+        query = query.filter_by(is_active=only_blocked)
+    if email is not None:
+        query = query.filter(User.email.ilike(f"%{email}%"))
+    return query.paginate(page=page, per_page=per_page, error_out=False)
+
+def change_user_status(user_id):
+    """Change user status
+
+    Args:
+        user_id (integer): id of the user
+
+    Returns:
+        boolean: True if was changed, else False
+    """
+    user = User.query.filter_by(id=user_id).first()
+    if(not user): ## TO DO--> ADD OR IF USER IS SUPER ADMIN
+        return False
+    user.is_active = not user.is_active
+    db.session.commit()
+    return True
+
+def assign_institution_owner(user_id, institution_id):
+    """Assign user as institution owner
+
+    Args:
+        user_id (int): Id of the user
+        institution_id (int): Id of the institution
+
+    Returns:
+        boolean: True if was assigned, else False
+    """
+    ###TO DO
+    return True
+
+
+def delete_institution_owner(user_id, institution_id):
+    """Remove user as institution owner
+
+    Args:
+        user_id (int): Id of the user
+        institution_id (int): Id of the institution
+
+    Returns:
+        boolean: True if was removed, else False
+    """
+    ###TO DO
+    return True

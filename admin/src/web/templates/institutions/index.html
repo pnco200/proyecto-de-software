@@ -1,0 +1,85 @@
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="institution-list">
+            <h1 class="mb-4">Listado de Instituciones</h1>
+            <!-- SI ES SUPERADMIN PERMITE CREAR INSTITUCION-->
+            <a href="{{ url_for('institution.register') }}" class="btn btn-primary float-right mb-3">Crear Institucion</a>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Informacion</th>
+                            <th>Direccion</th>
+                            <th>Localizacion</th>
+                            <th>Web</th>
+                            <th>Palabras Claves</th>
+                            <th>Horario de Atencion</th>
+                            <th>Contacto</th>
+                            <th>Activo</th>
+                            <th class="text-center">Accion</th>
+                            <th class="text-center">Asignar Dueño</th>
+                            <th class="text-center">Remover Dueño</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for institution in institutions.items %}
+                            <tr>
+                                <td>{{ institution.id }}</td>
+                                <td>{{ institution.name }}</td>
+                                <td>{{ institution.information }}</td>
+                                <td>{{ institution.address }}</td>
+                                <td>{{ institution.localization }}</td>
+                                <td>{{ institution.web }}</td>
+                                <td>{{ institution.keywords }}</td>
+                                <td>{{ institution.attention_time }}</td>
+                                <td>{{ institution.contact }}</td>
+                                <td>
+                                    {% if institution.is_active %}
+                                       Si
+                                    {% else %}
+                                       No
+                                    {% endif %}
+                                </td>
+                
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="pagination justify-content-center mt-4">
+            <ul class="pagination">
+                {% if institutions.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ institutions.prev_num }}" aria-label="Previous">&laquo; Anterior</a>
+                    </li>
+                {% endif %}
+
+                {% for page_num in institutions.iter_pages() %}
+                    <li class="page-item">
+                        {% if page_num %}
+                            {% if page_num == institutions.page %}
+                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                            {% else %}
+                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                            {% endif %}
+                        {% else %}
+                            <span class="page-link">...</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+
+                {% if institutions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ institutions.next_num }}" aria-label="Next">Siguiente &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{%endblock%}

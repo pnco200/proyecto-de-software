@@ -19,10 +19,10 @@ def update_configuration():
     is_maintenance = True if request.form.get('is_maintenance') == 'on' else False
    
     maintenance_message = request.form.get('maintenance_message')
-    if len(contact_information) > 50:
+    if utils.is_valid_length(contact_information, 50):
         flash("La informacion de contacto no debe superar los 50 caracteres!", "error")
         return redirect(url_for("configuration.index"))
-    if len(maintenance_message) > 255:
+    if utils.is_valid_length(maintenance_message, 255):
         flash("El mensaje de mantenimiento no debe superar los 255 caracteres!", "error")
         return redirect(url_for("configuration.index"))
     result = configuration.update_configuration(
