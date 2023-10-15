@@ -19,6 +19,14 @@ def register_form():
 
 @institution_bp.route('/confirm_delete/<int:institution_id>', methods=['GET', 'POST'])
 def confirm_delete(institution_id):
+    """Permite confirmar la eliminacion de una institucion si el metodo es GET,
+        si es POST elimina la institucion
+    Args:
+        institution_id (int): id de la institucion a eliminar
+    Returns:
+        home: si se elimino correctamente o incorrectamente
+        confirm_delete: si se quiere confirmar la eliminacion
+    """
     if request.method == 'POST':
         institution = institutions.delete_institution(institution_id)
         if institution:
@@ -31,7 +39,8 @@ def confirm_delete(institution_id):
 
 @institution_bp.post('/register')
 def register():
-    """Permite registrar una institucion"""
+    """Permite registrar una institucion
+    """
     params = request.form
     is_active = True if params.get('is_active') == 'on' else False
     
@@ -97,12 +106,26 @@ def register():
     
 @institution_bp.get('/update/<int:institution_id>')
 def getInstitution(institution_id):
+    """Permite obtener una institucion por id para actualizarla
+
+    Args:
+        institution_id (int): id de la institucion a obtener
+
+    Returns:
+        template: template de actualizacion de institucion 
+    """
     institutionToUpdate = institutions.get_institution_by_id(institution_id)
     print(institutionToUpdate.is_active)
     return render_template("institutions/update.html", institution=institutionToUpdate)
 
 @institution_bp.post('/update/<int:institution_id>')
 def updateInstitution(institution_id):
+    """Permite actualizar una institucion
+
+    Args:
+        institution_id (int): id de la institucion a actualizar
+
+    """
     params = request.form
     is_active = True if params.get('is_active') == 'on' else False
     
