@@ -25,13 +25,13 @@ class UserRole(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    institucion = db.Column(db.Integer, db.ForeignKey('institucion_prueba'))
+    institucion = db.Column(db.Integer, db.ForeignKey('institucion_prueba.id'))
 
 class Role(db.Model):
     __tablename__ = "roles"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(50), unique=True)
-    permissions = db.relationship('Permission', secondary='role_permissions')
+    permissions = db.Column(db.Integer, db.ForeignKey('role_permissions.id'))
 
 class RolePermission(db.Model):
     __tablename__ = "role_permissions"

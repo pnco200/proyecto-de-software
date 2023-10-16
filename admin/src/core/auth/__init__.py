@@ -55,11 +55,18 @@ def list_users_paged(page):
         
 def list_permissions_by_user_id(user_id):
     # Hacer una consulta JOIN para obtener los permisos del usuario
-    nombres_permisos = (
+
+    # Consulta para obtener los permisos asociados a un usuario específico
+    resultados = (
         db.session.query(Permission.name)
-        .join(RolePermission, Role, UserRole)
+        .join( RolePermission,Permission)
+        .join(Role, UserRole.role_id == Role.id)
+        .join(RolePermission, RolePermission.role_id == Role.id)
         .filter(UserRole.user_id == user_id)
         .all()
     )
-    return nombres_permisos          
+    # Extracción de nombres de permisos desde los resultados
+    nombres_permisos = [resultado[0] for resultado in resultados]
+
+    return nombres_permisos      
         

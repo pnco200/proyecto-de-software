@@ -2,13 +2,17 @@ from flask import Blueprint, render_template, request, flash, redirect,  url_for
 from src.core import auth
 from src.core.email import email_utils
 from src.web.helpers import utils
+from src.web.controllers.users import user_bp
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp.register_blueprint(user_bp, url_prefix='/user')
 
 @auth_bp.get('/')
 def login():
     """"Muestra el form de login"""
     return render_template("auth/login.html") ##TO DO!
+
+
 
 @auth_bp.post('/authenticate')
 def authenticate():
@@ -26,7 +30,8 @@ def authenticate():
         return redirect(url_for("auth.login"))
     session["user"] = user.email
     flash("La sesion se inicio correctamente.", "success")
-    return redirect(url_for("home"))
+    return redirect(url_for('user.home', _external=True))
+
 
 @auth_bp.get('/logout')
 def logout():

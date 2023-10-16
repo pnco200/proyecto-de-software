@@ -3,8 +3,8 @@ from src.web.helpers.auth import login_required, has_permission
 from src.core import auth
 user_bp = Blueprint('user', __name__, url_prefix='/users')
 
-@user_bp.get('/')
-@login_required
+@user_bp.get('/index')
+
 @has_permission(["user_index"])
 def home():
     ##Ver de hacer tablas de permisos
