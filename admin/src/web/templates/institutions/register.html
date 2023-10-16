@@ -1,0 +1,63 @@
+
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+<body>
+    <h2 class="h2" align="center">Registro de Institucion</h2>
+    <a href="{{ url_for('institution.home') }}" class="btn btn-primary btn-sm ml-2" style="position: relative; margin-bottom: 1rem; left: 0rem;">Volver al Listado</a>
+
+    <form method="POST" action="{{url_for('institution.register')}}">
+        <div class="mb-3">
+            <h6>Nombre de la institucion:</h6>
+            <input type="text" class="form-control" id="name" name="name" 
+                placeholder="InstitucionX" required maxlength="250">
+        </div>
+        <div class="mb-3">
+            <h6>Información de la institucion:</h6>
+            <input type="text" class="form-control" id="lastname" name="information"
+                placeholder="Investigacion sobre pinturas y recubrimientos"required maxlength="250">
+        </div>
+        <div class="mb-3">
+            <h6>Direccion:</h6>
+            <input type="text" class="form-control" id="username" name="address" 
+                placeholder="1 y 50"required maxlength="250">
+        </div>
+        <div class="mb-3">
+            <h6>Localizacion (latitud, longitud):</h6>
+            <input type="text" class="form-control" id="username" name="localization" 
+                placeholder="-34.903559, -57.937601"required maxlength="50">
+        </div>
+        <div class="mb-3">
+            <h6>Web:</h6>
+            <input type="text" class="form-control" id="web" name="web" 
+            placeholder="www.institucionx.com" required maxlength="250">
+        </div>
+        <div class="mb-3">
+            <h6>Palabras clave (separadas por coma):</h6>
+            <input type="text" class="form-control" id="keywords" name="keywords" 
+            placeholder="pintura,revestimiento,UNLP" required maxlength="250">
+        </div>
+        <div class="mb-3">
+            <h6>Días y horarios de atención:</h6>
+            <input type="text" class="form-control" id="horarios" name="attention_time" 
+            placeholder="Lunes a Viernes: 9:00 - 17:00" required maxlength="250">
+        </div>
+        <div class="mb-3">
+            <h6>Información de contacto:</h6>
+            <input class="form-control" id="contact_info" name="contact" 
+            placeholder="institucionx@gmail.com, 221-6203789" required maxlength="250">
+        </div>
+        <div class="mb-3">
+            <h6>Institucion habilitada:</h6>
+            <input type="checkbox" id="enabled" name="is_active">
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar Institucion</button>     
+    </form>    
+</body>
+{% endblock %}
+
+
+
+
+
+
+

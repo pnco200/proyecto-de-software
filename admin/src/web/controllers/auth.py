@@ -10,7 +10,7 @@ auth_bp.register_blueprint(user_bp, url_prefix='/user')
 @auth_bp.get('/')
 def login():
     """"Muestra el form de login"""
-    return render_template("auth/login.html") ##TO DO!
+    return render_template("auth/login.html")
 
 
 
