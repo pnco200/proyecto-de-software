@@ -18,11 +18,9 @@
                             <th>Palabras Claves</th>
                             <th>Horario de Atencion</th>
                             <th>Contacto</th>
-                            <th>Activo</th>
-                            <th class="text-center">Accion</th>
-                            <th class="text-center">Asignar Dueño</th>
-                            <th class="text-center">Remover Dueño</th>
-
+                            <th>Habilitada</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +42,18 @@
                                        No
                                     {% endif %}
                                 </td>
-                
+                                <td class="text-center">
+                                    <form method="GET" action="{{ url_for('institution.getInstitution', institution_id=institution.id) }}">
+                                        <div class="form-group d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary btn-sm ml-2">Modificar</button>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="get" action="{{ url_for('institution.confirm_delete', institution_id=institution.id) }}">
+                                        <button type="submit" class="btn btn-primary btn-sm ml-2">Delete</button>
+                                    </form>                                
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
