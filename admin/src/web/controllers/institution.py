@@ -45,10 +45,8 @@ def confirm_delete(institution_id):
 def select_institution():
     """Cambia la institucion seleccionada en la barra de navegacion"""
     selected_institution = request.form.get('selected_institution')
-    current_url = request.form.get('current_url')
-    parsed_url  = current_url if current_url else "/"
     if selected_institution:
-        response = make_response(redirect(parsed_url))
+        response = make_response(redirect(url_for("home")))
         response.set_cookie('selectedInstitution', selected_institution)
     return response
 
