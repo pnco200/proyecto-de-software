@@ -7,9 +7,8 @@ def has_permission(list_permissions):
    def decorator(f):
        
         @wraps(f)
-        def decorated_function(*args, **kwargs):
-                
-                user = auth.find_user_by_email(session.get("user"))         
+        def decorated_function(*args, **kwargs):                
+                user = session.get("user")         
                 user_permission_list = actions.list_permissions_by_user_id(user.id)
                 
                 for permission in list_permissions:
@@ -27,9 +26,8 @@ def permission_required_in_Institution(list_permissions):
         @wraps(f)
         def decorated_function(*args, **kwargs):
                 institution_id = kwargs.get('institution_id', None)
-                user = auth.find_user_by_email(session.get("user"))     
+                user = session.get("user")     
                 user_permission_list = actions.list_permissions_by_user_id(user.id,institution_id)
-                
                 for permission in list_permissions:
                     if not(permission in user_permission_list):
                         print("No posee el permiso en la institucion para la accion que desea. No posee permiso %s" %permission )

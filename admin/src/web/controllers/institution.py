@@ -30,6 +30,7 @@ def confirm_delete(institution_id):
         home: si se elimino correctamente o incorrectamente
         confirm_delete: si se quiere confirmar la eliminacion
     """
+    
     if request.method == 'POST':
         institution = institutions.delete_institution(institution_id)
         if institution:

@@ -19,8 +19,6 @@ class User(db.Model):
       
     
 
-
-
 class Institution(db.Model):
     __tablename__= "institutions"
     id = db.Column(db.Integer, primary_key=True, unique=True)

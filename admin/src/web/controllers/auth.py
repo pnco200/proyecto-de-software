@@ -28,7 +28,7 @@ def authenticate():
     if not user.is_active:
         flash("Su cuenta se encuentra bloqueada!", "error")
         return redirect(url_for("auth.login"))
-    session["user"] = user.email
+    session["user"] = user.id
     flash("La sesion se inicio correctamente.", "success")
     return redirect(url_for('user.home', _external=True))
 
