@@ -1,4 +1,5 @@
 import re
+from flask import request
 def is_valid_email(email):
     email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     return re.match(email_regex, email)
@@ -17,3 +18,5 @@ def is_valid_length(string, max_characters):
         return False
     else:
         return True
+
+

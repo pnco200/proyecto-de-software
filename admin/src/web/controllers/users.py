@@ -37,8 +37,8 @@ def update_user_status(user_id):
 
 @user_bp.post('/create_institution_owner') ## TO DO--> Proteger para superADMIN
 def create_institution_owner():
-    institution_id = request.args.get('institution_id',type=int,default=None)
-    user_id = request.args.get('user_id',type=int,default=None)
+    institution_id = request.form.get('institution_id')
+    user_id = request.form.get('user_id')
 
     user = auth.assign_institution_owner(user_id, institution_id)
     if not user:
@@ -48,8 +48,9 @@ def create_institution_owner():
 #@ValidateQueSeaDueñoDeInstitucion
 @user_bp.post('/create_institution_member') ## TO DO--> Proteger para Dueño!, el INSTITUTION ID LO SACA DE LA QUE ESTA SELECIONADA EN LA BARRA
 def create_institution_member():
-    permission_id = request.args.get('permission_id',type=int,default=None)
-    user_id = request.args.get('user_id',type=int,default=None)
+    current_selected_institution = request.form.get('current_selected_institution')
+    permission_id = request.form.get('permission_id')
+    user_id = request.form.get('user_id')
 
     user = auth.assign_institution_owner(user_id, permission_id)
     if not user:
@@ -59,8 +60,9 @@ def create_institution_member():
 #@ValidateQueSeaDueñoDeInstitucion
 @user_bp.post('/delete_institution_member') ## TO DO--> Proteger para Dueño!
 def delete_institution_member():
-    permission_id = request.args.get('permission_id',type=int,default=None)
-    user_id = request.args.get('user_id',type=int,default=None)
+    current_selected_institution = request.form.get('current_selected_institution')
+    permission_id = request.form.get('permission_id')
+    user_id = request.form.get('user_id')
 
     user = auth.assign_institution_owner(user_id, permission_id)
     if not user:
@@ -70,8 +72,8 @@ def delete_institution_member():
 
 @user_bp.post('/delete_institution_owner') ## TO DO--> Proteger para superADMIN
 def delete_institution_owner():
-    institution_id = request.args.get('institution_id',type=int,default=None)
-    user_id = request.args.get('user_id',type=int,default=None)
+    institution_id = request.form.get('institution_id')
+    user_id = request.form.get('user_id')
     user = auth.delete_institution_owner(user_id, institution_id)
     if not user:
         flash("No se pudo eliminar el usuario como dueño de la institucion", "error")

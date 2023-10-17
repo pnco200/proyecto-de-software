@@ -73,7 +73,7 @@
                                     </form>
                                 </td>
                                 <td class="text-center">
-                                    <form method="POST" action="{{ url_for('user.delete_institution_owner', user_id=user.id) }}">
+                                    <form method="POST" action="{{ url_for('user.delete_institution_owner') }}">
                                         <div class="form-group d-flex align-items-center">
                                             <input type="hidden" name="user_id" value="{{ user.id }}">
                                             <select name="institution_id" class="form-select form-select-sm">
