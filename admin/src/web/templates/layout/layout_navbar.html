@@ -31,21 +31,24 @@
                     Configuracion
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="{{url_for('user.home')}}">Administracion de usuario</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('user.admin_home')}}">Administracion de usuario</a></li>
                     <li><a class="dropdown-item" href="{{url_for('configuration.index')}}">Configuracion del Sitio</a></li>
                     <li><a class="dropdown-item" href="{{url_for('institution.home')}}">Administracion de Instituciones</a></li>
                     <li><a class="dropdown-item" href="#">....</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown" data-bs-toggle="dropdown1">
-                <!--TODO :::: Mostrar las instituciones a las que pertenece el usuario-->
-                <select class="form-select" aria-labelledby="navbarDropdownMenuLink">
-                    <!--RENDEREAR LA ULTIMA INSTITUCION SELECCIONADA QUE SE ALMACENA EN LA DB-->
-                    <option selected>Seleccionar Institucion</option>
-                    <option value="1">Cidepint</option>
-                    <option value="2">Lucrus</option>
-                    <option value="3">MANDIN</option>
-                </select>
+                <form action="{{ url_for('institution.select_institution') }}" method="POST">
+                    <input hidden value="{{ url_for(request.endpoint) }}" name="current_url"></input>
+                    <select name="selected_institution" class="form-select" aria-labelledby="navbarDropdownMenuLink">
+                        {% for institution in get_user_institutions() %}
+                        <option value="{{ institution['id'] }}">
+                        {{ institution['name'] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <button style="margin-left: 35%;" type="submit" class="btn btn-primary btn-sm mt-2">Seleccionar</button>
+                </form>
             </li>
 			<li class="nav-item dropdown" data-bs-toggle="dropdown2">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"

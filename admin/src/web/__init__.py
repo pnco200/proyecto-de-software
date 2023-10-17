@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, url_for, request, redirect
 from src.web import error
 from src.core import database, seeds
 from src.core import bcrypt
@@ -12,6 +12,7 @@ from src.web.controllers.permissions import permissions_bp
 from src.web.helpers import auth
 from flask_session import Session
 from src.core.email import email_utils
+from src.core import institutions
 #from src.web.controllers.issues import issues
 
 session = Session()
@@ -25,18 +26,25 @@ def create_app(env="development", static_folder="../../static"):
     database.init_app(app)
     bcrypt.init_app(app)
     email_utils.init_app(app)
-
     # BLUEPRINTS
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(config_bp)
     app.register_blueprint(institution_bp)
     app.register_blueprint(permissions_bp)
-
+    def get_user_institutions():
+        return institutions.get_user_institutions(current_selected_institution())
+    
+    def current_selected_institution():
+        selectedInstitution = request.cookies.get('selectedInstitution')
+        if selectedInstitution:
+            return int(request.cookies.get('selectedInstitution'))
+        else:
+            return None
     # URLS
     @app.get("/")
     def home():
-        return render_template("home.html") #Hay que mandarle si el usuario esta logeado o no
+        return render_template("home.html")
     
     @app.get("/sendmailtest")
     def mail_test():
@@ -49,6 +57,9 @@ def create_app(env="development", static_folder="../../static"):
 
     # JINJA
     app.jinja_env.globals.update(is_authenticated = auth.is_authenticated)
+    app.jinja_env.globals.update(get_user_institutions = get_user_institutions)
+    app.jinja_env.globals.update(current_selected_institution = get_user_institutions)
+
 
     @app.cli.command(name="resetdb")
     def resetdb():
