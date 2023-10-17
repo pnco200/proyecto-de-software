@@ -1,5 +1,5 @@
 from src.core.database import db
-from src.core.auth.user import User,Role,RolePermission,UserRole,Institution,Permission 
+from src.core.model.model import User
 from src.core.configuration import get_rows_per_page
 from src.core.bcrypt import bcrypt
 def list_users():
@@ -102,19 +102,3 @@ def delete_institution_owner(user_id, institution_id):
     """
     ###TO DO
     return True
-def list_permissions_by_user_id(user_id):
-    # Hacer una consulta JOIN para obtener los permisos del usuario
-
-    # Consulta para obtener los permisos asociados a un usuario específico
-    resultados = (
-        db.session.query(Permission.name)
-        .join( RolePermission,Permission)
-        .join(Role, UserRole.role_id == Role.id)
-        .join(RolePermission, RolePermission.role_id == Role.id)
-        .filter(UserRole.user_id == user_id)
-        .all()
-    )
-    # Extracción de nombres de permisos desde los resultados
-    nombres_permisos = [resultado[0] for resultado in resultados]
-
-    return nombres_permisos    

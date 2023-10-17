@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from src.web.helpers.auth import login_required, has_permission
+from src.web.helpers.auth import login_required
 from src.core import auth
+from src.web.helpers.permissions import has_permission
 user_bp = Blueprint('user', __name__, url_prefix='/users')
 
 @user_bp.get('/index')

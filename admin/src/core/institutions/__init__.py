@@ -1,6 +1,6 @@
 from src.core.configuration import get_rows_per_page
 from src.core.database import db
-from src.core.institutions.institution import Institution
+from src.core.model.model import Institution
 from sqlalchemy import or_
 
 def list_institutions():

@@ -3,6 +3,7 @@ from src.core import auth
 from src.core.email import email_utils
 from src.web.helpers import utils
 from src.web.controllers.users import user_bp
+from src.web.helpers.permissions import has_permission
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 auth_bp.register_blueprint(user_bp, url_prefix='/user')
