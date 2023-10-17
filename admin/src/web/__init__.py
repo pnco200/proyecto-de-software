@@ -2,12 +2,13 @@ from flask import Flask, render_template, url_for, request, redirect
 from src.web import error
 from src.core import database, seeds
 from src.core import bcrypt
-from src.web.config import config
+from src.web.config  import config
 from src.web import error
 from src.web.controllers.auth import auth_bp
 from src.web.controllers.users import user_bp
 from src.web.controllers.configuration import config_bp
 from src.web.controllers.institution import institution_bp
+from src.web.controllers.permissions import permissions_bp
 from src.web.helpers import auth
 from flask_session import Session
 from src.core.email import email_utils
@@ -30,6 +31,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(auth_bp)
     app.register_blueprint(config_bp)
     app.register_blueprint(institution_bp)
+    app.register_blueprint(permissions_bp)
     def get_user_institutions():
         return institutions.get_user_institutions(current_selected_institution())
     

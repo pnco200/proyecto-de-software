@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.web.helpers.auth import login_required
 from src.core import auth
+from src.web.helpers.permissions import has_permission,permission_required_in_Institution
 user_bp = Blueprint('user', __name__, url_prefix='/users')
 
-@user_bp.get('/admin')
-#@login_required
+@user_bp.get('/indexadmin')
+
+@has_permission(["user_index"])
 def admin_home():
     """"Muestra un listado de los usuarios si el usuario esta logeado"""
     page = request.args.get('page', type=int, default=1)
@@ -29,6 +31,7 @@ def home():
     return render_template("users/home.html", users=users, page=page, email=email)
 
 @user_bp.route('/update_user_status/<int:user_id>') ## TO DO--> Proteger para superADMIN
+@has_permission(["user_update"])##--> ver cuales necesita
 def update_user_status(user_id):
     user = auth.change_user_status(user_id=user_id)
     if not user:
@@ -36,6 +39,7 @@ def update_user_status(user_id):
     return redirect(url_for('user.admin_home'))
 
 @user_bp.post('/create_institution_owner') ## TO DO--> Proteger para superADMIN
+@has_permission([""])##--> ver cuales necesita
 def create_institution_owner():
     institution_id = request.form.get('institution_id')
     user_id = request.form.get('user_id')
@@ -71,6 +75,7 @@ def delete_institution_member():
 
 
 @user_bp.post('/delete_institution_owner') ## TO DO--> Proteger para superADMIN
+
 def delete_institution_owner():
     institution_id = request.form.get('institution_id')
     user_id = request.form.get('user_id')
