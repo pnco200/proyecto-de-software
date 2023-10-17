@@ -10,6 +10,7 @@ from src.web.controllers.configuration import config_bp
 from src.web.controllers.institution import institution_bp
 from src.web.controllers.permissions import permissions_bp
 from src.web.helpers import auth
+from src.web.helpers import utils
 from flask_session import Session
 from src.core.email import email_utils
 from src.core import institutions
@@ -32,15 +33,9 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(config_bp)
     app.register_blueprint(institution_bp)
     app.register_blueprint(permissions_bp)
-    def get_user_institutions():
-        return institutions.get_user_institutions(current_selected_institution())
+    def get_user_institutions(request):
+        return institutions.get_user_institutions(utils.current_selected_institution(request))
     
-    def current_selected_institution():
-        selectedInstitution = request.cookies.get('selectedInstitution')
-        if selectedInstitution:
-            return int(request.cookies.get('selectedInstitution'))
-        else:
-            return None
     # URLS
     @app.get("/")
     def home():

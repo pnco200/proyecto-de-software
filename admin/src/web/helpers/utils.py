@@ -1,5 +1,4 @@
 import re
-from flask import request
 def is_valid_email(email):
     """valida si el email es valido o no
 
@@ -26,4 +25,10 @@ def is_valid_length(string, max_characters):
     else:
         return True
 
+def current_selected_institution(request):
+    selectedInstitution = request.cookies.get('selectedInstitution')
+    if selectedInstitution:
+        return int(request.cookies.get('selectedInstitution'))
+    else:
+        return None
 

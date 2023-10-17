@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, abort
+from flask import session, abort, redirect, url_for, flash
 from src.core import rol_permission as actions
 from src.core import auth
 from src.core import institutions
@@ -8,7 +8,10 @@ def has_permission(list_permissions):
        
         @wraps(f)
         def decorated_function(*args, **kwargs):                
-                user = session.get("user")         
+                user = session.get("user")   
+                if not user:
+                     flash("Debe estar logeado para acceder a este recurso","info")
+                     redirect(url_for("auth.login"))       
                 user_permission_list = actions.list_permissions_by_user_id(user.id)
                 
                 for permission in list_permissions:
@@ -26,7 +29,10 @@ def permission_required_in_Institution(list_permissions):
         @wraps(f)
         def decorated_function(*args, **kwargs):
                 institution_id = kwargs.get('institution_id', None)
-                user = session.get("user")     
+                user = session.get("user")
+                if not user:
+                     flash("Debe estar logeado para acceder a este recurso","info")
+                     redirect(url_for("auth.login")) 
                 user_permission_list = actions.list_permissions_by_user_id(user.id,institution_id)
                 for permission in list_permissions:
                     if not(permission in user_permission_list):
