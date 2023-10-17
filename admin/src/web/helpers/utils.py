@@ -1,4 +1,5 @@
 import re
+from flask import request
 def is_valid_email(email):
     """valida si el email es valido o no
 
@@ -24,3 +25,5 @@ def is_valid_length(string, max_characters):
         return False
     else:
         return True
+
+

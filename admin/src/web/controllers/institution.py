@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, abort, request, url_for, redirect, flash
+from flask import Blueprint, render_template, session, abort, request, url_for, redirect, flash, make_response, request
 from src.core import institutions
 from src.web.helpers.utils import is_valid_length, is_valid_email
 
@@ -36,6 +36,17 @@ def confirm_delete(institution_id):
             flash("No se ha podido eliminar la institucion.", "error")
             return redirect(url_for("institution.home"))
     return render_template('institutions/confirm_delete.html', institution_id=institution_id)
+
+@institution_bp.post('/select_institution')
+def select_institution():
+    """Cambia la institucion seleccionada en la barra de navegacion"""
+    selected_institution = request.form.get('selected_institution')
+    current_url = request.form.get('current_url')
+    parsed_url  = current_url if current_url else "/"
+    if selected_institution:
+        response = make_response(redirect(parsed_url))
+        response.set_cookie('selectedInstitution', selected_institution)
+    return response
 
 @institution_bp.post('/register')
 def register():
