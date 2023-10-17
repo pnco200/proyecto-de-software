@@ -2,16 +2,19 @@ from flask import Blueprint, render_template, request, flash, redirect,  url_for
 from src.core import configuration
 from src.core.email import email_utils
 from src.web.helpers import utils
+from src.web.helpers import permissions
 
 config_bp = Blueprint('configuration', __name__, url_prefix='/config')
 
 @config_bp.get('/')
+###Permisos del superadmin?
 def index():
     config = configuration.get_configuration()
     return render_template('configuration/index.html', configuration=config)
 
 
 @config_bp.post('/update')
+###Permisos del superadmin?
 def update_configuration():
     """"Actualiza la configuracion del sitio"""
     rows_per_page = request.form.get('rows_per_page')

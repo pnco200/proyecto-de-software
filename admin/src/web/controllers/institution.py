@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, session, abort, request, url_for, redirect, flash
 from src.core import institutions
 from src.web.helpers.utils import is_valid_length, is_valid_email
+from src.web.helpers import permissions
 
 institution_bp = Blueprint('institution', __name__, url_prefix='/institution')
 
@@ -13,11 +14,13 @@ def home():
     return render_template("institutions/index.html", institutions=institutionsList, page=page)
     
 @institution_bp.get('/register')
+## Permiso de ¿user_create u otro? puede ser user_create porque crear isntitution y usuario lo hace solo el SA?
 def register_form():
     """"Muestra el form de registro"""
     return render_template("institutions/register.html")
 
 @institution_bp.route('/confirm_delete/<int:institution_id>', methods=['GET', 'POST'])
+@permissions.permission_required_in_Institution(["institution_delete"]) ##permiso de eliminar institucion SA?
 def confirm_delete(institution_id):
     """Permite confirmar la eliminacion de una institucion si el metodo es GET,
         si es POST elimina la institucion
@@ -38,6 +41,7 @@ def confirm_delete(institution_id):
     return render_template('institutions/confirm_delete.html', institution_id=institution_id)
 
 @institution_bp.post('/register')
+##permiso de crear institucion SA?
 def register():
     """Permite registrar una institucion
     """
@@ -119,6 +123,7 @@ def getInstitution(institution_id):
     return render_template("institutions/update.html", institution=institutionToUpdate)
 
 @institution_bp.post('/update/<int:institution_id>')
+##permiso de actualizar institucion SA?
 def updateInstitution(institution_id):
     """Permite actualizar una institucion
 

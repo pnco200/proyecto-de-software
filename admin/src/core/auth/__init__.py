@@ -2,6 +2,7 @@ from src.core.database import db
 from src.core.model.model import User
 from src.core.configuration import get_rows_per_page
 from src.core.bcrypt import bcrypt
+from src.core import rol_permission
 def list_users():
     return User.query.all()
     
@@ -87,6 +88,12 @@ def assign_institution_owner(user_id, institution_id):
         boolean: True if was assigned, else False
     """
     ###TO DO
+    ###--> Usar tabla user_role --> Usar funcion create_rol_usuario
+    rol_permission.create_rol_usuario(
+        role_id = "Owner",
+        user_id = user_id,
+        institution_id = institution_id
+    )
     return True
 
 
@@ -101,4 +108,6 @@ def delete_institution_owner(user_id, institution_id):
         boolean: True if was removed, else False
     """
     ###TO DO
+    ###borar la tabla de user_rol que tenga user_id e institution_id
+    rol_permission.delete_rol_usuario(user_id,institution_id)
     return True

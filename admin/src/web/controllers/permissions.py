@@ -6,18 +6,20 @@ from src.core import rol_permission
 permissions_bp = Blueprint('permissions', __name__, url_prefix='/permissions')
 
 @permissions_bp.post('/')
-@permissions.has_permission(
+@permissions.permission_required_in_Institution(
     ["institution_show",
     "institution_update",
     "institution_create"
-    ],institution)
+    ])
 ###Permisos posiblemente necesarios ["institution_create","institution_update"]
 def home():
     """
         Para asignar rol en institucion
     """
-    institution = request.form.get("Institution_name")
+    ## Tomo el insituto por nombre segun lo elegido en el form o lo pasado como parametro
+    institution_name = request.form.get("Institution_name")
     return render_template("permission/index.html")###To do template
 
 
 
+###hacer controladores que necesiten permisos(?)

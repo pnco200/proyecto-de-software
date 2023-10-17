@@ -35,6 +35,32 @@ def create_rol_usuario(**kwargs):
     db.session.commit()
     return user_role
 
+def delete_permission(permission_id):
+    permission = Permiso.query.get(permission_id)
+    if permission:
+        db.session.delete(permission)
+        db.session.commit()
+        return True
+    return False
+
+def delete_rol_permission(role_id, permission_id):
+    role_permission = RolPermiso.query.filter_by(role_id=role_id, permission_id=permission_id).first()
+    if role_permission:
+        db.session.delete(role_permission)
+        db.session.commit()
+        return True
+    return False
+
+def delete_rol_usuario(user_id,institution_id):
+    user_role = RolUsuario.query.filter_by(user_id=user_id, institution_id=institution_id).first()
+    if user_role:
+        db.session.delete(user_role)
+        db.session.commit()
+        return True
+    return False
+
+
+
 
 ##Esto para identificar los roles por nombre y no por id
 def get_role_id_by_name(role_name):
