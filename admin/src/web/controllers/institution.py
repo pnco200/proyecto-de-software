@@ -6,6 +6,8 @@ from src.web.helpers import permissions
 institution_bp = Blueprint('institution', __name__, url_prefix='/institution')
 
 @institution_bp.get('/')
+@permissions.superadmin_required
+@permissions.has_permission(["institution_index"])
 def home():
     """"Muestra un listado de todas las instituciones"""
     page = request.args.get('page', type=int, default=1)
@@ -14,13 +16,14 @@ def home():
     return render_template("institutions/index.html", institutions=institutionsList, page=page)
     
 @institution_bp.get('/register')
+@permissions.superadmin_required
 ## Permiso de ¿user_create u otro? puede ser user_create porque crear isntitution y usuario lo hace solo el SA?
 def register_form():
     """"Muestra el form de registro"""
     return render_template("institutions/register.html")
 
 @institution_bp.route('/confirm_delete/<int:institution_id>', methods=['GET', 'POST'])
-@permissions.permission_required_in_Institution(["institution_delete"]) ##permiso de eliminar institucion SA?
+@permissions.superadmin_required
 def confirm_delete(institution_id):
     """Permite confirmar la eliminacion de una institucion si el metodo es GET,
         si es POST elimina la institucion
