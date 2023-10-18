@@ -1,0 +1,60 @@
+
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+<style>
+    select {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    }
+
+    select:hover {
+        background-color: #eaeaea;
+    }   
+</style>
+<body>
+    <h2 class="h2" align="center">Agregar nuevo servicio</h2>
+    <form method="POST" action="{{url_for('services.create_service')}}">
+        <div class="mb-3">
+            <input type="text" class="form-control" id="name" name="name" 
+                placeholder="Nombre..."required>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="description" name="description"
+                placeholder="Descripción..."required>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="key_words" name="key_words" 
+                placeholder="Palabras clave... (separadas por coma)"required>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="centers" name="centers" 
+                placeholder="Centros... (separados por coma)"required>
+        </div>
+        <div class="mb-3">
+            Tipo de servicio:
+            <select id="type" name="type">
+                <option value="ANALISIS">Análisis</option>
+                <option value="CONSULTORIA">Consultoría</option>
+                <option value="DESARROLLO">Desarrollo</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar</button>  
+    </form>    
+</body>
+{% endblock %}
+
+
+
+
+
+
+
