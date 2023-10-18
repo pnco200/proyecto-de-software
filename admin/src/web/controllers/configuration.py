@@ -14,7 +14,6 @@ def index():
 
 @permissions.has_permission(['config_update'])
 @config_bp.post('/update')
-###Permisos del superadmin?
 def update_configuration():
     """"Actualiza la configuracion del sitio"""
     rows_per_page = request.form.get('rows_per_page')

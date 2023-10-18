@@ -356,9 +356,13 @@ def run():
             role_id ="SuperAdmin",
             permission_id = "config_update"
         )
-        role_SuperAdmin29= rol_permission.create_rol_permission(
+        rol_permission.create_rol_permission(
             role_id ="SuperAdmin",
             permission_id = "institution_add_owner"
+        )
+        rol_permission.create_rol_permission(
+            role_id ="SuperAdmin",
+            permission_id = "institution_delete_owner"
         )
         
         ###permisos del Owner

@@ -106,8 +106,10 @@ def delete_institution_owner(user_id, institution_id):
     """
     ###TO DO
     ###borar la tabla de user_rol que tenga user_id e institution_id
-    rol_permission.delete_rol_usuario(user_id,institution_id, 3)
-    return True
+    if rol_permission.delete_rol_usuario(user_id,institution_id, 1):
+        return True
+    else:
+        return False
 
 def assign_institution_member(user_id, permission_id, institution_id):
     """Assign user as institution member
@@ -127,7 +129,7 @@ def assign_institution_member(user_id, permission_id, institution_id):
     return True
 
 
-def delete_institution_member(user_id, permission_id):
+def delete_institution_member(user_id, permission_id, institution_id):
     """Remove user as institution member
 
     Args:
@@ -136,5 +138,5 @@ def delete_institution_member(user_id, permission_id):
     Returns:
         boolean: True if was removed, else False
     """
-    ###TO DO
+    rol_permission.delete_rol_usuario(user_id,institution_id, permission_id)
     return True
