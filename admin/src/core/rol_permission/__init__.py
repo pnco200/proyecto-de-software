@@ -1,4 +1,5 @@
 from src.core.database import db
+from src.core.institutions import Institution
 from src.core.model.model import User,Rol,RolUsuario,RolPermiso,Permiso
 from sqlalchemy.orm import joinedload
 
@@ -51,8 +52,10 @@ def delete_rol_permission(role_id, permission_id):
         return True
     return False
 
-def delete_rol_usuario(user_id,institution_id):
-    user_role = RolUsuario.query.filter_by(user_id=user_id, institution_id=institution_id).first()
+def delete_rol_usuario(user_id,institution_id, role_id):
+    user_role = RolUsuario.query.filter_by(user_id=user_id, institution_id=institution_id, role_id=role_id).first()
+    print("user role")
+    print(user_role)
     if user_role:
         db.session.delete(user_role)
         db.session.commit()
@@ -73,6 +76,50 @@ def get_permission_id_by_name(permission_name):
     permission = Permiso.query.filter_by(name=permission_name).first()
     return permission.id
 
+def is_superadmin(user_id):
+    role = (
+        db.session.query(Permiso.name)
+        .join(RolUsuario, RolUsuario.role_id == 3)
+        .filter(RolUsuario.user_id == user_id)
+        .all()
+    )
+    if role:
+        return True
+    else:
+        return False
+    
+def is_institution_owner(user_id, institution_id):
+    owner = (
+        db.session.query(Permiso.name)
+        .join(RolUsuario, RolUsuario.role_id == 1)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(RolUsuario.institution_id == institution_id)
+        .all()
+    )
+    if owner:
+        return True
+    else:
+        return False
+    
+def list_institutions_owned_by_user(user_id):
+    """Retorna las instituciones donde el user es dueño
+
+    Args:
+        user_id (int): user id
+
+    Returns:
+        list(Institutions)
+    """
+    print(user_id)
+    institutions = (
+        db.session.query(Institution)
+        .join(RolUsuario, RolUsuario.role_id == 1)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(Institution.id == RolUsuario.institution_id)
+        .all()
+    )
+    print(institutions)
+    return institutions
 
 def list_permissions_by_user_id(user_id):
     """

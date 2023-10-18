@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, session
 from src.web import error
 from src.core import database, seeds
 from src.core import bcrypt
@@ -12,6 +12,8 @@ from src.web.controllers.permissions import permissions_bp
 from src.web.controllers.services import service_bp
 from src.web.helpers import auth
 from src.web.helpers import utils
+from src.web.helpers import permissions
+
 from flask_session import Session
 from src.core.email import email_utils
 from src.core import institutions
@@ -37,7 +39,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(service_bp)
     
     def get_user_institutions(request):
-        return institutions.get_user_institutions(utils.current_selected_institution(request))
+        return institutions.get_user_institutions(utils.current_selected_institution())
     
     # URLS
     @app.get("/")
@@ -56,8 +58,9 @@ def create_app(env="development", static_folder="../../static"):
     # JINJA
     app.jinja_env.globals.update(is_authenticated = auth.is_authenticated)
     app.jinja_env.globals.update(get_user_institutions = get_user_institutions)
-    app.jinja_env.globals.update(current_selected_institution = get_user_institutions)
-
+    app.jinja_env.globals.update(current_selected_institution = utils.current_selected_institution)
+    app.jinja_env.globals.update(is_superadmin = permissions.is_superadmin)
+    app.jinja_env.globals.update(is_institution_owner = permissions.is_institution_owner)
 
     @app.cli.command(name="resetdb")
     def resetdb():

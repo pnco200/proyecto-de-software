@@ -64,9 +64,11 @@
                                         <div class="form-group d-flex align-items-center">
                                             <input type="hidden" name="user_id" value="{{ user.id }}">
                                             <select name="institution_id" class="form-select form-select-sm">
-                                                <option value="idInstitucion1">Institucion1</option>
-                                                <option value="idInstitucion2">Institucion2</option>
-                                                <option value="idInstitucion3">Institucion3</option>
+                                                {% for institution in institutions %}
+                                                <option value="{{ institution['id'] }}">
+                                                {{ institution['name'] }}
+                                                </option>
+                                                {% endfor %}
                                             </select>
                                             <button type="submit" class="btn btn-primary btn-sm ml-2">Ok</button>
                                         </div>
@@ -77,9 +79,11 @@
                                         <div class="form-group d-flex align-items-center">
                                             <input type="hidden" name="user_id" value="{{ user.id }}">
                                             <select name="institution_id" class="form-select form-select-sm">
-                                                <option value="idInstitucion1">Institucion1</option>
-                                                <option value="idInstitucion2">Institucion2</option>
-                                                <option value="idInstitucion3">Institucion3</option>
+                                                {% for institution in get_institutions_owner(user.id) %}
+                                                <option value="{{ institution['id'] }}">
+                                                {{ institution['name'] }}
+                                                </option>
+                                                {% endfor %}
                                             </select>
                                             <button type="submit" class="btn btn-primary btn-sm ml-2">Ok</button>
                                         </div>

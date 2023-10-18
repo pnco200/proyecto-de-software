@@ -6,6 +6,7 @@ from src.web.helpers import permissions
 institution_bp = Blueprint('institution', __name__, url_prefix='/institution')
 
 @institution_bp.get('/')
+@permissions.has_permission(["institution_index"])
 def home():
     """"Muestra un listado de todas las instituciones"""
     page = request.args.get('page', type=int, default=1)
@@ -14,13 +15,13 @@ def home():
     return render_template("institutions/index.html", institutions=institutionsList, page=page)
     
 @institution_bp.get('/register')
-## Permiso de ¿user_create u otro? puede ser user_create porque crear isntitution y usuario lo hace solo el SA?
+@permissions.has_permission(["institution_create"])
 def register_form():
     """"Muestra el form de registro"""
     return render_template("institutions/register.html")
 
 @institution_bp.route('/confirm_delete/<int:institution_id>', methods=['GET', 'POST'])
-@permissions.permission_required_in_Institution(["institution_delete"], request) ##permiso de eliminar institucion SA?
+@permissions.has_permission(["institution_destroy"])
 def confirm_delete(institution_id):
     """Permite confirmar la eliminacion de una institucion si el metodo es GET,
         si es POST elimina la institucion
@@ -42,6 +43,7 @@ def confirm_delete(institution_id):
     return render_template('institutions/confirm_delete.html', institution_id=institution_id)
 
 @institution_bp.post('/select_institution')
+@permissions.has_permission(["institution_show"]) #Utilizamos el show para que puedan ver el select de la navbar de sus instituciones pero NO todo el listado de instituciones
 def select_institution():
     """Cambia la institucion seleccionada en la barra de navegacion"""
     selected_institution = request.form.get('selected_institution')
@@ -51,7 +53,7 @@ def select_institution():
     return response
 
 @institution_bp.post('/register')
-##permiso de crear institucion SA?
+@permissions.has_permission(["institution_create"])
 def register():
     """Permite registrar una institucion
     """
@@ -119,6 +121,7 @@ def register():
         return redirect(url_for("institution.register_form"))
     
 @institution_bp.get('/update/<int:institution_id>')
+@permissions.has_permission(["institution_update"])
 def getInstitution(institution_id):
     """Permite obtener una institucion por id para actualizarla
 
@@ -133,7 +136,7 @@ def getInstitution(institution_id):
     return render_template("institutions/update.html", institution=institutionToUpdate)
 
 @institution_bp.post('/update/<int:institution_id>')
-##permiso de actualizar institucion SA?
+@permissions.has_permission(["institution_update"])
 def updateInstitution(institution_id):
     """Permite actualizar una institucion
 

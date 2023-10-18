@@ -1,11 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from src.web.helpers.auth import login_required
 from src.core import auth
+from src.core import institutions
+from src.core import rol_permission
 from src.web.helpers.permissions import has_permission,permission_required_in_Institution
 user_bp = Blueprint('user', __name__, url_prefix='/users')
 
-@user_bp.get('/indexadmin')
-
+@user_bp.get('/admin')
 @has_permission(["user_index"])
 def admin_home():
     """"Muestra un listado de los usuarios si el usuario esta logeado"""
@@ -19,10 +20,11 @@ def admin_home():
     else:
         only_blocked = None
     users = auth.list_users_paged(page,only_blocked,email)
-    return render_template("users/index.html", users=users, page=page, blocked=only_blocked, email=email)
+    _institutions = institutions.list_institutions()
+    return render_template("users/index.html", users=users, page=page, blocked=only_blocked, email=email, institutions=_institutions, get_institutions_owner=rol_permission.list_institutions_owned_by_user)
 
 @user_bp.get('/')
-#@login_required
+@has_permission(["institution_add_member", "institution_delete_member"])
 def home():
     """"Muestra un listado de los usuarios si el usuario esta logeado"""
     page = request.args.get('page', type=int, default=1)
@@ -39,7 +41,7 @@ def update_user_status(user_id):
     return redirect(url_for('user.admin_home'))
 
 @user_bp.post('/create_institution_owner') ## TO DO--> Proteger para superADMIN
-@has_permission([""])##--> ver cuales necesita
+@has_permission(["institution_add_owner"])##--> ver cuales necesita
 def create_institution_owner():
     institution_id = request.form.get('institution_id')
     user_id = request.form.get('user_id')
@@ -47,39 +49,48 @@ def create_institution_owner():
     user = auth.assign_institution_owner(user_id, institution_id)
     if not user:
         flash("No se pudo asignar el usuario como dueño de la institucion", "error")
+    else:
+        flash("El usuario fue asignado como dueño de la institucion", "success")
     return redirect(url_for('user.admin_home'))
 
-#@ValidateQueSeaDueñoDeInstitucion
+@permission_required_in_Institution(["institution_add_member"])
 @user_bp.post('/create_institution_member') ## TO DO--> Proteger para Dueño!, el INSTITUTION ID LO SACA DE LA QUE ESTA SELECIONADA EN LA BARRA
 def create_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
-    permission_id = request.form.get('permission_id')
+    permission_id = "Admin" if request.form.get('permission_id') == 2 else "Operator"
     user_id = request.form.get('user_id')
 
-    user = auth.assign_institution_owner(user_id, permission_id)
+    user = auth.assign_institution_member(user_id, permission_id, current_selected_institution)
     if not user:
         flash("No se pudo asignar el usuario como miembro de la institucion", "error")
+    else:
+        flash("El usuario fue asignado como miembro de la institucion", "success")
     return redirect(url_for('user.home'))
 
-#@ValidateQueSeaDueñoDeInstitucion
+@permission_required_in_Institution(["institution_delete_member"])
 @user_bp.post('/delete_institution_member') ## TO DO--> Proteger para Dueño!
 def delete_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
     permission_id = request.form.get('permission_id')
     user_id = request.form.get('user_id')
 
-    user = auth.assign_institution_owner(user_id, permission_id)
+    user = auth.delete_institution_member(user_id, permission_id, current_selected_institution)
     if not user:
-        flash("No se pudo asignar el usuario como miembro de la institucion", "error")
+        flash("No se pudo eliminar el usuario como miembro de la institucion", "error")
+    else:
+        flash("El usuario fue eliminado como miembro de la institucion", "success")
     return redirect(url_for('user.home'))
 
 
 @user_bp.post('/delete_institution_owner') ## TO DO--> Proteger para superADMIN
-
+@has_permission(["institution_delete_owner"])
 def delete_institution_owner():
     institution_id = request.form.get('institution_id')
     user_id = request.form.get('user_id')
     user = auth.delete_institution_owner(user_id, institution_id)
     if not user:
         flash("No se pudo eliminar el usuario como dueño de la institucion", "error")
+    else:
+        flash("El usuario fue eliminado como dueño de la institucion", "success")
+
     return redirect(url_for('user.admin_home'))
