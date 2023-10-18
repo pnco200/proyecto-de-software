@@ -2,6 +2,7 @@ from functools import wraps
 from flask import session, abort, redirect, url_for, flash, request
 from src.core import rol_permission as actions
 from src.web.helpers import utils
+from src.web.helpers.utils import current_selected_institution
 from src.core import auth
 from src.core import institutions
 def is_superadmin():

@@ -1,0 +1,54 @@
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="container mt-5">
+        <div class="user-list">
+            <h1 class="mb-4">Servicio</h1>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Palabras clave</th>
+                        <th>Centros</th>
+                        <th>Tipo</th>
+                        <th>Habilitado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>{{ service.id }}</td>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.description }}</td>
+                            <td>{{ service.key_words|join(", ") }}</td>
+                            <td>{{ service.centers|join(", ") }}</td>
+                            <td>{{ service.type.value }}</td>
+                            <td>
+                                {% if service.enabled %}
+                                   Si
+                                {% else %}
+                                   No
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <!-- delete --> 
+                    <form method="POST" action="{{url_for('services.delete_service', service_id=service.id)}}" style="display: inline-block;">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+
+                    <!-- update -->
+                    <form method="GET" action="{{ url_for('services.update_service', service_id=service.id) }}"style="display: inline-block;">
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    </form>
+                </div>  
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}
