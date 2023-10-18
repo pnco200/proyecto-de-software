@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from src.web.helpers.auth import login_required
 from src.core import auth
 from src.web.helpers.permissions import has_permission,permission_required_in_Institution
@@ -39,7 +39,7 @@ def update_user_status(user_id):
     return redirect(url_for('user.admin_home'))
 
 @user_bp.post('/create_institution_owner') ## TO DO--> Proteger para superADMIN
-@has_permission([""])##--> ver cuales necesita
+@has_permission(["institution_add_owner"])##--> ver cuales necesita
 def create_institution_owner():
     institution_id = request.form.get('institution_id')
     user_id = request.form.get('user_id')
@@ -49,33 +49,33 @@ def create_institution_owner():
         flash("No se pudo asignar el usuario como dueño de la institucion", "error")
     return redirect(url_for('user.admin_home'))
 
-#@ValidateQueSeaDueñoDeInstitucion
+@permission_required_in_Institution(["institution_add_member"])
 @user_bp.post('/create_institution_member') ## TO DO--> Proteger para Dueño!, el INSTITUTION ID LO SACA DE LA QUE ESTA SELECIONADA EN LA BARRA
 def create_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
-    permission_id = request.form.get('permission_id')
+    permission_id = "Admin" if request.form.get('permission_id') == 2 else "Operator"
     user_id = request.form.get('user_id')
 
-    user = auth.assign_institution_owner(user_id, permission_id)
+    user = auth.assign_institution_member(user_id, permission_id, current_selected_institution)
     if not user:
         flash("No se pudo asignar el usuario como miembro de la institucion", "error")
     return redirect(url_for('user.home'))
 
-#@ValidateQueSeaDueñoDeInstitucion
+@permission_required_in_Institution(["institution_delete_member"])
 @user_bp.post('/delete_institution_member') ## TO DO--> Proteger para Dueño!
 def delete_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
-    permission_id = request.form.get('permission_id')
+    permission_id = "Admin" if request.form.get('permission_id') == 2 else "Operator"
     user_id = request.form.get('user_id')
 
-    user = auth.assign_institution_owner(user_id, permission_id)
+    user = auth.assign_institution_member(user_id, permission_id, current_selected_institution)
     if not user:
         flash("No se pudo asignar el usuario como miembro de la institucion", "error")
     return redirect(url_for('user.home'))
 
 
 @user_bp.post('/delete_institution_owner') ## TO DO--> Proteger para superADMIN
-
+@has_permission(["institution_delete_owner"])
 def delete_institution_owner():
     institution_id = request.form.get('institution_id')
     user_id = request.form.get('user_id')

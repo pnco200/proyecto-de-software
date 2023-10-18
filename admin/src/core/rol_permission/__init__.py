@@ -51,8 +51,8 @@ def delete_rol_permission(role_id, permission_id):
         return True
     return False
 
-def delete_rol_usuario(user_id,institution_id):
-    user_role = RolUsuario.query.filter_by(user_id=user_id, institution_id=institution_id).first()
+def delete_rol_usuario(user_id,institution_id, role_id):
+    user_role = RolUsuario.query.filter_by(user_id=user_id, institution_id=institution_id, role_id=role_id).first()
     if user_role:
         db.session.delete(user_role)
         db.session.commit()

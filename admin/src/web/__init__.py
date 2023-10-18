@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, session
 from src.web import error
 from src.core import database, seeds
 from src.core import bcrypt
@@ -36,7 +36,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(institution_bp)
     app.register_blueprint(permissions_bp)
     def get_user_institutions(request):
-        return institutions.get_user_institutions(utils.current_selected_institution(request))
+        return institutions.get_user_institutions(utils.current_selected_institution())
     
     # URLS
     @app.get("/")

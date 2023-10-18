@@ -194,7 +194,19 @@ def run():
         institution7 = rol_permission.create_permission(
             name="institution_deactive"
         )
-        
+        rol_permission.create_permission(
+            name="institution_add_owner"
+        )
+        rol_permission.create_permission(
+            name="institution_add_member"
+        )
+        rol_permission.create_permission(
+            name="institution_delete_owner"
+        )
+        rol_permission.create_permission(
+            name="institution_delete_member"
+        )
+
         service1 = rol_permission.create_permission(
             name="service_index"
         )
@@ -229,6 +241,7 @@ def run():
         config2 = rol_permission.create_permission(
             name="config_update"
         )
+
         
     def create_rol_has_these_permission():
         
@@ -343,7 +356,29 @@ def run():
             role_id ="SuperAdmin",
             permission_id = "config_update"
         )
-        ###permisos del Owner        
+        role_SuperAdmin29= rol_permission.create_rol_permission(
+            role_id ="SuperAdmin",
+            permission_id = "institution_add_owner"
+        )
+        
+        ###permisos del Owner
+        role_Owner1 = rol_permission.create_rol_permission(
+            role_id = "Owner",
+            permission_id ="institution_index"
+        )
+        role_Owner2 = rol_permission.create_rol_permission(
+            role_id = "Owner",
+            permission_id ="institution_update"
+        )
+        role_Owner3 = rol_permission.create_rol_permission(
+            role_id = "Owner",
+            permission_id ="institution_create"
+        )
+        role_Owner4 = rol_permission.create_rol_permission(
+            role_id = "Owner",
+            permission_id ="institution_destroy"
+        )
+        
         role_Owner5 = rol_permission.create_rol_permission(
             role_id = "Owner",
             permission_id ="service_index"
@@ -380,6 +415,15 @@ def run():
             role_id = "Owner",
             permission_id ="request_destroy"
         )
+        rol_permission.create_rol_permission(
+            role_id = "Owner",
+            permission_id ="institution_add_member"
+        )
+        rol_permission.create_rol_permission(
+            role_id = "Owner",
+            permission_id ="institution_delete_member"
+        )
+
         role_Owner_Show_Institution = rol_permission.create_rol_permission(
             role_id = "Owner",
             permission_id ="institution_show"
