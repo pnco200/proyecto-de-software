@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.core import services
+from src.web.helpers.utils import current_selected_institution
 service_bp = Blueprint('services', __name__, url_prefix='/services')
 
 
 @service_bp.get("/")
 def list_services():
     page = request.args.get('page', type=int, default=1)
-    list = services.list_service_paged(page)
+    current_institution_id = current_selected_institution(request)
+    list = services.list_services_paged_by_institution(page, current_institution_id)
     return render_template("services/index.html", services=list, page=page)
 
 @service_bp.get("/config/<int:service_id>")
@@ -40,12 +42,16 @@ def create_service():
     description = request.form.get('description')
     service_type = request.form.get('type')
 
+    current_institution_id = current_selected_institution(request)
+
+          
     params = {
         'name': name,
         'description': description,
         'key_words': key_words_array,
         'centers': centers_array,
-        'type': service_type
+        'type': service_type,
+        'institution_id': current_institution_id
     }
     services.create_service(**params)
     flash("El servicio fue creado correctamente.", "success")
