@@ -30,6 +30,7 @@ class Institution(db.Model):
     keywords = db.Column(db.String(500), unique=False)
     attention_time = db.Column(db.String(250), unique=False)
     contact = db.Column(db.String(250), unique=False)
+    services = db.relationship('Service', back_populates='institution')
     is_active = db.Column(db.Boolean, unique=False)
     updated_at=db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
