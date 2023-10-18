@@ -48,7 +48,7 @@
                                     <form method="POST" action="{{ url_for('user.create_institution_member') }}">
                                         <div class="form-group d-flex align-items-center">
                                             <input type="hidden" name="user_id" value="{{ user.id }}">
-                                            <input type="hidden" name="current_selected_institution" value="{{ current_selected_institution }}">
+                                            <input type="hidden" name="current_selected_institution" value="{{ current_selected_institution(request) }}">
                                             <select name="permission_id" class="form-select form-select-sm">
                                                 <option value="idOperador">Operador</option>
                                                 <option value="idAdministrador">Administrador</option>
@@ -61,7 +61,7 @@
                                     <form method="POST" action="{{ url_for('user.delete_institution_member', user_id=user.id) }}">
                                         <div class="form-group d-flex align-items-center">
                                             <input type="hidden" name="user_id" value="{{ user.id }}">
-                                            <input type="hidden" name="current_selected_institution" value="{{ current_selected_institution }}">
+                                            <input type="hidden" name="current_selected_institution" value="{{ current_selected_institution(request) }}">
                                             <select name="permission_id" class="form-select form-select-sm">
                                                 <option value="idOperador">Operador</option>
                                                 <option value="idAdministrador">Administrador</option>

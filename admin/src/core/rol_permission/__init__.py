@@ -73,6 +73,30 @@ def get_permission_id_by_name(permission_name):
     permission = Permiso.query.filter_by(name=permission_name).first()
     return permission.id
 
+def is_superadmin(user_id):
+    role = (
+        db.session.query(Permiso.name)
+        .join(RolUsuario, RolUsuario.role_id == 3)
+        .filter(RolUsuario.user_id == user_id)
+        .all()
+    )
+    if role:
+        return True
+    else:
+        return False
+    
+def is_institution_owner(user_id, institution_id):
+    owner = (
+        db.session.query(Permiso.name)
+        .join(RolUsuario, RolUsuario.role_id == 1)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(RolUsuario.institution_id == institution_id)
+        .all()
+    )
+    if owner:
+        return True
+    else:
+        return False
 
 def list_permissions_by_user_id(user_id):
     """
