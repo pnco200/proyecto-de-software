@@ -20,7 +20,7 @@ def register_form():
     return render_template("institutions/register.html")
 
 @institution_bp.route('/confirm_delete/<int:institution_id>', methods=['GET', 'POST'])
-@permissions.permission_required_in_Institution(["institution_delete"]) ##permiso de eliminar institucion SA?
+@permissions.permission_required_in_Institution(["institution_delete"], request) ##permiso de eliminar institucion SA?
 def confirm_delete(institution_id):
     """Permite confirmar la eliminacion de una institucion si el metodo es GET,
         si es POST elimina la institucion
