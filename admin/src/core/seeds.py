@@ -424,7 +424,10 @@ def run():
             permission_id ="institution_delete_member"
         )
 
-        
+        role_Owner_Show_Institution = rol_permission.create_rol_permission(
+            role_id = "Owner",
+            permission_id ="institution_show"
+        )
         ###Aca van los permisos del admin de una institucion
         role_Admin1 = rol_permission.create_rol_permission(
             role_id = "Admin",
@@ -462,6 +465,10 @@ def run():
             role_id = "Admin",
             permission_id ="request_destroy"
         )
+        role_Admin_Show_Institution = rol_permission.create_rol_permission(
+            role_id = "Admin",
+            permission_id ="institution_show"
+        )
         
         ###Aca van los permisos del operator
         role_Operator1 = rol_permission.create_rol_permission(
@@ -492,6 +499,10 @@ def run():
         role_Operator7 = rol_permission.create_rol_permission(
             role_id = "Operator",
             permission_id = "request_update"
+        )
+        role_Operator_Show_Institution = rol_permission.create_rol_permission(
+            role_id = "Operator",
+            permission_id ="institution_show"
         )
         
     create_configurations()
