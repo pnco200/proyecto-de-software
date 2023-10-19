@@ -2,8 +2,6 @@ from functools import wraps
 from flask import session, abort, redirect, url_for, flash, request
 from src.core import rol_permission as actions
 from src.web.helpers import utils
-from src.web.helpers.utils import current_selected_institution
-from src.core import auth
 from src.core import institutions
 def is_superadmin():
     user_id = session.get("user")
@@ -44,7 +42,7 @@ def has_permission(list_permissions):
     return decorator
 
 
-def permission_required_in_Institution(list_permissions,i):
+def permission_required_in_Institution(list_permissions):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -53,7 +51,7 @@ def permission_required_in_Institution(list_permissions,i):
                 if not user:
                      flash("Debe estar logeado para acceder a este recurso","info")
                      redirect(url_for("auth.login")) 
-                user_permission_list = actions.list_permissions_by_user_id(user)
+                user_permission_list = actions.list_Permissions_By_User_Id_In_Institution(user,institution_id)
                 for permission in list_permissions:
                     if not(permission in user_permission_list):
                         print("No posee el permiso en la institucion para la accion que desea. No posee permiso %s" %permission )

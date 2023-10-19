@@ -1,10 +1,15 @@
 from src.core.database import db
-from src.core.model.model import User
+from src.core.model.model import User, RolUsuario
 from src.core.configuration import get_rows_per_page
 from src.core.bcrypt import bcrypt
 from src.core import rol_permission
 def list_users():
-    return User.query.all()
+    query = User.query
+
+    subquery = db.session.query(RolUsuario.user_id).filter_by(role_id=3).subquery()
+    
+    query = query.filter(~User.id.in_(subquery))
+    return query.all()
     
 def create_user(**kwargs):
     hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
@@ -39,10 +44,20 @@ def find_user_by_username(username):
         User: Devuelve usuario si lo encuentra
     """
     return User.query.filter_by(username=username).first()
+def find_user_by_id(id):
+    """Encontrar usuario por id
+
+    Args:
+        id (_int_): id del usuario a buscar
+
+    Returns:
+        User: Devuelve usuario si lo encuentra
+    """
+    return User.query.filter_by(id=id).first()
 
 def check_user(email,password):
     user = find_user_by_email(email)
-    if user and bcrypt.check_password_hash(user.password, password.encode("utf-8")):
+    if user and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
         return user
     else:
         return None
@@ -63,6 +78,11 @@ def list_users_paged(page, only_blocked=None, email=None):
         query = query.filter_by(is_active=only_blocked)
     if email is not None:
         query = query.filter(User.email.ilike(f"%{email}%"))
+    
+    subquery = db.session.query(RolUsuario.user_id).filter_by(role_id=3).subquery()
+    
+    query = query.filter(~User.id.in_(subquery))
+
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def change_user_status(user_id):

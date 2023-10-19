@@ -9,7 +9,6 @@ class TipoDeServicio(Enum):
     CONSULTORIA = "Consultoría"
     DESARROLLO = "Desarrollo"
 
-
 class Service(db.Model):
     __tablename__= "services"
     id = db.Column(db.Integer, primary_key=True, unique=True)
