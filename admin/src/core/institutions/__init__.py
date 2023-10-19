@@ -44,6 +44,7 @@ def get_first_institution_id(user_id):
         .filter(Institution.id == RolUsuario.institution_id)
         .all()
     )    
+
     if _institutions:
         return _institutions[0].id
     else:

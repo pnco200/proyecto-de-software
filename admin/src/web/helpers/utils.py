@@ -33,6 +33,6 @@ def current_selected_institution():
     if selectedInstitution:
         return int(selectedInstitution)
     else:
-        selectedInstitution = institutions.get_first_institution_id(user_id)
-        return None
+        return institutions.get_first_institution_id(user_id)
+        
 
