@@ -32,18 +32,20 @@
                     {% if is_superadmin() %}
                     <li><a class="dropdown-item" href="{{url_for('user.admin_home')}}">Administracion de usuarios</a></li>
                     <li><a class="dropdown-item" href="{{url_for('configuration.index')}}">Configuracion del Sitio</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('institution.home')}}">Administracion de Instituciones</a></li>
                     {% endif %}
                     {% if is_institution_owner() %}
-                    <li><a class="dropdown-item" href="{{url_for('user.home')}}">Administracion de usuarios de institucion</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('user.home')}}">Administracion de empleados de Institucion</a></li>
                     {% endif %}
-                    <li><a class="dropdown-item" href="{{url_for('institution.home')}}">Administracion de Instituciones</a></li>
-                    <li><a class="dropdown-item" href="#">....</a></li>
                 </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Seguimientos</a>
             </li>
             {% if not is_superadmin() %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('services.list_services')}}">Servicios</a>
+            </li>
             <li class="nav-item dropdown" data-bs-toggle="dropdown1">
                 <form action="{{ url_for('institution.select_institution') }}" method="POST">
                     <select name="selected_institution" class="form-select" aria-labelledby="navbarDropdownMenuLink">

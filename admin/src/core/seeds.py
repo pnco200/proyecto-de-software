@@ -1,4 +1,4 @@
-from src.core import institutions, configuration, auth, rol_permission
+from src.core import institutions, configuration, auth, rol_permission, services
 
 def run():
     def create_institutions():
@@ -125,12 +125,57 @@ def run():
         )
     def create_configurations():
         configuration.create_configuration(
-            rows_per_page=5,
+            rows_per_page=1,
             contact_information="11 3091-6149",
             is_maintenance=False,
             maintenance_message="",
         )
-        
+    def create_services():
+        services.create_service(
+            name="Matemática",
+            type="ANALISIS",
+            centers="IME",
+            description="Matemática",
+            key_words=["Matemática", "Cálculo", "Álgebra", "Geometría", "Análisis"],
+            enabled=True,
+            institution_id=1
+        )
+        services.create_service(
+            name="Física",
+            type="ANALISIS",
+            centers="IF",
+            description="Física",
+            key_words=["Física", "Mecánica", "Óptica", "Termodinámica", "Electricidad", "Magnetismo", "Ondas", "Física Moderna", "Física Cuántica", "Relatividad"],
+            enabled=True,
+            institution_id=2
+        )
+        services.create_service(
+            name="Química",
+            type="ANALISIS",
+            centers="IQ",
+            description="Química",
+            key_words=["Quimica"],
+            enabled=True,
+            institution_id=2
+        )
+        services.create_service(
+            name="Biologia",
+            type="ANALISIS",
+            centers="IB",
+            description="Biologia",
+            key_words=["Quimica","Biologia", "Biología", "Biología Celular", "Biología Molecular", "Genética", "Bioquímica", "Microbiología", "Botánica", "Zoología", "Ecología", "Fisiología", "Anatomía", "Embriología", "Biología Evolutiva", "Biología del Desarrollo", "Bi"],
+            enabled=True,
+            institution_id=4
+        )
+        services.create_service(
+            name="Psicologia",
+            type="CONSULTORIA",
+            centers="IP",
+            description="Psicologia",
+            key_words=["Quimica","psico"],
+            enabled=True,
+            institution_id=5
+        )
     def create_roles():
         rol1 = rol_permission.create_rol(
             name = "Owner"
@@ -144,6 +189,7 @@ def run():
         rol4 = rol_permission.create_rol(
             name = "Operator"
         )
+    
     def create_permissions():
         user_index = rol_permission.create_permission(
             name="user_index"
@@ -240,9 +286,8 @@ def run():
         )
         config2 = rol_permission.create_permission(
             name="config_update"
-        )
-
-        
+        )      
+    
     def create_rol_has_these_permission():
         
         role_SuperAdmin1= rol_permission.create_rol_permission(
@@ -508,6 +553,7 @@ def run():
     create_configurations()
     create_institutions()
     create_users()
+    create_services()
     create_roles()
     create_permissions()
     create_rol_has_these_permission()
