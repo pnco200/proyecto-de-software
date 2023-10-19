@@ -36,6 +36,17 @@ def create_rol_usuario(**kwargs):
     db.session.commit()
     return user_role
 
+def get_rol_usuario(institution_id, user_id, role_id):
+    role_id = get_role_id_by_name(role_id)
+    user_role = (
+        db.session.query(RolUsuario)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(RolUsuario.institution_id == institution_id)
+        .filter(RolUsuario.role_id == role_id)
+        .all()
+    )
+    return user_role
+
 def delete_permission(permission_id):
     permission = Permiso.query.get(permission_id)
     if permission:
