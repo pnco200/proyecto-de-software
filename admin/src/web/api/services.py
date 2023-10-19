@@ -18,7 +18,7 @@ def getServices():
     page = request.args.get('page', 1, type=int)
 
 
-    queryRes = get_service_by_keyword_and_type(keyword=keyword, service_type=service_type, per_page=per_page, page=page)
+    queryRes = servicesQueries.get_service_by_keyword_and_type(keyword=keyword, service_type=service_type, per_page=per_page, page=page)
 
     if(queryRes == False):
         return jsonify({'error': 'Parametros Invalidos'}), 400
