@@ -42,7 +42,7 @@ def find_user_by_username(username):
 
 def check_user(email,password):
     user = find_user_by_email(email)
-    if user and bcrypt.check_password_hash(user.password, password.encode("utf-8")):
+    if user and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
         return user
     else:
         return None

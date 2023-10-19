@@ -11,6 +11,8 @@ from src.web.controllers.institution import institution_bp
 from src.web.controllers.permissions import permissions_bp
 from src.web.controllers.services import service_bp
 from src.web.api.institutions import api_institution_bp
+from src.web.api.auth import api_auth_bp
+
 from src.web.helpers import auth
 from src.web.helpers import utils
 from src.web.helpers import permissions
@@ -37,7 +39,9 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(institution_bp)
     app.register_blueprint(permissions_bp)
     app.register_blueprint(service_bp)
+    #API BLUEPRINTS
     app.register_blueprint(api_institution_bp)
+    app.register_blueprint(api_auth_bp)
 
     def get_user_institutions():
         return institutions.get_user_institutions(session.get("user"),utils.current_selected_institution())
