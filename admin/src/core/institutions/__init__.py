@@ -23,6 +23,7 @@ def get_user_institutions(user_id,selected_institution=-1):
     _institutions = (
         db.session.query(Institution)
         .join(RolUsuario, RolUsuario.user_id == user_id)
+        .filter(Institution.id == RolUsuario.institution_id)
         .all()
     )
     if selected_institution != -1:
@@ -40,6 +41,7 @@ def get_first_institution_id(user_id):
     _institutions = (
         db.session.query(Institution)
         .join(RolUsuario, RolUsuario.user_id == user_id)
+        .filter(Institution.id == RolUsuario.institution_id)
         .all()
     )    
     if _institutions:
