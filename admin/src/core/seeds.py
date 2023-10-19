@@ -125,7 +125,7 @@ def run():
         )
     def create_configurations():
         configuration.create_configuration(
-            rows_per_page=5,
+            rows_per_page=1,
             contact_information="11 3091-6149",
             is_maintenance=False,
             maintenance_message="",
@@ -160,10 +160,10 @@ def run():
         )
         services.create_service(
             name="Biologia",
-            type="CONSULTORIA",
+            type="ANALISIS",
             centers="IB",
             description="Biologia",
-            key_words=["Biologia", "Biología", "Biología Celular", "Biología Molecular", "Genética", "Bioquímica", "Microbiología", "Botánica", "Zoología", "Ecología", "Fisiología", "Anatomía", "Embriología", "Biología Evolutiva", "Biología del Desarrollo", "Bi"],
+            key_words=["Quimica","Biologia", "Biología", "Biología Celular", "Biología Molecular", "Genética", "Bioquímica", "Microbiología", "Botánica", "Zoología", "Ecología", "Fisiología", "Anatomía", "Embriología", "Biología Evolutiva", "Biología del Desarrollo", "Bi"],
             enabled=True,
             institution_id=4
         )
@@ -172,7 +172,7 @@ def run():
             type="CONSULTORIA",
             centers="IP",
             description="Psicologia",
-            key_words=["psico"],
+            key_words=["Quimica","psico"],
             enabled=True,
             institution_id=5
         )
