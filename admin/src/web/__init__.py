@@ -23,7 +23,7 @@ from src.core import institutions
 
 _session = Session()
 
-def create_app(env="development", static_folder="../../static"):
+def create_app(env="production", static_folder="../../static"):
     from src.web.api.users import api_user_bp
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
