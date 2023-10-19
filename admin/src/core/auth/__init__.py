@@ -1,10 +1,15 @@
 from src.core.database import db
-from src.core.model.model import User
+from src.core.model.model import User, RolUsuario
 from src.core.configuration import get_rows_per_page
 from src.core.bcrypt import bcrypt
 from src.core import rol_permission
 def list_users():
-    return User.query.all()
+    query = User.query
+
+    subquery = db.session.query(RolUsuario.user_id).filter_by(role_id=3).subquery()
+    
+    query = query.filter(~User.id.in_(subquery))
+    return query.all()
     
 def create_user(**kwargs):
     hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
@@ -58,6 +63,11 @@ def list_users_paged(page, only_blocked=None, email=None):
         query = query.filter_by(is_active=only_blocked)
     if email is not None:
         query = query.filter(User.email.ilike(f"%{email}%"))
+    
+    subquery = db.session.query(RolUsuario.user_id).filter_by(role_id=3).subquery()
+    
+    query = query.filter(~User.id.in_(subquery))
+
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def change_user_status(user_id):
