@@ -12,8 +12,8 @@ def index():
     config = configuration.get_configuration()
     return render_template('configuration/index.html', configuration=config)
 
-@permissions.has_permission(['config_update'])
 @config_bp.post('/update')
+@permissions.has_permission(['config_update'])
 def update_configuration():
     """"Actualiza la configuracion del sitio"""
     rows_per_page = request.form.get('rows_per_page')

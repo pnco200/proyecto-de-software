@@ -11,7 +11,6 @@ from src.web.controllers.institution import institution_bp
 from src.web.controllers.permissions import permissions_bp
 from src.web.controllers.services import service_bp
 from src.web.api.institutions import api_institution_bp
-from src.web.api.users import api_user_bp
 from src.web.api.auth import api_auth_bp
 
 from src.web.helpers import auth
@@ -25,6 +24,7 @@ from src.core import institutions
 _session = Session()
 
 def create_app(env="development", static_folder="../../static"):
+    from src.web.api.users import api_user_bp
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
 
