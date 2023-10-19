@@ -86,8 +86,6 @@ def assign_institution_owner(user_id, institution_id):
     Returns:
         boolean: True if was assigned, else False
     """
-    ###TO DO
-    ###--> Usar tabla user_role --> Usar funcion create_rol_usuario
     rol_permission.create_rol_usuario(
         role_id = "Owner",
         user_id = user_id,
@@ -108,10 +106,12 @@ def delete_institution_owner(user_id, institution_id):
     """
     ###TO DO
     ###borar la tabla de user_rol que tenga user_id e institution_id
-    rol_permission.delete_rol_usuario(user_id,institution_id)
-    return True
+    if rol_permission.delete_rol_usuario(user_id,institution_id, 1):
+        return True
+    else:
+        return False
 
-def assign_institution_member(user_id, permission_id):
+def assign_institution_member(user_id, permission_id, institution_id):
     """Assign user as institution member
 
     Args:
@@ -121,11 +121,15 @@ def assign_institution_member(user_id, permission_id):
     Returns:
         boolean: True if was assigned, else False
     """
-    ###TO DO
+    rol_permission.create_rol_usuario(
+        role_id = permission_id,
+        user_id = user_id,
+        institution_id = institution_id
+    )    
     return True
 
 
-def delete_institution_member(user_id, permission_id):
+def delete_institution_member(user_id, permission_id, institution_id):
     """Remove user as institution member
 
     Args:
@@ -134,5 +138,5 @@ def delete_institution_member(user_id, permission_id):
     Returns:
         boolean: True if was removed, else False
     """
-    ###TO DO
+    rol_permission.delete_rol_usuario(user_id,institution_id, permission_id)
     return True

@@ -25,6 +25,20 @@ def get_user_institutions(selected_institution=-1):
         _institutions.sort(key=lambda institution: (institution.id != selected_institution, institution.id))
     return _institutions
 
+def get_first_institution_id(user_id):
+    """Returns the id of the first institution of the user
+
+    Args:
+        user_id (int): The user id
+    Returns:
+        The ID of the institution, or NONE
+    """
+    _institutions = Institution.query.all() ## hay que ser que sean las del usuario TO DO
+    if _institutions:
+        return _institutions[0].id
+    else:
+        return None
+
 def list_institutions_paged(page):
     """Devuelve una lista de instituciones paginada y ordenada por id ascendentemente
    
