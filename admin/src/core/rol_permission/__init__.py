@@ -36,6 +36,15 @@ def create_rol_usuario(**kwargs):
     db.session.commit()
     return user_role
 
+def get_roles_for_user(user_id, institution_id):
+    user_roles = (
+        db.session.query(RolUsuario.role_id)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(RolUsuario.institution_id == institution_id)
+        .all()
+    )
+    return [role.role_id for role in user_roles]
+
 def get_rol_usuario(institution_id, user_id, role_id):
     role_id = get_role_id_by_name(role_id)
     user_role = (
