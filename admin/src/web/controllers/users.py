@@ -53,7 +53,7 @@ def create_institution_owner():
         flash("El usuario fue asignado como dueño de la institucion", "success")
     return redirect(url_for('user.admin_home'))
 
-@permission_required_in_Institution(["institution_add_member"])
+@permission_required_in_Institution(["institution_add_member"],'i')
 @user_bp.post('/create_institution_member') ## TO DO--> Proteger para Dueño!, el INSTITUTION ID LO SACA DE LA QUE ESTA SELECIONADA EN LA BARRA
 def create_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
@@ -67,7 +67,7 @@ def create_institution_member():
         flash("El usuario fue asignado como miembro de la institucion", "success")
     return redirect(url_for('user.home'))
 
-@permission_required_in_Institution(["institution_delete_member"])
+@permission_required_in_Institution(["institution_delete_member"],'i')
 @user_bp.post('/delete_institution_member') ## TO DO--> Proteger para Dueño!
 def delete_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
