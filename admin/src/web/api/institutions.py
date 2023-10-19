@@ -10,7 +10,7 @@ def get_institutions():
     per_page = None
 
     if ('page' in params and 'per_page' not in params) or ('per_page' in params and 'page' not in params):
-        return jsonify(message='parametros invalidos'), 400
+        return jsonify(error='Parametros Invalidos'), 400
     
     if 'page' in params and 'per_page' in params:
         page = int(params['page'])

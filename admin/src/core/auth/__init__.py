@@ -39,10 +39,20 @@ def find_user_by_username(username):
         User: Devuelve usuario si lo encuentra
     """
     return User.query.filter_by(username=username).first()
+def find_user_by_id(id):
+    """Encontrar usuario por id
+
+    Args:
+        id (_int_): id del usuario a buscar
+
+    Returns:
+        User: Devuelve usuario si lo encuentra
+    """
+    return User.query.filter_by(id=id).first()
 
 def check_user(email,password):
     user = find_user_by_email(email)
-    if user and bcrypt.check_password_hash(user.password, password.encode("utf-8")):
+    if user and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
         return user
     else:
         return None

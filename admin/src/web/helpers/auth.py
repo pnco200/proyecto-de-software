@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, abort
+from flask import session, abort, request, jsonify
 from src.core import auth
 def is_authenticated(session):
     return session.get("user") is not None
@@ -11,6 +11,4 @@ def login_required(f):
             return abort(401)
         return f(*args, **kwargs)
     return decorated_function
-
-
         
