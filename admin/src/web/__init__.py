@@ -76,6 +76,4 @@ def create_app(env="production", static_folder="../../static"):
     def seeddb():
         seeds.run()
         print("Seeds ejecutados")
-    resetdb()
-    seeddb()
     return app
