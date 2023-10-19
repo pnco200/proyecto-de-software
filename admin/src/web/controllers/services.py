@@ -6,7 +6,7 @@ service_bp = Blueprint('services', __name__, url_prefix='/services')
 
 
 @service_bp.get("/")
-@permissions.permission_required_in_Institution(["service_index,"])
+@permissions.permission_required_in_Institution(["service_index"])
 def list_services():
     page = request.args.get('page', type=int, default=1)
     current_institution_id = current_selected_institution()
@@ -14,13 +14,13 @@ def list_services():
     return render_template("services/index.html", services=list, page=page)
 
 @service_bp.get("/config/<int:service_id>")
-@permissions.permission_required_in_Institution(["institution_update"])
+@permissions.permission_required_in_Institution(["service_update"])
 def config_service(service_id):
     service = services.get_service(service_id)
     return render_template("services/config.html", service=service)
 
 @service_bp.get("/create")
-@permissions.permission_required_in_Institution(["institution_update"])
+@permissions.permission_required_in_Institution(["service_create"])
 def create_service_form():
     """
         Muestra el form de creacion de servicios
@@ -28,6 +28,7 @@ def create_service_form():
     return render_template("services/create.html")
 
 @service_bp.post("/create")
+@permissions.permission_required_in_Institution(["service_create"])
 def create_service():
     """
         Me permite crear un servicio
@@ -62,16 +63,17 @@ def create_service():
     return redirect(url_for('services.list_services'))
 
 @service_bp.post("/delete/<int:service_id>")
+@permissions.permission_required_in_Institution(["service_destroy"])
 def delete_service(service_id):
     """
         Me permite eliminar un servicio
     """
     services.delete_service(service_id)
     flash("El servicio fue eliminado correctamente.", "error")
-    return redirect(url_for('services.list_services'))
+    return redirect(url_for('services.list_services', ))
 
 @service_bp.get("/update/<int:service_id>")
-@permissions.permission_required_in_Institution(["institution_update"])
+@permissions.permission_required_in_Institution(["service_update, service_show"])
 def update_service_form(service_id):
     """
         Muestra el form de actualizacion de servicios
@@ -80,6 +82,7 @@ def update_service_form(service_id):
     return render_template("services/update.html", service=service)
 
 @service_bp.post("/update/<int:service_id>")
+@permissions.permission_required_in_Institution(["service_update"])
 def update_service(service_id):
     """
         Me permite actualizar un servicio
