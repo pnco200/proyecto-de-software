@@ -52,6 +52,18 @@ def list_institutions_paged(page):
     query = Institution.query.order_by(Institution.id.asc())
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
+def list_institutions_paged_api(page, per_page):
+    """Devuelve una lista de instituciones paginada y ordenada por id ascendentemente
+   
+     Args:
+        page (int): numero de pagina
+    
+    Returns:
+        list: lista de instituciones
+    """
+    query = Institution.query.order_by(Institution.id.asc())
+    return query.paginate(page=page, per_page=per_page, error_out=False)
+
 def create_institution(**kwargs):
     """Crea una institucion
 

@@ -6,7 +6,7 @@ service_bp = Blueprint('services', __name__, url_prefix='/services')
 
 
 @service_bp.get("/")
-@permissions.permission_required_in_Institution(["institution_show"], request)
+@permissions.permission_required_in_Institution(["institution_show"])
 def list_services():
     page = request.args.get('page', type=int, default=1)
     current_institution_id = current_selected_institution(request)
@@ -14,13 +14,13 @@ def list_services():
     return render_template("services/index.html", services=list, page=page)
 
 @service_bp.get("/config/<int:service_id>")
-@permissions.permission_required_in_Institution(["institution_update"], request)
+@permissions.permission_required_in_Institution(["institution_update"])
 def config_service(service_id):
     service = services.get_service(service_id)
     return render_template("services/config.html", service=service)
 
 @service_bp.get("/create")
-@permissions.permission_required_in_Institution(["institution_update"], request)
+@permissions.permission_required_in_Institution(["institution_update"])
 def create_service_form():
     """
         Muestra el form de creacion de servicios
@@ -71,7 +71,7 @@ def delete_service(service_id):
     return redirect(url_for('services.list_services'))
 
 @service_bp.get("/update/<int:service_id>")
-@permissions.permission_required_in_Institution(["institution_update"], request)
+@permissions.permission_required_in_Institution(["institution_update"])
 def update_service_form(service_id):
     """
         Muestra el form de actualizacion de servicios

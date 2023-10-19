@@ -10,7 +10,7 @@ permissions_bp = Blueprint('permissions', __name__, url_prefix='/permissions')
     ["institution_show",
     "institution_update",
     "institution_create"
-    ], request)
+    ])
 ###Permisos posiblemente necesarios ["institution_create","institution_update"]
 def home():
     """
