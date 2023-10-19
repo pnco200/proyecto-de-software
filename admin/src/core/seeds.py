@@ -483,10 +483,6 @@ def run():
             role_id = "Operator",
             permission_id = "service_show"
         )
-        role_Operator3 = rol_permission.create_rol_permission(
-            role_id = "Operator",
-            permission_id = "service_update"
-        )
         role_Operator4 = rol_permission.create_rol_permission(
             role_id = "Operator",
             permission_id = "service_create"
