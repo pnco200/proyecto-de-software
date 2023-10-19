@@ -6,10 +6,10 @@ service_bp = Blueprint('services', __name__, url_prefix='/services')
 
 
 @service_bp.get("/")
-@permissions.permission_required_in_Institution(["institution_show"])
+@permissions.permission_required_in_Institution(["service_index,"])
 def list_services():
     page = request.args.get('page', type=int, default=1)
-    current_institution_id = current_selected_institution(request)
+    current_institution_id = current_selected_institution()
     list = services.list_services_paged_by_institution(page, current_institution_id)
     return render_template("services/index.html", services=list, page=page)
 
@@ -46,7 +46,7 @@ def create_service():
     description = request.form.get('description')
     service_type = request.form.get('type')
 
-    current_institution_id = current_selected_institution(request)
+    current_institution_id = current_selected_institution()
 
           
     params = {

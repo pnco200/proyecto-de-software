@@ -51,7 +51,7 @@ def permission_required_in_Institution(list_permissions):
                 if not user:
                      flash("Debe estar logeado para acceder a este recurso","info")
                      redirect(url_for("auth.login")) 
-                user_permission_list = actions.list_permissions_by_user_id(user,institution_id)
+                user_permission_list = actions.list_Permissions_By_User_Id_In_Institution(user,institution_id)
                 for permission in list_permissions:
                     if not(permission in user_permission_list):
                         print("No posee el permiso en la institucion para la accion que desea. No posee permiso %s" %permission )
