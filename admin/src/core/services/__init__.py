@@ -32,3 +32,16 @@ def update_service(service_id, **kwargs):
         setattr(service, key, value)
     db.session.commit()
     return service
+
+def get_service_by_keyword_and_type(keyword, service_type=None, per_page=None, page=None):
+    query = Service.query
+
+    query = query.filter(Service.name.like(f'%{keyword}%'))
+
+    if service_type is not None:
+        query = query.filter(Service.type == service_type)
+
+    # Apply pagination
+    query = query.paginate(page=page, per_page=per_page, error_out=False)
+
+    return query.items  # Returns a list of Service objects for the specified page
