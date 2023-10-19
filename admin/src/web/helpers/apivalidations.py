@@ -21,7 +21,7 @@ def requires_auth():
                     return jsonify(error='Token invalido'), 401
             except ValueError:
                 return jsonify(error='Formato de token invalido'), 401
-            return f(*args, **kwargs)
+            return f(user, *args, **kwargs)
 
         return decorated_function
     return decorator
