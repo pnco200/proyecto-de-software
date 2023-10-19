@@ -19,14 +19,14 @@ from src.core.email import email_utils
 from src.core import institutions
 #from src.web.controllers.issues import issues
 
-session = Session()
+_session = Session()
 
 def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
 
     # INICIAR DEPENDENCIAS
-    session.init_app(app)
+    _session.init_app(app)
     database.init_app(app)
     bcrypt.init_app(app)
     email_utils.init_app(app)
@@ -39,8 +39,8 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(service_bp)
     app.register_blueprint(api_institution_bp)
 
-    def get_user_institutions(request):
-        return institutions.get_user_institutions(utils.current_selected_institution())
+    def get_user_institutions():
+        return institutions.get_user_institutions(session.get("user"),utils.current_selected_institution())
     
     # URLS
     @app.get("/")

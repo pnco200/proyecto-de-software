@@ -47,7 +47,7 @@
             <li class="nav-item dropdown" data-bs-toggle="dropdown1">
                 <form action="{{ url_for('institution.select_institution') }}" method="POST">
                     <select name="selected_institution" class="form-select" aria-labelledby="navbarDropdownMenuLink">
-                        {% for institution in get_user_institutions(request) %}
+                        {% for institution in get_user_institutions() %}
                         <option value="{{ institution['id'] }}">
                         {{ institution['name'] }}
                         </option>

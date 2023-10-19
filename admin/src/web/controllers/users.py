@@ -35,9 +35,14 @@ def home():
 @user_bp.route('/update_user_status/<int:user_id>') ## TO DO--> Proteger para superADMIN
 @has_permission(["user_update"])##--> ver cuales necesita
 def update_user_status(user_id):
-    user = auth.change_user_status(user_id=user_id)
-    if not user:
-        flash("No se puede cambiar el estado de ese usuario", "error")
+    if rol_permission.is_superadmin(user_id):
+        flash("No se puede cambiar el estado de un SuperAdmin", "error")
+    else:
+        user = auth.change_user_status(user_id=user_id)
+        if not user:
+            flash("No se puede cambiar el estado de ese usuario", "error")
+        else:
+            flash("Se actualizo el estado del usuario exitosamente", "success")
     return redirect(url_for('user.admin_home'))
 
 @user_bp.post('/create_institution_owner') ## TO DO--> Proteger para superADMIN

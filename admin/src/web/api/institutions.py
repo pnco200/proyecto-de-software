@@ -11,20 +11,23 @@ def get_institutions():
 
     if ('page' in params and 'per_page' not in params) or ('per_page' in params and 'page' not in params):
         return jsonify(message='parametros invalidos'), 400
-
+    
     if 'page' in params and 'per_page' in params:
         page = int(params['page'])
         per_page = int(params['per_page'])
-        institutions = institutionsQueries.list_institutions_paged_api(page=page, per_page=per_page)
+        paginated_institutions = institutionsQueries.list_institutions_paged_api(page=page, per_page=per_page)
+        institutions = paginated_institutions.items
     else:
         institutions = institutionsQueries.list_institutions()
 
+    total_institutions_count = len(institutionsQueries.list_institutions())
+
     if not institutions:
-        return jsonify(data=[], page=page, per_page=per_page, total=0), 200
+        return jsonify(data=[], page=page, per_page=per_page, total=total_institutions_count), 200
 
     institution_list = []
 
-    for institution in institutions.items:
+    for institution in institutions:
         institution_data = {
             'id': institution.id,
             'name': institution.name,
@@ -43,12 +46,15 @@ def get_institutions():
         response = {
             'data': institution_list,
             'page': page,
-            'per_page': institutions.per_page,
-            'total': institutions.total
+            'per_page': per_page,
+            'total': total_institutions_count
         }
     else:
         response = {
-            'data': institution_list
+            'data': institution_list,
+            'page': None,
+            'per_page': None,
+            'total': total_institutions_count
         }
 
     return jsonify(response), 200

@@ -1,6 +1,6 @@
 from src.core.configuration import get_rows_per_page
 from src.core.database import db
-from src.core.model.model import Institution
+from src.core.model.model import Institution, RolUsuario
 from sqlalchemy import or_
 
 def list_institutions():
@@ -11,7 +11,7 @@ def list_institutions():
     """
     return Institution.query.all()
 
-def get_user_institutions(selected_institution=-1):
+def get_user_institutions(user_id,selected_institution=-1):
     """Returns user institutions, if he has a selected institution it should be sorted to appear first on the list
 
     Args:
@@ -20,7 +20,11 @@ def get_user_institutions(selected_institution=-1):
     Returns:
         list(Institution): Return a list of institutions
     """
-    _institutions = Institution.query.all() ## hay que ser que sean las del usuario TO DO
+    _institutions = (
+        db.session.query(Institution)
+        .join(RolUsuario, RolUsuario.user_id == user_id)
+        .all()
+    )
     if selected_institution != -1:
         _institutions.sort(key=lambda institution: (institution.id != selected_institution, institution.id))
     return _institutions
@@ -33,7 +37,11 @@ def get_first_institution_id(user_id):
     Returns:
         The ID of the institution, or NONE
     """
-    _institutions = Institution.query.all() ## hay que ser que sean las del usuario TO DO
+    _institutions = (
+        db.session.query(Institution)
+        .join(RolUsuario, RolUsuario.user_id == user_id)
+        .all()
+    )    
     if _institutions:
         return _institutions[0].id
     else:
