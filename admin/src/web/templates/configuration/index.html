@@ -1,0 +1,27 @@
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+<body>
+    <h2 class="h2" align="center">Actualizar configuracion del sitio</h2>
+    <form method="POST" action="{{ url_for('configuration.update_configuration') }}">
+        <div class="mb-3">
+            <label for="rows_per_page" class="form-label">Elementos por pagina</label>
+            <input type="number" class="form-control" id="rows_per_page" name="rows_per_page" value="{{ configuration.rows_per_page }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="contact_information" class="form-label">Informacion de contacto</label>
+            <input type="text" class="form-control" id="contact_information" name="contact_information" value="{{ configuration.contact_information }}" required pattern=".{1,50}">
+            <small class="form-text text-info">Maximo 50 caracteres.</small>
+        </div>
+        <div class="mb-3 form-check">
+            <label class="form-check-label" for="is_maintenance">En Mantenimiento</label>
+            <input type="checkbox" class="form-check-input" id="is_maintenance" name="is_maintenance" {% if configuration.is_maintenance %}checked{% endif %}>
+        </div>
+        <div class="mb-3">
+            <label for="maintenance_message" class="form-label">Mensaje de mantenimiento</label>
+            <textarea class="form-control" id="maintenance_message" name="maintenance_message" pattern=".{1,255}">{{ configuration.maintenance_message }}</textarea>
+            <small class="form-text text-info">Maximo 255 caracteres.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar</button>     
+    </form>
+</body>
+{% endblock %}

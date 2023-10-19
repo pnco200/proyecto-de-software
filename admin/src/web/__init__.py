@@ -1,38 +1,56 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, url_for, request, redirect, session
 from src.web import error
-from src.core import database
+from src.core import database, seeds
 from src.core import bcrypt
-from src.web.config import config
+from src.web.config  import config
 from src.web import error
-from src.web.controllers.test import test_bp
 from src.web.controllers.auth import auth_bp
 from src.web.controllers.users import user_bp
+from src.web.controllers.configuration import config_bp
+from src.web.controllers.institution import institution_bp
+from src.web.controllers.permissions import permissions_bp
+from src.web.controllers.services import service_bp
+from src.web.api.institutions import api_institution_bp
+from src.web.api.auth import api_auth_bp
+
 from src.web.helpers import auth
+from src.web.helpers import utils
+from src.web.helpers import permissions
 from flask_session import Session
 from src.core.email import email_utils
+from src.core import institutions
 #from src.web.controllers.issues import issues
 
-session = Session()
+_session = Session()
 
 def create_app(env="development", static_folder="../../static"):
+    from src.web.api.users import api_user_bp
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
 
     # INICIAR DEPENDENCIAS
-    session.init_app(app)
+    _session.init_app(app)
     database.init_app(app)
     bcrypt.init_app(app)
     email_utils.init_app(app)
-
     # BLUEPRINTS
-    app.register_blueprint(test_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
-
+    app.register_blueprint(config_bp)
+    app.register_blueprint(institution_bp)
+    app.register_blueprint(permissions_bp)
+    app.register_blueprint(service_bp)
+    #API BLUEPRINTS
+    app.register_blueprint(api_institution_bp)
+    app.register_blueprint(api_user_bp)    
+    app.register_blueprint(api_auth_bp)
+    def get_user_institutions():
+        return institutions.get_user_institutions(session.get("user"),utils.current_selected_institution())
+    
     # URLS
     @app.get("/")
     def home():
-        return render_template("home.html") #Hay que mandarle si el usuario esta logeado o no
+        return render_template("home.html")
     
     @app.get("/sendmailtest")
     def mail_test():
@@ -45,9 +63,17 @@ def create_app(env="development", static_folder="../../static"):
 
     # JINJA
     app.jinja_env.globals.update(is_authenticated = auth.is_authenticated)
+    app.jinja_env.globals.update(get_user_institutions = get_user_institutions)
+    app.jinja_env.globals.update(current_selected_institution = utils.current_selected_institution)
+    app.jinja_env.globals.update(is_superadmin = permissions.is_superadmin)
+    app.jinja_env.globals.update(is_institution_owner = permissions.is_institution_owner)
 
     @app.cli.command(name="resetdb")
     def resetdb():
         database.reset_db()
 
+    @app.cli.command(name="seeddb")
+    def seeddb():
+        seeds.run()
+        print("Seeds ejecutados")
     return app
