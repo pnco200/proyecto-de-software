@@ -1,6 +1,7 @@
 from src.core.database import db
-from src.core.services.service import Service
+from src.core.services.service import Service, TipoDeServicio
 from src.core.configuration import get_rows_per_page
+from sqlalchemy import or_
 
 #TODO: Sacar esta función
 def list_service_paged(page):
@@ -32,3 +33,30 @@ def update_service(service_id, **kwargs):
         setattr(service, key, value)
     db.session.commit()
     return service
+
+def get_service_types():
+    _dict = {}
+    for item in TipoDeServicio:
+        _dict[item.name] = item.value
+    return _dict
+
+def get_service_by_keyword_and_type(keyword, service_type=None, per_page=None, page=None):
+    query = Service.query
+
+    try:
+        query = query.filter(or_(Service.key_words.contains([keyword])))
+
+        if service_type is not None:
+            query = query.filter(Service.type == service_type)
+
+        total_count = query.count()
+
+        query = query.paginate(page=page, per_page=per_page, error_out=False)
+    except Exception as e:
+        print(e)
+        return False
+
+    return query.items, total_count  
+
+
+

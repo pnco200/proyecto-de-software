@@ -1,7 +1,7 @@
 from src.core.database import db
 from src.core.institutions import Institution
 from src.core.model.model import User,Rol,RolUsuario,RolPermiso,Permiso
-from sqlalchemy.orm import joinedload
+from sqlalchemy import or_
 
 
 def create_rol(**kwargs):
@@ -36,6 +36,37 @@ def create_rol_usuario(**kwargs):
     db.session.commit()
     return user_role
 
+def get_roles_for_user(user_id, institution_id):
+    user_roles = (
+        db.session.query(RolUsuario.role_id)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(RolUsuario.institution_id == institution_id)
+        .all()
+    )
+    return [role.role_id for role in user_roles]
+
+def get_rol_usuario(institution_id, user_id, role_id):
+    role_id = get_role_id_by_name(role_id)
+    user_role = (
+        db.session.query(RolUsuario)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(RolUsuario.institution_id == institution_id)
+        .filter(RolUsuario.role_id == role_id)
+        .all()
+    )
+    return user_role
+
+def get_user_admin_or_operator_in_institution(institution_id, user_id):
+    roles = (
+        db.session.query(Rol)
+        .join(RolUsuario, RolUsuario.role_id == Rol.id)
+        .filter(RolUsuario.user_id == user_id)
+        .filter(RolUsuario.institution_id == institution_id)
+        .filter(or_(RolUsuario.role_id == 2, RolUsuario.role_id == 4))        
+        .all()
+    )
+    return roles
+
 def delete_permission(permission_id):
     permission = Permiso.query.get(permission_id)
     if permission:
@@ -54,8 +85,6 @@ def delete_rol_permission(role_id, permission_id):
 
 def delete_rol_usuario(user_id,institution_id, role_id):
     user_role = RolUsuario.query.filter_by(user_id=user_id, institution_id=institution_id, role_id=role_id).first()
-    print("user role")
-    print(user_role)
     if user_role:
         db.session.delete(user_role)
         db.session.commit()

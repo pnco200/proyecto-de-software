@@ -10,24 +10,27 @@ from src.web.controllers.configuration import config_bp
 from src.web.controllers.institution import institution_bp
 from src.web.controllers.permissions import permissions_bp
 from src.web.controllers.services import service_bp
+from src.web.api.institutions import api_institution_bp
+from src.web.api.auth import api_auth_bp
+from src.web.api.services import api_service_bp
 from src.web.controllers.services_requests import srequest_bp
 from src.web.helpers import auth
 from src.web.helpers import utils
 from src.web.helpers import permissions
-
 from flask_session import Session
 from src.core.email import email_utils
 from src.core import institutions
 #from src.web.controllers.issues import issues
 
-session = Session()
+_session = Session()
 
 def create_app(env="development", static_folder="../../static"):
+    from src.web.api.users import api_user_bp
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
 
     # INICIAR DEPENDENCIAS
-    session.init_app(app)
+    _session.init_app(app)
     database.init_app(app)
     bcrypt.init_app(app)
     email_utils.init_app(app)
@@ -39,9 +42,13 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(permissions_bp)
     app.register_blueprint(service_bp)
     app.register_blueprint(srequest_bp)
-    
-    def get_user_institutions(request):
-        return institutions.get_user_institutions(utils.current_selected_institution())
+    app.register_blueprint(api_service_bp)
+    #API BLUEPRINTS
+    app.register_blueprint(api_institution_bp)
+    app.register_blueprint(api_user_bp)    
+    app.register_blueprint(api_auth_bp)
+    def get_user_institutions():
+        return institutions.get_user_institutions(session.get("user"),utils.current_selected_institution())
     
     # URLS
     @app.get("/")

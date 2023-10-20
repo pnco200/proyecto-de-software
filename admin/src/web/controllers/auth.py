@@ -30,7 +30,7 @@ def authenticate():
         return redirect(url_for("auth.login"))
     session["user"] = user.id
     flash("La sesion se inicio correctamente.", "success")
-    return redirect(url_for('user.home', _external=True))
+    return redirect(url_for('home', _external=True))
 
 
 @auth_bp.get('/logout')
