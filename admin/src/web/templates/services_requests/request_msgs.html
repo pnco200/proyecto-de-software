@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat con {{ user_and_msgs[0].name }} - {{ user_and_msgs[3].name }}</title>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Chat con {{ user_and_msgs[0].name }}</h1>
+            <p>Servicio: {{ user_and_msgs[3].name }} ({{ user_and_msgs[3].type }})</p>
+        </div>
+
+        <div id="chat">
+            {% for msg in user_and_msgs[1] %}
+                <div class="message {% if msg.user_id == user_and_msgs[0].id %}left{% else %}right{% endif %}">
+                    <p>{{ msg.msg_content }}</p>
+                    <small>{{ msg.inserted_at }}</small>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="message-input">
+            <form method="post" action="{{url_for('servicesRequests.send_msg')}}">
+                <input type="text" name="nuevo_mensaje" placeholder="Escribe tu mensaje">
+                <input type="submit" value="Enviar">
+                <input type="hidden"name="user_id" value={{user_and_msgs[0].id}}>
+                <input type="hidden"name="service_request" value={{user_and_msgs[2]}}>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-header {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .message {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 5px;
+            max-width: 70%;
+            border-radius: 5px;
+        }
+
+        .left {
+            text-align: left;
+            background-color: #f0f0f0;
+        }
+
+        .right {
+            text-align: right;
+            background-color: #e1f7e6;
+        }
+
+        .message-input {
+            margin-top: 10px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</body>
+</html>

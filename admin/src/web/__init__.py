@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, request, redirect, session
+from flask import Flask, render_template, url_for, request, redirect, session, abort
 from src.web import error
 from src.core import database, seeds
 from src.core import bcrypt
+from src.core.configuration import is_in_maintenance
 from src.web.config  import config
 from src.web import error
 from src.web.controllers.auth import auth_bp
@@ -13,6 +14,7 @@ from src.web.controllers.services import service_bp
 from src.web.api.institutions import api_institution_bp
 from src.web.api.auth import api_auth_bp
 from src.web.api.services import api_service_bp
+from src.web.controllers.services_requests import srequest_bp
 from src.web.helpers import auth
 from src.web.helpers import utils
 from src.web.helpers import permissions
@@ -40,6 +42,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(institution_bp)
     app.register_blueprint(permissions_bp)
     app.register_blueprint(service_bp)
+    app.register_blueprint(srequest_bp)
     app.register_blueprint(api_service_bp)
     #API BLUEPRINTS
     app.register_blueprint(api_institution_bp)
@@ -61,6 +64,7 @@ def create_app(env="development", static_folder="../../static"):
     #ERRORS
     app.register_error_handler(404,error.not_found_error404)
     app.register_error_handler(401,error.unauthorized)
+    app.register_error_handler(503,error.maintenance)
 
     # JINJA
     app.jinja_env.globals.update(is_authenticated = auth.is_authenticated)
@@ -68,7 +72,10 @@ def create_app(env="development", static_folder="../../static"):
     app.jinja_env.globals.update(current_selected_institution = utils.current_selected_institution)
     app.jinja_env.globals.update(is_superadmin = permissions.is_superadmin)
     app.jinja_env.globals.update(is_institution_owner = permissions.is_institution_owner)
-
+    @app.before_request
+    def verify_maintenance():
+        if is_in_maintenance():
+            abort(503)
     @app.cli.command(name="resetdb")
     def resetdb():
         database.reset_db()

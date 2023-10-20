@@ -31,6 +31,24 @@ def get_configuration():
     """
     return Configuration.query.first()
 
+def is_in_maintenance():
+    """Devuelve el estado actual del sitio
+
+    Returns:
+        bool: True si esta en mantenimiento, False si no.
+    """
+
+    return Configuration.query.first().is_maintenance
+
+def maintenance_message():
+    """Devuelve el mensaje de mantenimiento del sitio
+
+    Returns:
+        string: mensaje de mantenimiento del sitio
+    """
+
+    return Configuration.query.first().maintenance_message
+
 def get_rows_per_page():
     """Devuelve la configuracion actual del sitio para cuantas filas mostrar por pagina
 

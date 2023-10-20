@@ -37,6 +37,11 @@ def find_user_by_email(email):
         User: Devuelve usuario si lo encuentra
     """
     return User.query.filter_by(email=email).first()
+
+def find_user_by_id(id):
+    return User.query.fileter_by(id=id).first()    
+
+
 def find_user_by_username(username):
     """Encontrar usuario por nombre de usuario
 
