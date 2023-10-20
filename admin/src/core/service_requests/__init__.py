@@ -1,3 +1,4 @@
+from flask import session
 from src.core.database import db
 from src.core import services
 from src.core import auth 
@@ -75,28 +76,42 @@ def add_message_to_service_request(service_request_id, new_message):
 def get_request_detaile(id):
     service_alias = aliased(Service, name="service_alias")
     user_alias = aliased(User, name="user_alias")
-    request = (db.session.query(ServiceRequest,service_alias,user_alias,Institution.name)
-            .join(service_alias,service_alias.id == ServiceRequest.service_id)
-            .join(user_alias, user_alias.id ==ServiceRequest.user_id)
-            .join(Institution, Institution.id == service_alias.institution_id)
-            .filter(ServiceRequest.id == id)
-            .first()
-    )
-    return request
+    try:
+        request = (db.session.query(ServiceRequest,service_alias,user_alias,Institution.name)
+                .join(service_alias,service_alias.id == ServiceRequest.service_id)
+                .join(user_alias, user_alias.id ==ServiceRequest.user_id)
+                .join(Institution, Institution.id == service_alias.institution_id)
+                .filter(ServiceRequest.id == id)
+                .first()
+        )
+        return request
+    except Exception as e:
+        print(e)
+        return None
+
+def get_state_by_id(id):
+    state = ServiceState.query.filter(ServiceState.id == id).first()
+    return state
 
 def get_request_msgs(id):
     user_alias = aliased(User,name="user_alias")
     service_alias = aliased(Service, name="service_alias")
-    msgs = (db.session.query(ServiceRequestMessages,service_alias)
+    service_request = aliased(ServiceRequest,name="s_request")
+    msgs = (db.session.query(ServiceRequestMessages)
             .join(ServiceRequest,ServiceRequest.id==ServiceRequestMessages.service_request_id)
             .join(service_alias,service_alias.id == ServiceRequest.service_id)
             .all()
             )
+    s = (db.session.query(service_alias)
+         .join(service_request,service_request.service_id==service_alias.id)
+         .filter(service_request.id == id)
+         .first()
+         )
     user = (db.session.query(user_alias)
             .join(ServiceRequest,ServiceRequest.user_id == user_alias.id)
             .first()
             )
-    list =[user,msgs]
+    list =[user,msgs,id,s]
     return list
 
 def create_service_request(**kwargs):
@@ -104,21 +119,22 @@ def create_service_request(**kwargs):
     state = create_state_request(
         name = 'inicial'
     )
-    db.session.ada(sr)
+    db.session.add(sr)
     db.session.commit()
     return sr
 
-def create_state_request(**kargs):
-    state = ServiceState(**kargs)
-    db.session.ada(state)
+def create_state_request(**kwargs):
+    state = ServiceState(**kwargs)
+    db.session.add(state)
     db.session.commit()
     return state
 
 
 
-def create_message_request(**kargs):
-    msg = ServiceRequestMessages(**kargs)
-    db.session.ada(msg)
+def create_message_request(**kwargs):
+    kwargs['user_id']= session.get('user')
+    msg = ServiceRequestMessages(**kwargs)
+    db.session.add(msg)
     db.session.commit()
     return msg
 
