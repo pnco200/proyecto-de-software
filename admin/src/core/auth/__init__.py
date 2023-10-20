@@ -12,6 +12,14 @@ def list_users():
     return query.all()
     
 def create_user(**kwargs):
+    """Crear usuario
+
+    Args:
+        **kwargs (_dict_): Diccionario con los datos del usuario a crear
+
+    Returns:
+        User: Devuelve usuario creado
+    """
     hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
     kwargs.update(password=hash.decode("utf-8"))
     user = User(**kwargs)
@@ -51,6 +59,16 @@ def find_user_by_id(id):
     return User.query.filter_by(id=id).first()
 
 def check_user(email,password):
+    """Verificar usuario por email y password
+
+    Args:
+        email (_str_): email del usuario
+        password (_str_): password del usuario
+
+    Returns:
+        User: Devuelve usuario si la verificación es exitosa
+        None: Devuelve None en caso contrario
+    """
     user = find_user_by_email(email)
     if user and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
         return user
@@ -58,6 +76,15 @@ def check_user(email,password):
         return None
     
 def confirm_email(token):
+    """Confirmar email del usuario
+
+    Args:
+        token (_str_): token de confirmación
+    
+    Returns:
+        User: Devuelve usuario si el token es correcto
+        None: Devuelve None en caso contrario
+    """
     user = User.query.filter_by(confirm_token=token).first()
     if user: 
         user.is_confirmed = True
@@ -67,6 +94,16 @@ def confirm_email(token):
         return None
 
 def list_users_paged(page, only_blocked=None, email=None):
+    """Listar usuarios en forma paginada
+
+    Args:
+        page (_int_): Número de página
+        only_blocked (_bool_, optional): Si es True, lista solo usuarios bloqueados. Si es False, lista usuarios no bloqueados.
+        email (_str_, optional): Filtra usuarios por dirección de correo electrónico.
+
+    Returns:
+        Pagination: Objeto paginado con la lista de usuarios.
+    """
     per_page = get_rows_per_page()
     query = User.query
     if only_blocked is not None:
@@ -81,13 +118,13 @@ def list_users_paged(page, only_blocked=None, email=None):
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def change_user_status(user_id):
-    """Change user status
+    """Cambiar estado de usuario
 
     Args:
-        user_id (integer): id of the user
+        user_id (_int_): Id del usuario 
 
     Returns:
-        boolean: True if was changed, else False
+        boolean: True si se cambió el estado, False en caso contrario
     """
     user = User.query.filter_by(id=user_id).first()
     if(not user): ## TO DO--> ADD OR IF USER IS SUPER ADMIN
@@ -97,14 +134,14 @@ def change_user_status(user_id):
     return True
 
 def assign_institution_owner(user_id, institution_id):
-    """Assign user as institution owner
+    """Asignar usuario como dueño de institución
 
     Args:
-        user_id (int): Id of the user
-        institution_id (int): Id of the institution
-
+        user_id (_int_): Id del usuario
+        institution_id (_int_): Id de la institución
+    
     Returns:
-        boolean: True if was assigned, else False
+        boolean: True si se asignó el usuario como dueño, False en caso contrario
     """
     rol_permission.create_rol_usuario(
         role_id = "Owner",
@@ -115,14 +152,14 @@ def assign_institution_owner(user_id, institution_id):
 
 
 def delete_institution_owner(user_id, institution_id):
-    """Remove user as institution owner
+    """Eliminar usuario como dueño de institución
 
     Args:
-        user_id (int): Id of the user
-        institution_id (int): Id of the institution
-
+        user_id (_int_): Id del usuario
+        institution_id (_int_): Id de la institución
+    
     Returns:
-        boolean: True if was removed, else False
+        boolean: True si se eliminó el usuario como dueño, False en caso contrario
     """
     ###TO DO
     ###borar la tabla de user_rol que tenga user_id e institution_id
@@ -132,14 +169,15 @@ def delete_institution_owner(user_id, institution_id):
         return False
 
 def assign_institution_member(user_id, permission_id, institution_id):
-    """Assign user as institution member
+    """Asignar usuario como miembro de institución
 
     Args:
-        user_id (int): Id of the user
-        permission_id (int): Role of member
-
+        user_id (_int_): Id del usuario
+        permission_id (_int_): Id del permiso
+        institution_id (_int_): Id de la institución
+    
     Returns:
-        boolean: True if was assigned, else False
+        boolean: True si se asignó el usuario como miembro, False en caso contrario
     """
     rol_permission.create_rol_usuario(
         role_id = permission_id,
@@ -150,13 +188,15 @@ def assign_institution_member(user_id, permission_id, institution_id):
 
 
 def delete_institution_member(user_id, permission_id, institution_id):
-    """Remove user as institution member
-
+    """Eliminar usuario como miembro de institución
+    
     Args:
-        user_id (int): Id of the user
-        permission_id (int): Role of member
+        user_id (_int_): Id del usuario
+        permission_id (_int_): Id del permiso
+        institution_id (_int_): Id de la institución
+
     Returns:
-        boolean: True if was removed, else False
+        boolean: True si se eliminó el usuario como miembro, False en caso contrario
     """
     rol_permission.delete_rol_usuario(user_id,institution_id, permission_id)
     return True
