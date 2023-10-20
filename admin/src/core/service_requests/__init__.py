@@ -25,14 +25,22 @@ def list_requests_paged_by_institution(page, institution_id):
 def get_request_detaile(id):
     service_alias = aliased(Service, name="service_alias")
     user_alias = aliased(User, name="user_alias")
-    request = (db.session.query(ServiceRequest,service_alias,user_alias,Institution.name)
-            .join(service_alias,service_alias.id == ServiceRequest.service_id)
-            .join(user_alias, user_alias.id ==ServiceRequest.user_id)
-            .join(Institution, Institution.id == service_alias.institution_id)
-            .filter(ServiceRequest.id == id)
-            .first()
-    )
-    return request
+    try:
+        request = (db.session.query(ServiceRequest,service_alias,user_alias,Institution.name)
+                .join(service_alias,service_alias.id == ServiceRequest.service_id)
+                .join(user_alias, user_alias.id ==ServiceRequest.user_id)
+                .join(Institution, Institution.id == service_alias.institution_id)
+                .filter(ServiceRequest.id == id)
+                .first()
+        )
+        return request
+    except Exception as e:
+        print(e)
+        return None
+
+def get_state_by_id(id):
+    state = ServiceState.query.filter(ServiceState.id == id).first()
+    return state
 
 def get_request_msgs(id):
     user_alias = aliased(User,name="user_alias")
