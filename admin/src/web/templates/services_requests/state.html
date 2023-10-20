@@ -1,0 +1,29 @@
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<body>
+                <h2>Estado Actual {{state.ServiceState.name}}</h2>
+                <h3>Observaciones:</h3>
+                <p align="center">{{state.SreviceState.state_message}}</p>
+
+                <h2>Modificar Estado</h2>
+                <form method="post" action="{{url_for('servicesRequests.change_state',request_id=request_id)}}">
+                    <select name="new_state">
+                        <option value="inicial">Inicial</option>
+                        <option value="aceptada">Aceptada</option>
+                        <option value="rechazada">Rechazada</option>
+                        <option value="en_proceso">En Proceso</option>
+                        <option value="finalizada">Finalizada</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                    <br>
+                    <input type="text" name="new_observations" placeholder="Ingrese sus observaciones">
+                    <input type="submit" value="Cambiar Estado">
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

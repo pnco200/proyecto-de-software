@@ -35,4 +35,14 @@ def send_msg():
         user_id= 0
     )
     return redirect(url_for('servicesRequests.see_request_msgs', request_id = service_request))
+
+@srequest_bp.post('/see_state_request/<int:request_id>/<int:state_id>')
+def see_state_request(request_id,state_id):
     
+    state = service_requests.get_state(state_id)  
+    return redirect(url_for('servicesRequests.see_state_request', state = state,request_id = request_id))
+
+@srequest_bp.post('/change_state/<int:request_id>')
+def change_state(request_id):
+    return redirect(url_for('servicesRequests.see_state_request', request_id=request_id))
+

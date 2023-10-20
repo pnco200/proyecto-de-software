@@ -22,14 +22,21 @@ def list_requests_paged_by_institution(page, institution_id):
 
     return request
 
+def get_state(state_id):
+    s = (db.session.query(ServiceState, ServiceRequest)
+         .filter(ServiceState.id == state_id)
+         .first()
+         )
 
 def get_request_detaile(id):
     service_alias = aliased(Service, name="service_alias")
     user_alias = aliased(User, name="user_alias")
-    request = (db.session.query(ServiceRequest,service_alias,user_alias,Institution.name)
+    state_of_service = aliased(ServiceState,name="request_state")
+    request = (db.session.query(ServiceRequest,service_alias,user_alias,state_of_service)
             .join(service_alias,service_alias.id == ServiceRequest.service_id)
             .join(user_alias, user_alias.id ==ServiceRequest.user_id)
             .join(Institution, Institution.id == service_alias.institution_id)
+            .join(state_of_service,state_of_service.id == ServiceRequest.state_id)
             .filter(ServiceRequest.id == id)
             .first()
     )
