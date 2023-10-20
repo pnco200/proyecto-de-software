@@ -1,6 +1,7 @@
 from src.core.database import db
 from src.core.services.service import Service, TipoDeServicio
 from src.core.configuration import get_rows_per_page
+from src.core.service_requests import ServiceRequest, ServiceRequestMessages
 from sqlalchemy import or_
 
 def list_service_paged(page):
@@ -54,19 +55,30 @@ def create_service(**kwargs):
     return service
 
 def delete_service(service_id):
-    """Elimina un servicio
+    try:
+        # Find the service by ID
+        service = Service.query.get(service_id)
 
-    Args:
-        service_id (_int_): ID del servicio
+        if service:
+            # Delete related service requests
+            service_requests = ServiceRequest.query.filter_by(service_id=service.id).all()
+            for service_request in service_requests:
+                # Delete related messages
+                messages = ServiceRequestMessages.query.filter_by(service_request_id=service_request.id).all()
+                for message in messages:
+                    db.session.delete(message)
+                db.session.delete(service_request)
 
-    Returns:
-        Service: Servicio eliminado
-    """
-    service = Service.query.get(service_id)
-    db.session.delete(service)
-    db.session.commit()
-    return service
-
+            # Finally, delete the service
+            db.session.delete(service)
+            db.session.commit()
+            return True
+        else:
+            return False  # Service not found
+    except Exception as e:
+        print(e)
+        return False
+    
 def update_service(service_id, **kwargs):
     """ Actualiza un servicio
 
