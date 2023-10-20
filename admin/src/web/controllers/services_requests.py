@@ -8,7 +8,7 @@ srequest_bp = Blueprint('servicesRequests', __name__, url_prefix='/srequests')
 ##@permissions.permission_required_in_Institution(["institution_show"], request)
 def list_service_request():
     page = request.args.get('page', type=int, default=1)
-    current_institution_id = 2
+    current_institution_id = current_institution_id()
     list = service_requests.list_requests_paged_by_institution(page, current_institution_id)    
     return render_template("services_requests/index.html", request=list, page=page)
 
@@ -36,13 +36,20 @@ def send_msg():
     )
     return redirect(url_for('servicesRequests.see_request_msgs', request_id = service_request))
 
-@srequest_bp.post('/see_state_request/<int:request_id>/<int:state_id>')
+@srequest_bp.get('/see_state_request/<int:request_id>/<int:state_id>')
 def see_state_request(request_id,state_id):
     
-    state = service_requests.get_state(state_id)  
-    return redirect(url_for('servicesRequests.see_state_request', state = state,request_id = request_id))
+    state = service_requests.get_state_by_id(state_id)  
+    return render_template('services_requests/state.html', state = state,request_id = request_id)
 
 @srequest_bp.post('/change_state/<int:request_id>')
 def change_state(request_id):
-    return redirect(url_for('servicesRequests.see_state_request', request_id=request_id))
+    nuevo_mensaje = request.form.get('new_observations')
+    estado = request.form.get('new_state')
+    new_state = service_requests.create_state_request(
+        name = estado,
+        state_message = nuevo_mensaje
+    )
+    new_state_request = service_requests.set_new_state(new_state,request_id)
+    return redirect(url_for('servicesRequests.see_state_request', request_id=request_id,state_id=new_state.id))
 

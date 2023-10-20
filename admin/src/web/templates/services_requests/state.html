@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html>
 <body>
-                <h2>Estado Actual {{state.ServiceState.name}}</h2>
-                <h3>Observaciones:</h3>
-                <p align="center">{{state.SreviceState.state_message}}</p>
+                <h2>Estado Actual: {{state.state_request.name}}</h2>
+                <h5>Observaciones:</h3>
+                <p >{{state.state_request.state_message}}</p>
 
                 <h2>Modificar Estado</h2>
                 <form method="post" action="{{url_for('servicesRequests.change_state',request_id=request_id)}}">
@@ -18,10 +18,11 @@
                         <option value="cancelada">Cancelada</option>
                     </select>
                     <br>
-                    <input type="text" name="new_observations" placeholder="Ingrese sus observaciones">
+                    <textarea name="new_observations" rows="4" cols="50" placeholder="Ingrese sus observaciones"></textarea>
+
                     <input type="submit" value="Cambiar Estado">
                 </form>
-            {% endif %}
+            
         </div>
     </div>
 </body>

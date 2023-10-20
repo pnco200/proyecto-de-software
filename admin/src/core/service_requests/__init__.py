@@ -21,7 +21,19 @@ def list_requests_paged_by_institution(page, institution_id):
     ##dejo por si acaso
 
     return request
-
+def set_new_state(state,request_id):
+    request_actual = ServiceRequest.query.filter_by(id=request_id).first()
+    request_actual.state_id = state.id
+    db.session.commit()
+    pass
+    
+def get_state_by_id(state_id):
+    state = aliased(ServiceState,name="state_request")
+    s = (db.session.query(state, ServiceRequest)
+         .join(ServiceRequest,ServiceRequest.state_id==state.id)
+         .first()
+         )
+    return s
 
 def get_request_detaile(id):
     service_alias = aliased(Service, name="service_alias")
