@@ -147,7 +147,7 @@ def run():
             description="Física",
             key_words=["Física", "Mecánica", "Óptica", "Termodinámica", "Electricidad", "Magnetismo", "Ondas", "Física Moderna", "Física Cuántica", "Relatividad"],
             enabled=True,
-            institution_id=2
+            institution_id=1
         )
         service3 = services.create_service(
             name="Química",
@@ -156,7 +156,7 @@ def run():
             description="Química",
             key_words=["Quimica"],
             enabled=True,
-            institution_id=3
+            institution_id=1
         )
         services.create_service(
             name="Biologia",
@@ -165,7 +165,7 @@ def run():
             description="Biologia",
             key_words=["Quimica","Biologia", "Biología", "Biología Celular", "Biología Molecular", "Genética", "Bioquímica", "Microbiología", "Botánica", "Zoología", "Ecología", "Fisiología", "Anatomía", "Embriología", "Biología Evolutiva", "Biología del Desarrollo", "Bi"],
             enabled=True,
-            institution_id=4
+            institution_id=1
         )
         services.create_service(
             name="Psicologia",
