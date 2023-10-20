@@ -131,7 +131,7 @@ def run():
             maintenance_message="",
         )
     def create_services():
-        services.create_service(
+        service1= services.create_service(
             name="Matemática",
             type="ANALISIS",
             centers="IME",
@@ -140,7 +140,7 @@ def run():
             enabled=True,
             institution_id=1
         )
-        services.create_service(
+        service2 = services.create_service(
             name="Física",
             type="ANALISIS",
             centers="IF",
@@ -149,7 +149,7 @@ def run():
             enabled=True,
             institution_id=2
         )
-        services.create_service(
+        service3 = services.create_service(
             name="Química",
             type="ANALISIS",
             centers="IQ",
@@ -176,6 +176,7 @@ def run():
             enabled=True,
             institution_id=5
         )
+        return service1,service2,service3
     def create_roles():
         rol_permission.create_rol(
             name = "Owner"
@@ -561,7 +562,7 @@ def run():
             role_id = "SuperAdmin"
         )
         
-    def   create_solcitudes_Example_1():
+    def   create_solcitudes_Example_1(service):
         user = auth.create_user(
             email="mail30@gmail.com",
             name="Jay",
@@ -571,15 +572,7 @@ def run():
             is_confirmed=True,
             is_active=True
         )
-        service =  services.create_service(
-            name="Química1",
-            type="ANALISIS",
-            centers="IQ",
-            description="Química uno",
-            key_words=["Quimica1"],
-            enabled=True,
-            institution_id=2
-        )
+        
         state = service_requests.create_state_request(
             name="incial",
             state_message = "estado inicial"
@@ -588,20 +581,20 @@ def run():
             user_id = user.id,
             service_id = service.id,
             state_id = state.id,
-            observations ="quiero que se le haga a la pintura un nuevo tratamiento en la capa de pintura exterior",
+            observations ="quiero que se le mida correctamente las dimensiones de los aspectos mas importantes",
             archive = None
         )
-        message = service_requests.create_message_request(
+        message = service_requests.create_user_message(
             user_id = solicitude.user_id,
-            service_request_id = service_requests.id,
-            msg_content = "Quisiera aclarar que quiero que se pueda aplicar a cuantas campas sea posible"            
+            service_request_id = solicitude.id,
+            msg_content = "Quisiera saber si se encuentra algun tipo de proporcion en la pintura"            
         )
-        message = service_requests.create_message_request(
+        message = service_requests.create_user_message(
             user_id = solicitude.user_id,
-            service_request_id = service_requests.id,
+            service_request_id = solicitude.id,
             msg_content = "En lo posible quisiera conocer un costo estimado"            
         )
-    def   create_solcitudes_Example_2():
+    def   create_solcitudes_Example_2(service):
         user = auth.create_user(
             email="mail10@gmail.com",
             name="Juanito",
@@ -611,15 +604,7 @@ def run():
             is_confirmed=True,
             is_active=True
         )
-        service =  services.create_service(
-            name="Química3",
-            type="ANALISIS",
-            centers="IQ",
-            description="Química tres",
-            key_words=["Quimica3"],
-            enabled=True,
-            institution_id=2
-        )
+        
         state = service_requests.create_state_request(
             name="incial",
             state_message = "estado inicial"
@@ -631,17 +616,17 @@ def run():
             observations ="aplicar un tratamiento para conocer la edad de la pintura",
             archive = None
         )
-        message = service_requests.create_message_request(
+        message = service_requests.create_user_message(
             user_id = solicitude.user_id,
-            service_request_id = service_requests.id,
+            service_request_id = solicitude.id,
             msg_content = "conocer que tipo de pintura se utilizo"            
         )
-        message = service_requests.create_message_request(
+        message = service_requests.create_user_message(
             user_id = solicitude.user_id,
-            service_request_id = service_requests.id,
+            service_request_id = solicitude.id,
             msg_content = "En lo posible quisiera conocer un costo estimado"            
         )
-    def   create_solcitudes_Example_3():
+    def   create_solcitudes_Example_3(service):
         user = auth.create_user(
             email="mail20@gmail.com",
             name="roman",
@@ -651,15 +636,7 @@ def run():
             is_confirmed=True,
             is_active=True
         )
-        service =  services.create_service(
-            name="Psicologia2",
-            type="ANALISIS",
-            centers="IQ",
-            description="psicologia dos",
-            key_words=["Psicologia2"],
-            enabled=True,
-            institution_id=5
-        )
+       
         state = service_requests.create_state_request(
             name="incial",
             state_message = "estado inicial"
@@ -668,17 +645,17 @@ def run():
             user_id = user.id,
             service_id = service.id,
             state_id = state.id,
-            observations ="conocer el significado real de la pintura",
+            observations ="conocer el datos de edad de la pintura",
             archive = None
         )
-        message = service_requests.create_message_request(
+        message = service_requests.create_user_message(
             user_id = solicitude.user_id,
-            service_request_id = service_requests.id,
-            msg_content = "tener conocimiento sobre la persona que hizo la pintura, que aspecto se pueden conocer"            
+            service_request_id = solicitude.id,
+            msg_content = "tener conocimiento sobre la edad de la pintura, que aspecto se puede saber del tipo de pintura utilizada"            
         )
-        message = service_requests.create_message_request(
+        message = service_requests.create_user_message(
             user_id = solicitude.user_id,
-            service_request_id = service_requests.id,
+            service_request_id = solicitude.id,
             msg_content = "En lo posible quisiera conocer un costo estimado"            
         )
         
@@ -687,12 +664,12 @@ def run():
     create_configurations()
     create_institutions()
     create_users()
-    create_services()
+    service1,service2,service3 = create_services()
     create_roles()
     create_permissions()
     create_rol_has_these_permission()
-    create_solcitudes_Example_1()##De instituto de fisica id=2
-    create_solcitudes_Example_2()
-    create_solcitudes_Example_3()##De instuto de psicologia id=5
+    create_solcitudes_Example_1(service1)##De instituto de fmatematica 
+    create_solcitudes_Example_2(service2)##De instituto de fisica
+    create_solcitudes_Example_3(service3)##De instuto de quimica
 
 

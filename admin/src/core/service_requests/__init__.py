@@ -144,6 +144,12 @@ def create_message_request(**kwargs):
     db.session.commit()
     return msg
 
+def create_user_message(**kwargs):
+    msg = ServiceRequestMessages(**kwargs)
+    db.session.add(msg)
+    db.session.commit()
+    return msg
+
 
 def return_request_messages(service_request_id):
     messages = (
