@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from web.helpers.apivalidations import requires_auth
 from src.core.configuration import get_rows_per_page
 from src.core import service_requests
-from src.core.service_requests import get_request_detaile, get_state_by_id
+from src.core.service_requests import get_request_detaile, get_state_by_id, create_service_request
 api_user_bp = Blueprint("user_api", __name__, url_prefix="/api/me/")
 
 @api_user_bp.get('/profile')
@@ -31,7 +31,7 @@ def get_user_requests(user, service_request_id):
 
     service_request_parsed = {
         "id": service_request.id,
-        "service_name": service_service.name,
+        "request_name": service_request.name,
         "service_id": service_request.service_id,
         "observations": service_request.observations,
         "inserted_at": service_request.inserted_at,
@@ -81,6 +81,30 @@ def get_requests_paginated(user):
     }
     return jsonify(response), 200
 
+@api_user_bp.post('/requests/')
+@requires_auth()
+def create_request(user):
+    data = request.json
+    if "service_id" not in data or "description" not in data:
+        return jsonify(error='Parametros Invalidos'), 400
+
+    service_id = data["service_id"]
+    description = data["description"]
+
+    resulting_request = create_service_request(service_id=service_id, user_id=user.id, observations=description, archive=None)
+    
+    if not resulting_request:
+        return jsonify(error='ID de servicio invalido'), 400
+    
+    response = {
+        "id": resulting_request.id,
+        "service_id": resulting_request.service_id,
+        "user_id": resulting_request.user_id,
+        "observations": resulting_request.observations,
+        "inserted_at": resulting_request.inserted_at,
+    }
+    return jsonify(response), 201
+
 @api_user_bp.post('/requests/<int:service_request_id>/notes')
 @requires_auth()
 def add_note_to_request(user, service_request_id):
@@ -89,6 +113,10 @@ def add_note_to_request(user, service_request_id):
         return jsonify(error='Parametros Invalidos'), 400
     text_added = service_requests.create_message_request(service_request_id=service_request_id, user_id=user.id, msg_content=text)
     if text_added:
-        return jsonify(), 200
+        res = {
+            "id": service_request_id,
+            "text": text
+        }
+        return jsonify(res), 201
     else:
         return jsonify(error='ID no encontrada'), 404
