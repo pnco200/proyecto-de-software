@@ -42,11 +42,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Seguimientos</a>
             </li>
-            {% if not is_superadmin() %}
+            {% if not is_superadmin() and get_user_institutions() %}
             <li class="nav-item">
                 <a class="nav-link" href="{{url_for('services.list_services')}}">Servicios</a>
             </li>
-            {% if(get_user_institutions()) %}
             <li class="nav-item dropdown" data-bs-toggle="dropdown1">
                 <form action="{{ url_for('institution.select_institution') }}" method="POST">
                     <select name="selected_institution" class="form-select" aria-labelledby="navbarDropdownMenuLink">
@@ -60,14 +59,12 @@
                 </form>
             </li>
             {% endif %}
-            {% endif %}
             <li class="nav-item dropdown" data-bs-toggle="dropdown2">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img src="../../../static/img/pfp.png" alt="prfpct" class="profilePic">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">Ver perfil</a></li>
                     <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Cerrar sesion</a></li>
                 </ul>
             </li>
