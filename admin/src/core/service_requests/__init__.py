@@ -34,6 +34,56 @@ def get_state_by_id(state_id):
          .first()
          )
     return s
+def list_requests_paged_by_user(page, per_page, user_id):
+    service_alias = aliased(Service, name="service_alias")
+    service_state_alias = aliased(ServiceState, name="service_state_alias")
+    user_alias = aliased(User, name="user_alias")
+    request = (db.session.query(ServiceRequest,service_alias,user_alias,service_state_alias)
+            .join(service_alias,service_alias.id == ServiceRequest.service_id)
+            .join(user_alias, user_alias.id == ServiceRequest.user_id)
+            .join(service_state_alias, service_state_alias.id == ServiceRequest.state_id)
+            .filter(ServiceRequest.user_id == user_id)
+            .paginate(page=page, per_page=per_page, error_out=False)
+    )
+    return request
+
+def list_all_requests_by_user(user_id):
+    service_alias = aliased(Service, name="service_alias")
+    service_state_alias = aliased(ServiceState, name="service_state_alias")
+    user_alias = aliased(User, name="user_alias")
+    request = (db.session.query(ServiceRequest,service_alias,user_alias,service_alias)
+            .join(service_alias,service_alias.id == ServiceRequest.service_id)
+            .join(user_alias, user_alias.id ==ServiceRequest.user_id)
+            .join(service_state_alias, service_state_alias.id == ServiceRequest.state_id)
+            .filter(ServiceRequest.user_id == user_id)
+            .all()
+    )
+    return request
+def get_request_detaile(id):
+    service_alias = aliased(Service, name="service_alias")
+    user_alias = aliased(User, name="user_alias")
+    request = (db.session.query(ServiceRequest,service_alias,user_alias,Institution.name)
+            .join(service_alias,service_alias.id == ServiceRequest.service_id)
+            .join(user_alias, user_alias.id ==ServiceRequest.user_id)
+            .join(Institution, Institution.id == service_alias.institution_id)
+            .filter(ServiceRequest.id == id)
+            .first()
+    )
+    return request
+
+def add_message_to_service_request(service_request_id, new_message):
+    service_request = ServiceRequest.query.get(service_request_id)
+
+    if service_request:
+        if service_request.observations:
+            service_request.observations += "\n" + new_message
+        else:
+            service_request.observations = new_message
+        db.session.commit()
+        return True
+    else:
+        return False
+
 
 def get_request_detaile(id):
     service_alias = aliased(Service, name="service_alias")

@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, request, redirect, session
+from flask import Flask, render_template, url_for, request, redirect, session, abort
 from src.web import error
 from src.core import database, seeds
 from src.core import bcrypt
+from src.core.configuration import is_in_maintenance
 from src.web.config  import config
 from src.web import error
 from src.web.controllers.auth import auth_bp
@@ -63,6 +64,7 @@ def create_app(env="development", static_folder="../../static"):
     #ERRORS
     app.register_error_handler(404,error.not_found_error404)
     app.register_error_handler(401,error.unauthorized)
+    app.register_error_handler(503,error.maintenance)
 
     # JINJA
     app.jinja_env.globals.update(is_authenticated = auth.is_authenticated)
@@ -70,7 +72,10 @@ def create_app(env="development", static_folder="../../static"):
     app.jinja_env.globals.update(current_selected_institution = utils.current_selected_institution)
     app.jinja_env.globals.update(is_superadmin = permissions.is_superadmin)
     app.jinja_env.globals.update(is_institution_owner = permissions.is_institution_owner)
-
+    @app.before_request
+    def verify_maintenance():
+        if is_in_maintenance():
+            abort(503)
     @app.cli.command(name="resetdb")
     def resetdb():
         database.reset_db()
