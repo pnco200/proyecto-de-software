@@ -8,8 +8,7 @@ srequest_bp = Blueprint('servicesRequests', __name__, url_prefix='/srequests')
 ##@permissions.permission_required_in_Institution(["institution_show"], request)
 def list_service_request():
     page = request.args.get('page', type=int, default=1)
-    current_institution_id = 2
-    list = service_requests.list_requests_paged_by_institution(page, current_institution_id)    
+    list = service_requests.list_requests_paged_by_institution(page, current_selected_institution())    
     return render_template("services_requests/index.html", request=list, page=page)
 
 
