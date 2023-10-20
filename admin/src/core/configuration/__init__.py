@@ -5,10 +5,10 @@ def create_configuration(rows_per_page, contact_information, is_maintenance, mai
     """Crea la configuracion inicial del sitio
 
     Args:
-        rows_per_page (integer): Elementos por pagina
-        contact_information (string): Informacion de contacto
-        is_maintenance (boolean): Determina si la pagina esta en mantenimiento o no
-        maintenance_message (string): Mensaje para mostrar si la pagina esta en mantenmiento
+        rows_per_page (_int_): Elementos por pagina
+        contact_information (_str_): Informacion de contacto
+        is_maintenance (_bool_): Determina si la pagina esta en mantenimiento o no
+        maintenance_message (_str_): Mensaje para mostrar si la pagina esta en mantenmiento
 
     Returns:
         Configuration: Devuelve un objeto Configuration(rows_per_page, contact_information, is_maintenance, maintenance_message)
@@ -53,7 +53,7 @@ def get_rows_per_page():
     """Devuelve la configuracion actual del sitio para cuantas filas mostrar por pagina
 
     Returns:
-        int: rows_per_page
+        int: Devuelve la cantidad de filas por pagina
     """
     return Configuration.query.first().rows_per_page
 
@@ -61,10 +61,10 @@ def update_configuration(rows_per_page=None, contact_information=None, is_mainte
     """Actualiza la configuracion de la pagina
 
     Args:
-        rows_per_page (integer, optional): Elementos por pagina. Defaults to None.
-        contact_information (string, optional): Informacion de contacto. Defaults to None.
-        is_maintenance (boolean, optional): Determina si la pagina esta en mantenimiento o no. Defaults to None.
-        maintenance_message (string, optional): Mensaje para mostrar si la pagina esta en mantenmiento. Defaults to None.
+        rows_per_page (_int_, optional): Elementos por pagina. Defaults to None.
+        contact_information (_int_, optional): Informacion de contacto. Defaults to None.
+        is_maintenance (_bool_, optional): Determina si la pagina esta en mantenimiento o no. Defaults to None.
+        maintenance_message (_str_, optional): Mensaje para mostrar si la pagina esta en mantenmiento. Defaults to None.
 
     Returns:
         boolean: Devuelve true en caso de que se pudo actualizar, false en caso contrario

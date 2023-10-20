@@ -12,13 +12,14 @@ def list_institutions():
     return Institution.query.all()
 
 def get_user_institutions(user_id,selected_institution=-1):
-    """Returns user institutions, if he has a selected institution it should be sorted to appear first on the list
+    """Devuelve una lista de instituciones de un usuario
 
     Args:
-        selected_institution (int, optional): If other value than -1 then there is a selected institution. Defaults to -1.
-
+        user_id (_int_): El id del usuario
+        selected_institution (_int_): El id de la institucion seleccionada
+    
     Returns:
-        list(Institution): Return a list of institutions
+        list: lista de instituciones del usuario
     """
     _institutions = (
         db.session.query(Institution)
@@ -31,12 +32,13 @@ def get_user_institutions(user_id,selected_institution=-1):
     return _institutions
 
 def get_first_institution_id(user_id):
-    """Returns the id of the first institution of the user
+    """Devuelve el id de la primera institucion del usuario
 
     Args:
-        user_id (int): The user id
+        user_id (_int_): El id del usuario
+    
     Returns:
-        The ID of the institution, or NONE
+        int: id de la primera institucion del usuario
     """
     _institutions = (
         db.session.query(Institution)
@@ -54,7 +56,7 @@ def list_institutions_paged(page):
     """Devuelve una lista de instituciones paginada y ordenada por id ascendentemente
    
      Args:
-        page (int): numero de pagina
+        page (_int_): numero de pagina
     
     Returns:
         list: lista de instituciones
@@ -67,7 +69,7 @@ def list_institutions_paged_api(page, per_page):
     """Devuelve una lista de instituciones paginada y ordenada por id ascendentemente
    
      Args:
-        page (int): numero de pagina
+        page (_int_): numero de pagina
     
     Returns:
         list: lista de instituciones
@@ -77,6 +79,9 @@ def list_institutions_paged_api(page, per_page):
 
 def create_institution(**kwargs):
     """Crea una institucion
+
+    Args:
+        **kwargs: parametros de la institucion a crear
 
     Returns:
         Institution: institucion creada
@@ -94,7 +99,7 @@ def institution_exists(name):
     """Comprueba si existe una institucion con el nombre pasado por parametro
 
     Args:
-        name (str): nombre de la institucion
+        name (_str_): nombre de la institucion
     Returns:
         bool: True si existe, False en caso contrario
     """
@@ -107,7 +112,7 @@ def update_institution(id, **kwargs):
     """Actualiza una institucion
 
     Args:
-        id (int): id de la institucion
+        id (_int_): id de la institucion
         **kwargs: parametros a actualizar
 
     Returns:
@@ -129,7 +134,7 @@ def delete_institution(id):
     """Elimina una institucion
 
     Args:
-        id (int): id de la institucion
+        id (_int_): id de la institucion
 
     Returns:
         Institution: institucion eliminada
