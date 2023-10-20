@@ -20,10 +20,19 @@ def see_request_detaile(request_id):
 
 @srequest_bp.get('/request_msgs/<int:request_id>')
 def see_request_msgs(request_id):
-    user_and_msgs = service_requests.get_request_msgs(request_id)
-    if not user_and_msgs[1]:
-        flash("No hay mensajes en la solicitud")
-        return  redirect(url_for('servicesRequests.list_service_request'))
-    else:
-        user_and_msgs[1] = sorted(user_and_msgs[1], key=lambda msg: msg.ServiceRequestMessages.inserted_at)
+        user_and_msgs = service_requests.get_request_msgs(request_id)
+    
+        user_and_msgs[1] = sorted(user_and_msgs[1], key=lambda msg: msg.inserted_at)
         return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs)
+
+@srequest_bp.post('/send_request_msg')
+def send_msg():
+    nuevo_mensaje = request.form.get('nuevo_mensaje')
+    service_request = request.form.get('service_request')
+    msg = service_requests.create_message_request(
+        service_request_id = service_request,
+        msg_content = nuevo_mensaje,
+        user_id= 0
+    )
+    return redirect(url_for('servicesRequests.see_request_msgs', request_id = service_request))
+    
