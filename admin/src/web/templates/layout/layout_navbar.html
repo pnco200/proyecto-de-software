@@ -46,6 +46,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{url_for('services.list_services')}}">Servicios</a>
             </li>
+            {% if(get_user_institutions()) %}
             <li class="nav-item dropdown" data-bs-toggle="dropdown1">
                 <form action="{{ url_for('institution.select_institution') }}" method="POST">
                     <select name="selected_institution" class="form-select" aria-labelledby="navbarDropdownMenuLink">
@@ -58,6 +59,7 @@
                     <button style="left: 90px; display: flex;" type="submit" class="btn btn-primary btn-sm mt-2">Seleccionar</button>
                 </form>
             </li>
+            {% endif %}
             {% endif %}
             <li class="nav-item dropdown" data-bs-toggle="dropdown2">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
