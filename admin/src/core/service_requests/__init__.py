@@ -21,7 +21,19 @@ def list_requests_paged_by_institution(page, institution_id):
     ##dejo por si acaso
 
     return request
-
+def set_new_state(state,request_id):
+    request_actual = ServiceRequest.query.filter_by(id=request_id).first()
+    request_actual.state_id = state.id
+    db.session.commit()
+    pass
+    
+def get_state_by_id(state_id):
+    state = aliased(ServiceState,name="state_request")
+    s = (db.session.query(state, ServiceRequest)
+         .join(ServiceRequest,ServiceRequest.state_id==state.id)
+         .first()
+         )
+    return s
 def list_requests_paged_by_user(page, per_page, user_id):
     service_alias = aliased(Service, name="service_alias")
     service_state_alias = aliased(ServiceState, name="service_state_alias")
@@ -74,13 +86,15 @@ def add_message_to_service_request(service_request_id, new_message):
 
 
 def get_request_detaile(id):
-    service_alias = aliased(Service, name="service_alias")
-    user_alias = aliased(User, name="user_alias")
     try:
-        request = (db.session.query(ServiceRequest,service_alias,user_alias,Institution.name)
+        service_alias = aliased(Service, name="service_alias")
+        user_alias = aliased(User, name="user_alias")
+        state_of_service = aliased(ServiceState,name="request_state")
+        request = (db.session.query(ServiceRequest,service_alias,user_alias,state_of_service)
                 .join(service_alias,service_alias.id == ServiceRequest.service_id)
                 .join(user_alias, user_alias.id ==ServiceRequest.user_id)
                 .join(Institution, Institution.id == service_alias.institution_id)
+                .join(state_of_service,state_of_service.id == ServiceRequest.state_id)
                 .filter(ServiceRequest.id == id)
                 .first()
         )
@@ -88,10 +102,6 @@ def get_request_detaile(id):
     except Exception as e:
         print(e)
         return None
-
-def get_state_by_id(id):
-    state = ServiceState.query.filter(ServiceState.id == id).first()
-    return state
 
 def get_request_msgs(id):
     user_alias = aliased(User,name="user_alias")
@@ -133,6 +143,12 @@ def create_state_request(**kwargs):
 
 def create_message_request(**kwargs):
     kwargs['user_id']= session.get('user')
+    msg = ServiceRequestMessages(**kwargs)
+    db.session.add(msg)
+    db.session.commit()
+    return msg
+
+def create_user_message(**kwargs):
     msg = ServiceRequestMessages(**kwargs)
     db.session.add(msg)
     db.session.commit()

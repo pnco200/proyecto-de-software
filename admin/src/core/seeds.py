@@ -1,4 +1,4 @@
-from src.core import institutions, configuration, auth, rol_permission, services
+from src.core import institutions, configuration, auth, rol_permission, services, service_requests
 
 def run():
     def create_institutions():
@@ -21,7 +21,7 @@ def run():
             web="https://portal.if.usp.br/",
             keywords="Física",
             attention_time="Segunda à Sexta das 8h às 17h",
-            contact="11 3091-6149",
+            contact="11 309-6149",
             is_active=True
         )
         institutions.create_institution(
@@ -32,7 +32,7 @@ def run():
             web="https://www.iq.usp.br/",
             keywords="Química",
             attention_time="Segunda à Sexta das 8h às 17h",
-            contact="11 3091-6149",
+            contact="11 091-6149",
             is_active=True
         )
         institutions.create_institution(
@@ -43,7 +43,7 @@ def run():
             web="https://ib.usp.br/",
             keywords="Biologia",
             attention_time="Segunda à Sexta das 8h às 17h",
-            contact="11 3091-6149",
+            contact="11 91-6149",
             is_active=True
         )
         institutions.create_institution(
@@ -54,7 +54,7 @@ def run():
             web="https://www.ip.usp.br/",
             keywords="Psicologia",
             attention_time="Segunda à Sexta das 8h às 17h",
-            contact="11 3091-6149",
+            contact="11 3091-49",
             is_active=True
         )
         institutions.create_institution(
@@ -65,7 +65,7 @@ def run():
             web="https://icb.usp.br/",
             keywords="Biologia, Medicina",
             attention_time="Segunda à Sexta das 8h às 17h",
-            contact="11 3091-6149",
+            contact="11 3091-9",
             is_active=True
         )
     def create_users():
@@ -131,7 +131,7 @@ def run():
             maintenance_message="",
         )
     def create_services():
-        services.create_service(
+        service1= services.create_service(
             name="Matemática",
             type="ANALISIS",
             centers="IME",
@@ -140,7 +140,7 @@ def run():
             enabled=True,
             institution_id=1
         )
-        services.create_service(
+        service2 = services.create_service(
             name="Física",
             type="ANALISIS",
             centers="IF",
@@ -149,14 +149,14 @@ def run():
             enabled=True,
             institution_id=2
         )
-        services.create_service(
+        service3 = services.create_service(
             name="Química",
             type="ANALISIS",
             centers="IQ",
             description="Química",
             key_words=["Quimica"],
             enabled=True,
-            institution_id=2
+            institution_id=3
         )
         services.create_service(
             name="Biologia",
@@ -176,6 +176,7 @@ def run():
             enabled=True,
             institution_id=5
         )
+        return service1,service2,service3
     def create_roles():
         rol_permission.create_rol(
             name = "Owner"
@@ -561,12 +562,114 @@ def run():
             role_id = "SuperAdmin"
         )
         
+    def   create_solcitudes_Example_1(service):
+        user = auth.create_user(
+            email="mail30@gmail.com",
+            name="Jay",
+            lastname="Dem",
+            username="jaye",
+            password="1453",
+            is_confirmed=True,
+            is_active=True
+        )
+        
+        state = service_requests.create_state_request(
+            name="inicial",
+            state_message = "estado inicial"
+        )
+        solicitude = service_requests.create_service_request(
+            user_id = user.id,
+            service_id = service.id,
+            state_id = state.id,
+            observations ="quiero que se le mida correctamente las dimensiones de los aspectos mas importantes",
+            archive = None
+        )
+        message = service_requests.create_user_message(
+            user_id = solicitude.user_id,
+            service_request_id = solicitude.id,
+            msg_content = "Quisiera saber si se encuentra algun tipo de proporcion en la pintura"            
+        )
+        message = service_requests.create_user_message(
+            user_id = solicitude.user_id,
+            service_request_id = solicitude.id,
+            msg_content = "En lo posible quisiera conocer un costo estimado"            
+        )
+    def   create_solcitudes_Example_2(service):
+        user = auth.create_user(
+            email="mail10@gmail.com",
+            name="Juanito",
+            lastname="guay",
+            username="juan2",
+            password="2009",
+            is_confirmed=True,
+            is_active=True
+        )
+        
+        state = service_requests.create_state_request(
+            name="inicial",
+            state_message = "estado inicial"
+        )
+        solicitude = service_requests.create_service_request(
+            user_id = user.id,
+            service_id = service.id,
+            state_id = state.id,
+            observations ="aplicar un tratamiento para conocer la edad de la pintura",
+            archive = None
+        )
+        message = service_requests.create_user_message(
+            user_id = solicitude.user_id,
+            service_request_id = solicitude.id,
+            msg_content = "conocer que tipo de pintura se utilizo"            
+        )
+        message = service_requests.create_user_message(
+            user_id = solicitude.user_id,
+            service_request_id = solicitude.id,
+            msg_content = "En lo posible quisiera conocer un costo estimado"            
+        )
+    def   create_solcitudes_Example_3(service):
+        user = auth.create_user(
+            email="mail20@gmail.com",
+            name="roman",
+            lastname="tamar",
+            username="je",
+            password="13456",
+            is_confirmed=True,
+            is_active=True
+        )
+       
+        state = service_requests.create_state_request(
+            name="inicial",
+            state_message = "estado inicial"
+        )
+        solicitude = service_requests.create_service_request(
+            user_id = user.id,
+            service_id = service.id,
+            state_id = state.id,
+            observations ="conocer el datos de edad de la pintura",
+            archive = None
+        )
+        message = service_requests.create_user_message(
+            user_id = solicitude.user_id,
+            service_request_id = solicitude.id,
+            msg_content = "tener conocimiento sobre la edad de la pintura, que aspecto se puede saber del tipo de pintura utilizada"            
+        )
+        message = service_requests.create_user_message(
+            user_id = solicitude.user_id,
+            service_request_id = solicitude.id,
+            msg_content = "En lo posible quisiera conocer un costo estimado"            
+        )
+        
+        
+        
     create_configurations()
     create_institutions()
     create_users()
-    create_services()
+    service1,service2,service3 = create_services()
     create_roles()
     create_permissions()
     create_rol_has_these_permission()
+    create_solcitudes_Example_1(service1)##De instituto de fmatematica 
+    create_solcitudes_Example_2(service2)##De instituto de fisica
+    create_solcitudes_Example_3(service3)##De instuto de quimica
 
 

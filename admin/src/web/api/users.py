@@ -20,21 +20,23 @@ def get_user_profile(user):
 @api_user_bp.get('/requests/<int:service_request_id>')
 @requires_auth()
 def get_user_requests(user, service_request_id):
-    if not service_request_id:
-        return jsonify({"error": "Falta el id de la solicitud"}), 400
-    service_request = get_request_detaile(service_request_id)
-    if service_request is None:
-        return jsonify({"error": "id de solicitud invalido"}), 400
-    state = get_state_by_id(service_request.state_id)
+    print(service_request_id)
+    query = get_request_detaile(service_request_id)
+    if not query:
+        return jsonify({"error": "ID de solicitud inválido"}), 400
+
+    service_request = query.ServiceRequest
+    service_service = query.service_alias
+    service_state = query.request_state
 
     service_request_parsed = {
         "id": service_request.id,
-        "name": service_request.name,
+        "service_name": service_service.name,
         "service_id": service_request.service_id,
         "observations": service_request.observations,
         "inserted_at": service_request.inserted_at,
-        "state_name": state.name,
-        "state_message": state.state_message,
+        "state_name": service_state.name,
+        "state_message": service_state.state_message,
     }
     
     return jsonify(service_request_parsed), 200
@@ -65,7 +67,6 @@ def get_requests_paginated(user):
         request_data = {
             "name": req.ServiceRequest.name,
             "creation_date": req.ServiceRequest.inserted_at,
-            "close_date": req.ServiceRequest.closed_at,
             "status": req.service_state_alias.name,
             "observations": req.ServiceRequest.observations
         }
