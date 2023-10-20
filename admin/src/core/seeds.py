@@ -156,7 +156,7 @@ def run():
             description="Química",
             key_words=["Quimica"],
             enabled=True,
-            institution_id=2
+            institution_id=3
         )
         services.create_service(
             name="Biologia",
@@ -574,7 +574,7 @@ def run():
         )
         
         state = service_requests.create_state_request(
-            name="incial",
+            name="inicial",
             state_message = "estado inicial"
         )
         solicitude = service_requests.create_service_request(
@@ -606,7 +606,7 @@ def run():
         )
         
         state = service_requests.create_state_request(
-            name="incial",
+            name="inicial",
             state_message = "estado inicial"
         )
         solicitude = service_requests.create_service_request(
@@ -638,7 +638,7 @@ def run():
         )
        
         state = service_requests.create_state_request(
-            name="incial",
+            name="inicial",
             state_message = "estado inicial"
         )
         solicitude = service_requests.create_service_request(
