@@ -50,28 +50,35 @@ def update_user_status(user_id):
 def create_institution_owner():
     institution_id = request.form.get('institution_id')
     user_id = request.form.get('user_id')
-
-    user = auth.assign_institution_owner(user_id, institution_id)
-    user_role = rol_permission.get_rol_usuario(institution_id=institution_id, user_id=user_id,role_id="Owner")
+    user_role = rol_permission.get_rol_usuario(institution_id=institution_id, user_id=user_id,role_name="Owner")
     if rol_permission.is_superadmin(user_id):
         flash("No se puede cambiar el estado de un SuperAdmin", "error")
         return redirect(url_for('user.admin_home'))
-    if user_role:
-        flash("El usuario ya es dueño en la institucion", "success")
+    elif user_role:
+        flash("El usuario ya es dueño en la institucion", "info")
         return redirect(url_for('user.admin_home'))
-    if not user:
-        flash("No se pudo asignar el usuario como dueño de la institucion", "error")
     else:
-        flash("El usuario fue asignado como dueño de la institucion", "success")
-    return redirect(url_for('user.admin_home'))
+        user = auth.assign_institution_owner(user_id, institution_id)
+        if not user:
+            flash("No se pudo asignar el usuario como dueño de la institucion", "error")
+        else:
+            flash("El usuario fue asignado como dueño de la institucion", "success")
+        return redirect(url_for('user.admin_home'))
 
 @user_bp.post('/create_institution_member') ## TO DO--> Proteger para Dueño!, el INSTITUTION ID LO SACA DE LA QUE ESTA SELECIONADA EN LA BARRA
 @permission_required_in_Institution(["institution_add_member"])
 def create_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
-    permission_id = "Admin" if int(request.form.get('permission_id')) == 2 else "Operator"
+    permission_id = None
+    try:
+        permission_id = "Admin" if int(request.form.get('permission_id')) == 2 else "Operator"
+    except Exception as e:
+        print(e)
+        flash("Operacion Invalida","error")
+        return redirect(url_for('user.home'))
+
     user_id = request.form.get('user_id')
-    user_role = rol_permission.get_rol_usuario(institution_id=current_selected_institution, user_id=user_id,role_id=permission_id)
+    user_role = rol_permission.get_rol_usuario(institution_id=current_selected_institution, user_id=user_id,role_name=permission_id)
     if user_role:
         flash("El usuario ya tiene ese rol en la institucion", "info")
     else:
@@ -86,7 +93,14 @@ def create_institution_member():
 @permission_required_in_Institution(["institution_delete_member"])
 def delete_institution_member():
     current_selected_institution = request.form.get('current_selected_institution')
-    permission_id = int(request.form.get('permission_id'))
+    permission_id = None
+    try:
+        permission_id = int(request.form.get('permission_id'))
+    except Exception as e:
+        print(e)
+        flash("Operacion Invalida", "error")
+        return redirect(url_for('user.home'))
+
     user_id = request.form.get('user_id')
 
     user = auth.delete_institution_member(user_id, permission_id, current_selected_institution)
