@@ -1,6 +1,8 @@
 from src.core.configuration import get_rows_per_page
 from src.core.database import db
 from src.core.model.model import Institution, RolUsuario
+from src.core.services import Service
+from src.core.service_requests import ServiceRequest, ServiceState, ServiceRequestMessages
 from sqlalchemy import or_
 
 def list_institutions():
@@ -12,13 +14,14 @@ def list_institutions():
     return Institution.query.all()
 
 def get_user_institutions(user_id,selected_institution=-1):
-    """Returns user institutions, if he has a selected institution it should be sorted to appear first on the list
+    """Devuelve una lista de instituciones de un usuario
 
     Args:
-        selected_institution (int, optional): If other value than -1 then there is a selected institution. Defaults to -1.
-
+        user_id (_int_): El id del usuario
+        selected_institution (_int_): El id de la institucion seleccionada
+    
     Returns:
-        list(Institution): Return a list of institutions
+        list: lista de instituciones del usuario
     """
     _institutions = (
         db.session.query(Institution)
@@ -31,12 +34,13 @@ def get_user_institutions(user_id,selected_institution=-1):
     return _institutions
 
 def get_first_institution_id(user_id):
-    """Returns the id of the first institution of the user
+    """Devuelve el id de la primera institucion del usuario
 
     Args:
-        user_id (int): The user id
+        user_id (_int_): El id del usuario
+    
     Returns:
-        The ID of the institution, or NONE
+        int: id de la primera institucion del usuario
     """
     _institutions = (
         db.session.query(Institution)
@@ -54,7 +58,7 @@ def list_institutions_paged(page):
     """Devuelve una lista de instituciones paginada y ordenada por id ascendentemente
    
      Args:
-        page (int): numero de pagina
+        page (_int_): numero de pagina
     
     Returns:
         list: lista de instituciones
@@ -67,7 +71,7 @@ def list_institutions_paged_api(page, per_page):
     """Devuelve una lista de instituciones paginada y ordenada por id ascendentemente
    
      Args:
-        page (int): numero de pagina
+        page (_int_): numero de pagina
     
     Returns:
         list: lista de instituciones
@@ -77,6 +81,9 @@ def list_institutions_paged_api(page, per_page):
 
 def create_institution(**kwargs):
     """Crea una institucion
+
+    Args:
+        **kwargs: parametros de la institucion a crear
 
     Returns:
         Institution: institucion creada
@@ -94,7 +101,7 @@ def institution_exists(name):
     """Comprueba si existe una institucion con el nombre pasado por parametro
 
     Args:
-        name (str): nombre de la institucion
+        name (_str_): nombre de la institucion
     Returns:
         bool: True si existe, False en caso contrario
     """
@@ -107,7 +114,7 @@ def update_institution(id, **kwargs):
     """Actualiza una institucion
 
     Args:
-        id (int): id de la institucion
+        id (_int_): id de la institucion
         **kwargs: parametros a actualizar
 
     Returns:
@@ -125,22 +132,31 @@ def update_institution(id, **kwargs):
         print(e)
         return None
 
-def delete_institution(id):
-    """Elimina una institucion
+def delete_institution(institution_id):
+    """Permite eliminar una institucion
 
     Args:
-        id (int): id de la institucion
+        institution_id (_int_): id de la institucion a eliminar
 
     Returns:
-        Institution: institucion eliminada
+        institucion: devuelve el objeto de la institucion eliminada
     """
+    institution = Institution.query.get(institution_id)
+    
     try:
-        institution = get_institution_by_id(id)
-        if institution is None:
-            return None
+        services = Service.query.filter_by(institution_id=institution_id).all()
+        for service in services:
+            service_requests = ServiceRequest.query.filter_by(service_id=service.id).all()
+            for service_request in service_requests:
+                messages = ServiceRequestMessages.query.filter_by(service_request_id=service_request.id).all()
+                for message in messages:
+                    db.session.delete(message)
+                db.session.delete(service_request)
+            db.session.delete(service)
+  
         db.session.delete(institution)
         db.session.commit()
         return institution
     except Exception as e:
         print(e)
-        return None
+        return False

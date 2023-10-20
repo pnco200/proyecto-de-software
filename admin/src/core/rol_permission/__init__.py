@@ -5,18 +5,42 @@ from sqlalchemy import or_
 
 
 def create_rol(**kwargs):
+    """Crea un rol
+
+    Args:
+        **kwargs: Campos del rol
+
+    Returns:
+        Rol: Devuelve el rol creado
+    """
     rol = Rol(**kwargs)
     db.session.add(rol)
     db.session.commit()
     return rol
 
 def create_permission(**kwargs):
+    """Crea un permiso
+
+    Args:
+        **kwargs: Campos del permiso
+    
+    Returns:
+        Permiso: Devuelve el permiso creado
+    """
     permission = Permiso(**kwargs)
     db.session.add(permission)
     db.session.commit()
     return permission
 
 def create_rol_permission(**kwargs):
+    """Crea un permiso para un rol
+
+    Args:
+        **kwargs: Campos del permiso para un rol
+    
+    Returns:
+        RolPermiso: Devuelve el permiso creado para el rol
+    """
     kwargs["role_id"] = get_role_id_by_name(kwargs["role_id"])
     kwargs["permission_id"] = get_permission_id_by_name(kwargs["permission_id"])
     permission_role = RolPermiso(**kwargs)
@@ -26,9 +50,13 @@ def create_rol_permission(**kwargs):
     
         
 def create_rol_usuario(**kwargs):
-    """
-    Aca supone que se elige el rol por nombre
-    entonces se obtiene el id del rol, para que quede en la tabla rol de usuario 
+    """Crea un rol para un usuario
+
+    Args:
+        **kwargs: Campos del rol para un usuario
+    
+    Returns:
+        RolUsuario: Devuelve el rol creado para el usuario
     """
     kwargs["role_id"] = get_role_id_by_name(kwargs["role_id"])
     user_role = RolUsuario(**kwargs)
@@ -37,6 +65,15 @@ def create_rol_usuario(**kwargs):
     return user_role
 
 def get_roles_for_user(user_id, institution_id):
+    """ Retorna los roles de un usuario en una institucion
+
+    Args:
+        user_id (_int_): user id
+        institution_id (_int_): institution id
+
+    Returns:
+        list(RolUsuario): lista de roles del usuario en la institucion
+    """
     user_roles = (
         db.session.query(RolUsuario.role_id)
         .filter(RolUsuario.user_id == user_id)
@@ -45,8 +82,18 @@ def get_roles_for_user(user_id, institution_id):
     )
     return [role.role_id for role in user_roles]
 
-def get_rol_usuario(institution_id, user_id, role_id):
-    role_id = get_role_id_by_name(role_id)
+def get_rol_usuario(institution_id, user_id, role_name):
+    """ Retorna el rol de un usuario en una institucion
+
+    Args:
+        user_id (_int_): user id
+        institution_id (_int_): institution id
+        role_name (_str_): nombre del rol
+    
+    Returns:
+        list: lista de roles del usuario en la institucion
+    """
+    role_id = get_role_id_by_name(role_name)
     user_role = (
         db.session.query(RolUsuario)
         .filter(RolUsuario.user_id == user_id)
@@ -57,6 +104,15 @@ def get_rol_usuario(institution_id, user_id, role_id):
     return user_role
 
 def get_user_admin_or_operator_in_institution(institution_id, user_id):
+    """ Retorna los roles de administrador u operador de un usuario en una institucion
+    
+    Args:
+        user_id (_int_): user id
+        institution_id (_int_): institution id
+    
+    Returns:
+        list: Lista de roles que el usuario tiene en la institución especificada.
+    """
     roles = (
         db.session.query(Rol)
         .join(RolUsuario, RolUsuario.role_id == Rol.id)
@@ -68,6 +124,14 @@ def get_user_admin_or_operator_in_institution(institution_id, user_id):
     return roles
 
 def delete_permission(permission_id):
+    """Elimina un permiso
+
+    Args:
+        permission_id (_int_): id del permiso
+    
+    Returns:
+        bool: True si se elimino el permiso, False en caso contrario
+    """
     permission = Permiso.query.get(permission_id)
     if permission:
         db.session.delete(permission)
@@ -76,6 +140,15 @@ def delete_permission(permission_id):
     return False
 
 def delete_rol_permission(role_id, permission_id):
+    """Elimina un permiso de un rol
+
+    Args:
+        role_id (_int_): id del rol
+        permission_id (_int_): id del permiso
+    
+    Returns:
+        bool: True si se elimino el permiso del rol, False en caso contrario
+    """
     role_permission = RolPermiso.query.filter_by(role_id=role_id, permission_id=permission_id).first()
     if role_permission:
         db.session.delete(role_permission)
@@ -84,6 +157,17 @@ def delete_rol_permission(role_id, permission_id):
     return False
 
 def delete_rol_usuario(user_id,institution_id, role_id):
+    """ Elimina un rol de un usuario en una institucion
+
+    Args:
+        user_id (_int_): user id
+        institution_id (_int_): institution id
+        role_id (_int_): role id
+    
+    Returns:
+        bool: True si se elimino el rol del usuario en la institucion, False en caso contrario
+
+    """
     user_role = RolUsuario.query.filter_by(user_id=user_id, institution_id=institution_id, role_id=role_id).first()
     if user_role:
         db.session.delete(user_role)
@@ -91,21 +175,43 @@ def delete_rol_usuario(user_id,institution_id, role_id):
         return True
     return False
 
-
-
-
-##Esto para identificar los roles por nombre y no por id
 def get_role_id_by_name(role_name):
+    """Retorna el id del rol segun el nombre
+
+    Args:
+        role_name (_str_): nombre del rol
+
+    Returns:
+        int: id del rol
+
+    """
     print(role_name)
     rol = Rol.query.filter_by(name=role_name).first()
     return rol.id 
 
-###retorna name id del permiso segun name
+
 def get_permission_id_by_name(permission_name):
+    """Retorna el id del permiso segun el nombre
+
+    Args:
+        permission_name (_str_): nombre del permiso
+    
+    Returns:
+        int: id del permiso
+
+    """
     permission = Permiso.query.filter_by(name=permission_name).first()
     return permission.id
 
 def is_superadmin(user_id):
+    """ Verifica si el usuario es superadmin
+
+    Args:
+        user_id (_int_): user id
+    
+    Returns:
+        bool: True si es superadmin, False en caso contrario
+    """
     role = (
         db.session.query(Permiso.name)
         .join(RolUsuario, RolUsuario.role_id == 3)
@@ -118,6 +224,16 @@ def is_superadmin(user_id):
         return False
     
 def is_institution_owner(user_id, institution_id):
+    """Verifica si el usuario es dueño de la institucion
+
+    Args:
+        user_id (_int_): user id
+        institution_id (_int_): institution id
+    
+    Returns:
+        bool: True si es dueño, False en caso contrario
+
+    """
     owner = (
         db.session.query(Permiso.name)
         .join(RolUsuario, RolUsuario.role_id == 1)
@@ -137,7 +253,7 @@ def list_institutions_owned_by_user(user_id):
         user_id (int): user id
 
     Returns:
-        list(Institutions)
+        list(Institutions): lista de instituciones donde el user es dueño
     """
     print(user_id)
     institutions = (
@@ -151,9 +267,13 @@ def list_institutions_owned_by_user(user_id):
     return institutions
 
 def list_permissions_by_user_id(user_id):
-    """
-        Listar los permisos en general de un usuario
-        Puede ser usada como base para hacer peticion de permisos segun el modulo
+    """ Obtener los permisos de un usuario
+
+    Args:
+        user_id (_int_): user id
+    
+    Returns:
+        list: lista de permisos del usuario
     """
     permissions = (
         db.session.query(Permiso.name)
@@ -168,8 +288,14 @@ def list_permissions_by_user_id(user_id):
     return permission_names
 
 def list_Permissions_By_User_Id_In_Institution(user_id,institution_id):
-    """
-        Obtener los permisos de un usuario en una institucion especifica
+    """ Obtener los permisos de un usuario en una institucion
+
+    Args:
+        user_id (_int_): user id
+        institution_id (_int_): institution id
+    
+    Returns:
+        list: lista de permisos del usuario en la institucion
     """
     permissions = (
         db.session.query(Permiso.name)

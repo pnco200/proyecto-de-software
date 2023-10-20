@@ -1,0 +1,59 @@
+{% extends "layout/layout_navbar.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="container mt-5">
+        <div class="user-list">
+            <h1 class="mb-4">Detalle de la solicitud</h1>
+            <br><br>
+            {% if request == null %}
+                <div class="alert alert-warning text-center mt-5">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <h3 class="d-inline-block ml-3">Hubo un fallo en el detalle de la solicitud</h3>
+                </div>
+            {% else %}
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Usuario</th>
+                            <th>Archivo</th>
+                            <th>Observaciones</th>
+                            <th>Estado Actual</th>
+                            <th>Tipo</th>
+                            <th>Fecha de solicitud</th>
+                            <th>Mensajes Cliente</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td>{{ request.service_alias.name }}</td>
+                            <td>{{ request.user_alias.email }}</td>
+                            <td>
+                                {% if request.ServiceRequest.archive %}
+                                    <a href="{{ request.ServiceRequest.archive }}" download>Descargar archivo</a>
+                                {% else %}
+                                    vacio
+                                {% endif %}
+                            </td>
+                            <td>{{ request.ServiceRequest.observations }}</td>
+                            <td>{{ request.request_state.name}}<a href="{{url_for('servicesRequests.see_state_request', request_id=request.ServiceRequest.id,state_id=request.request_state.id)}}"class="btn btn-primary">Ver estado</a></td>
+                            <td>{{ request.service_alias.type.value }}</td>
+                            <td>{{ request.ServiceRequest.inserted_at }}</td>
+                            <td><a href="{{url_for('servicesRequests.see_request_msgs', request_id=request.ServiceRequest.id)}}"class="btn btn-primary">Chat</a> </td>
+
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+
+
+    </div>
+</body>
+</html>
+{% endblock %}
