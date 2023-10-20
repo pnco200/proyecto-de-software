@@ -142,11 +142,15 @@ def create_state_request(**kwargs):
 
 
 def create_message_request(**kwargs):
-    kwargs['user_id']= session.get('user')
-    msg = ServiceRequestMessages(**kwargs)
-    db.session.add(msg)
-    db.session.commit()
-    return msg
+    try:
+        kwargs['user_id']= session.get('user')
+        msg = ServiceRequestMessages(**kwargs)
+        db.session.add(msg)
+        db.session.commit()
+        return msg
+    except Exception as e:
+        print(e)
+        return None
 
 def create_user_message(**kwargs):
     msg = ServiceRequestMessages(**kwargs)
