@@ -72,10 +72,13 @@ def create_app(env="development", static_folder="../../static"):
     app.jinja_env.globals.update(current_selected_institution = utils.current_selected_institution)
     app.jinja_env.globals.update(is_superadmin = permissions.is_superadmin)
     app.jinja_env.globals.update(is_institution_owner = permissions.is_institution_owner)
+    
     @app.before_request
     def verify_maintenance():
-        if is_in_maintenance():
-            abort(503)
+        if not permissions.is_superadmin():
+            if is_in_maintenance():
+                abort(503)
+   
     @app.cli.command(name="resetdb")
     def resetdb():
         database.reset_db()
