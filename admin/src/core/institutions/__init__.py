@@ -133,23 +133,27 @@ def update_institution(id, **kwargs):
         return None
 
 def delete_institution(institution_id):
+    """Permite eliminar una institucion
+
+    Args:
+        institution_id (_int_): id de la institucion a eliminar
+
+    Returns:
+        institucion: devuelve el objeto de la institucion eliminada
+    """
     institution = Institution.query.get(institution_id)
     
     try:
-        # Delete related services and service requests
         services = Service.query.filter_by(institution_id=institution_id).all()
         for service in services:
-            # Delete related service requests
             service_requests = ServiceRequest.query.filter_by(service_id=service.id).all()
             for service_request in service_requests:
-                # Delete related messages
                 messages = ServiceRequestMessages.query.filter_by(service_request_id=service_request.id).all()
                 for message in messages:
                     db.session.delete(message)
                 db.session.delete(service_request)
             db.session.delete(service)
-    
-        # Finally, delete the institution
+  
         db.session.delete(institution)
         db.session.commit()
         return institution

@@ -79,8 +79,11 @@ def delete_service(service_id):
     """
         Me permite eliminar un servicio
     """
-    services.delete_service(service_id)
-    flash("El servicio fue eliminado correctamente.", "success")
+    deleted = services.delete_service(service_id)
+    if not deleted:
+        flash("El servicio no se pudo eliminar.", "error")
+    else:
+        flash("El servicio fue eliminado correctamente.", "success")
     return redirect(url_for('services.list_services', ))
 
 @service_bp.get("/update/<int:service_id>")
