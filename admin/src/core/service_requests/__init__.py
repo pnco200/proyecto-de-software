@@ -166,3 +166,41 @@ def return_request_messages(service_request_id):
         .all()
     )
     return messages
+
+def filter_service_requests_paged(page, service_type=None, start_date=None, end_date=None, user_name=None, state=None):
+    """
+    Filtra las solicitudes de servicio según los parámetros proporcionados y las devuelve en forma paginada.
+
+    Args:
+        page (int): Número de página.
+        service_type (str, optional): Tipo de servicio (correspondiente a los valores de TipoDeServicio).
+        start_date (datetime, optional): Fecha inicial del rango para filtrar solicitudes.
+        end_date (datetime, optional): Fecha final del rango para filtrar solicitudes.
+        user_name (str, optional): Nombre del usuario que realizó la solicitud.
+        state (str, optional): Estado de la solicitud.
+
+    Returns:
+        Pagination: Objeto paginado con la lista de solicitudes de servicio que coinciden con los criterios de filtrado.
+    """
+    per_page = get_rows_per_page()
+    query = ServiceRequest.query
+
+    if service_type:
+        service = Service.query.filter_by(type=service_type).first()
+        if service:
+            query = query.filter_by(service_id=service.id)
+
+    if start_date and end_date:
+        query = query.filter(ServiceRequest.inserted_at.between(start_date, end_date))
+
+    if user_name:
+        user = User.query.filter_by(name=user_name).first()
+        if user:
+            query = query.filter_by(user_id=user.id)
+
+    if state:
+        state_entry = ServiceState.query.filter_by(state=state).first()
+        if state_entry:
+            query = query.filter_by(state_id=state_entry.id)
+
+    return query.paginate(page=page, per_page=per_page, error_out=False)
