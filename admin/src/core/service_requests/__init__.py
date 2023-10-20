@@ -22,11 +22,6 @@ def list_requests_paged_by_institution(page, institution_id):
 
     return request
 
-def get_state(state_id):
-    s = (db.session.query(ServiceState, ServiceRequest)
-         .filter(ServiceState.id == state_id)
-         .first()
-         )
 
 def get_request_detaile(id):
     service_alias = aliased(Service, name="service_alias")
