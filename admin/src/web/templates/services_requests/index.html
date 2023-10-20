@@ -33,7 +33,7 @@
                                 <td>
                                     <a href="{{url_for('servicesRequests.see_request_detaile', request_id=r.ServiceRequest.id)}}" class="btn btn-primary">ver detalle</a>
                                 </td>  
-                                <td>{{ r.service_alias.type}}</td>
+                                <td>{{ r.service_alias.type.value}}</td>
                                 <td>{{ r.ServiceRequest.inserted_at}}</td>
                             </tr>
                         {% endfor %}
