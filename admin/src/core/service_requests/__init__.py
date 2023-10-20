@@ -86,18 +86,22 @@ def add_message_to_service_request(service_request_id, new_message):
 
 
 def get_request_detaile(id):
-    service_alias = aliased(Service, name="service_alias")
-    user_alias = aliased(User, name="user_alias")
-    state_of_service = aliased(ServiceState,name="request_state")
-    request = (db.session.query(ServiceRequest,service_alias,user_alias,state_of_service)
-            .join(service_alias,service_alias.id == ServiceRequest.service_id)
-            .join(user_alias, user_alias.id ==ServiceRequest.user_id)
-            .join(Institution, Institution.id == service_alias.institution_id)
-            .join(state_of_service,state_of_service.id == ServiceRequest.state_id)
-            .filter(ServiceRequest.id == id)
-            .first()
-    )
-    return request
+    try:
+        service_alias = aliased(Service, name="service_alias")
+        user_alias = aliased(User, name="user_alias")
+        state_of_service = aliased(ServiceState,name="request_state")
+        request = (db.session.query(ServiceRequest,service_alias,user_alias,state_of_service)
+                .join(service_alias,service_alias.id == ServiceRequest.service_id)
+                .join(user_alias, user_alias.id ==ServiceRequest.user_id)
+                .join(Institution, Institution.id == service_alias.institution_id)
+                .join(state_of_service,state_of_service.id == ServiceRequest.state_id)
+                .filter(ServiceRequest.id == id)
+                .first()
+        )
+        return request
+    except Exception as e:
+        print(e)
+        return None
 
 def get_request_msgs(id):
     user_alias = aliased(User,name="user_alias")
