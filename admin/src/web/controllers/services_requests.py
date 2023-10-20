@@ -32,6 +32,8 @@ def see_request_msgs(request_id):
         user_and_msgs[1] = sorted(user_and_msgs[1], key=lambda msg: msg.inserted_at)
         return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs)
 
+
+
 @srequest_bp.post('/send_request_msg')
 @permissions.permission_required_in_Institution(["request_update"])
 def send_msg():
@@ -40,12 +42,17 @@ def send_msg():
     """
     nuevo_mensaje = request.form.get('nuevo_mensaje')
     service_request = request.form.get('service_request')
+    
+    if not nuevo_mensaje.strip():  # Verifica si el mensaje es vacío o contiene solo espacios en blanco
+        flash("No se puede enviar un mensaje vacío", "error")
+        return redirect(url_for('servicesRequests.see_request_msgs', request_id=service_request))
+
     msg = service_requests.create_message_request(
-        service_request_id = service_request,
-        msg_content = nuevo_mensaje,
-        user_id= 0
+        service_request_id=service_request,
+        msg_content=nuevo_mensaje,
+        user_id=0
     )
-    return redirect(url_for('servicesRequests.see_request_msgs', request_id = service_request))
+    return redirect(url_for('servicesRequests.see_request_msgs', request_id=service_request))
 @srequest_bp.get('/see_state_request/<int:request_id>/<int:state_id>')
 @permissions.permission_required_in_Institution(["request_show"])
 def see_state_request(request_id,state_id):
