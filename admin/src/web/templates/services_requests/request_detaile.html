@@ -41,7 +41,7 @@
                             </td>
                             <td>{{ request.ServiceRequest.observations }}</td>
                             <td>{{ request.request_state.name}}<a href="{{url_for('servicesRequests.see_state_request', request_id=request.ServiceRequest.id,state_id=request.request_state.id)}}"class="btn btn-primary">Ver estado</a></td>
-                            <td>{{ request.service_alias.type }}</td>
+                            <td>{{ request.service_alias.type.value }}</td>
                             <td>{{ request.ServiceRequest.inserted_at }}</td>
                             <td><a href="{{url_for('servicesRequests.see_request_msgs', request_id=request.ServiceRequest.id)}}"class="btn btn-primary">Chat</a> </td>
 
