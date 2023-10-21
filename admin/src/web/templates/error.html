@@ -13,5 +13,6 @@
     <h1>{{ error_name }}</h1>
     <p><b>Error!</b> {{ error_description }}</p>
     <a href="{{url_for('home')}}">Back to the homepage</a>
+    <a href="{{url_for('auth.login')}}">Login para Administrador</a> <!--En caso de que esta la pagina en mantenimiento y el admin cierra sesion, sirve para no lockear la pagina-->
 </body>
 </html>
