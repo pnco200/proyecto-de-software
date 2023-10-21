@@ -75,6 +75,9 @@ def create_app(env="development", static_folder="../../static"):
     
     @app.before_request
     def verify_maintenance():
+        path = request.path
+        if path.startswith("/auth"):
+            return
         if not permissions.is_superadmin():
             if is_in_maintenance():
                 abort(503)
