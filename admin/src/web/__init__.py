@@ -21,7 +21,7 @@ from src.web.helpers import permissions
 from flask_session import Session
 from src.core.email import email_utils
 from src.core import institutions
-#from src.web.controllers.issues import issues
+
 
 _session = Session()
 
@@ -54,11 +54,6 @@ def create_app(env="development", static_folder="../../static"):
     # URLS
     @app.get("/")
     def home():
-        return render_template("home.html")
-    
-    @app.get("/sendmailtest")
-    def mail_test():
-        email_utils.send_email("Prueba",["ramagp00@gmail.com"],"Esto es una prueba. </br> Funciono?")
         return render_template("home.html")
     
     #ERRORS

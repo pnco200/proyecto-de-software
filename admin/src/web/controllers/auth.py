@@ -3,16 +3,14 @@ from src.core import auth
 from src.core.email import email_utils
 from src.web.helpers import utils
 from src.web.controllers.users import user_bp
+from authlib.integrations.flask_client import OAuth
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
-auth_bp.register_blueprint(user_bp, url_prefix='/user')
 
 @auth_bp.get('/')
 def login():
     """"Muestra el form de login"""
     return render_template("auth/login.html")
-
-
 
 @auth_bp.post('/authenticate')
 def authenticate():
