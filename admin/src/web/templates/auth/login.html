@@ -15,13 +15,9 @@
         <button type="submit" class="btn btn-primary">Iniciar Sesión</button>     
     </form>
     
-    <form method="GET" action="/login_with_google">
-        <div class="mb-3">
-        <button type="button" class="btn btn-outline-secondary mt-3">
-            <img src="/static/img/googleLogo.png" alt="Botón de Imagen" class="img-fluid" style="max-width: 30px;">
-        </button>
-    </div>    
-    </form>
+    <a href="{{url_for('auth.google_login')}}">
+        <img src="/static/img/googleLogo.png" alt="Botón de Imagen" class="img-fluid" style="max-width: 30px ;">
+    </a>
 
     
 </body>

@@ -1,5 +1,17 @@
 from functools import wraps
 from flask import session, abort, request, jsonify
+from authlib.integrations.flask_client import OAuth
+
+oauth = OAuth()
+
+oauth.register(
+    name='google',
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={
+        'scope': 'openid email profile'
+    }
+)
+
 from src.core import auth
 def is_authenticated(session):
     return session.get("user") is not None
