@@ -21,6 +21,7 @@ from src.web.helpers import permissions
 from flask_session import Session
 from src.core.email import email_utils
 from src.core import institutions
+from flask_jwt_extended import JWTManager
 #from src.web.controllers.issues import issues
 
 _session = Session()
@@ -29,7 +30,8 @@ def create_app(env="development", static_folder="../../static"):
     from src.web.api.users import api_user_bp
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
-
+    app.config["JWT_SECRET_KEY"] = "gastondev"
+    jwt = JWTManager(app)
     # INICIAR DEPENDENCIAS
     _session.init_app(app)
     database.init_app(app)
