@@ -91,7 +91,10 @@ def register():
         return redirect(url_for("auth.register"))
     
     existing_user = None
-    if params["username"]:
+    is_superadmin = False
+    if "username" in params:
+        is_superadmin = True
+    if is_superadmin:
         existing_user = auth.find_user_by_email(params["email"]) or auth.find_user_by_username(params["username"])
     else:
         existing_user = auth.find_user_by_email(params["email"])
@@ -104,6 +107,6 @@ def register():
         flash("Ocurrio un error al crear el email de confirmacion.", "error")
         return redirect(url_for("auth.register"))
     
-    auth.create_user(name=params["name"], email=params["email"], password=params["password"],username=params["username"],confirm_token=token, lastname=params["lastname"])
+    auth.create_user(name=params["name"], email=params["email"], password=params["password"] if is_superadmin else None,username=params["username"] if is_superadmin else None,confirm_token=token, lastname=params["lastname"])
     flash("El usuario se creo correctamente. Revise su bandeja de entrada para terminar el registro.", "success")
     return redirect(url_for("auth.login"))
