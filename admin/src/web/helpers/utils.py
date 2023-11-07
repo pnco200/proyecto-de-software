@@ -34,5 +34,4 @@ def current_selected_institution():
         return int(selectedInstitution)
     else:
         return institutions.get_first_institution_id(user_id)
-        
 

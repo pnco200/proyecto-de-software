@@ -20,9 +20,11 @@ def create_user(**kwargs):
     Returns:
         User: Devuelve usuario creado
     """
-    hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
-    kwargs.update(password=hash.decode("utf-8"))
+    if kwargs["password"]:
+        hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
+        kwargs.update(password=hash.decode("utf-8"))
     user = User(**kwargs)
+    user.is_active = False
     db.session.add(user)
     db.session.commit()
     return user
@@ -75,6 +77,8 @@ def check_user(email,password):
         None: Devuelve None en caso contrario
     """
     user = find_user_by_email(email)
+    if not user.password:
+        return None
     if user and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
         return user
     else:
@@ -135,6 +139,17 @@ def change_user_status(user_id):
     if(not user): ## TO DO--> ADD OR IF USER IS SUPER ADMIN
         return False
     user.is_active = not user.is_active
+    db.session.commit()
+    return True
+
+def update_username_and_password(token, username, password):
+    user = User.query.filter_by(confirm_token=token).first()
+    if(not user):
+        return False
+    hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+    user.password = hash.decode("utf-8")
+    user.username = username
+    user.is_active = True
     db.session.commit()
     return True
 
