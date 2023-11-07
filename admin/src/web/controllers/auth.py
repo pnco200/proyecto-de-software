@@ -3,9 +3,10 @@ from src.core import auth
 from src.core.email import email_utils
 from src.web.helpers import utils
 from src.web.controllers.users import user_bp
+from authlib.integrations.flask_client import OAuth
+
 ##DUDAS: PROTEJO PARA QUE SI EL USUARIO QUIERE MANDARLE AL SV EL USERNAME Y LA PASSWORD DE UNA , PARA MI NO PPRQUE CUAL SERIA EL PROBLEMA. DESPUES, SI EL SUPERADMIN CREA EL USER HAY QUE CONFIRMARLO=
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
-auth_bp.register_blueprint(user_bp, url_prefix='/user')
 
 @auth_bp.get('/')
 def login():

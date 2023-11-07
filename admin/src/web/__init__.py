@@ -58,11 +58,6 @@ def create_app(env="development", static_folder="../../static"):
     def home():
         return render_template("home.html")
     
-    @app.get("/sendmailtest")
-    def mail_test():
-        email_utils.send_email("Prueba",["ramagp00@gmail.com"],"Esto es una prueba. </br> Funciono?")
-        return render_template("home.html")
-    
     #ERRORS
     app.register_error_handler(404,error.not_found_error404)
     app.register_error_handler(401,error.unauthorized)
