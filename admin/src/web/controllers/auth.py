@@ -26,12 +26,17 @@ def google_auth():
     try:
         token = oauth.google.authorize_access_token()
         user_info = oauth.google.parse_id_token(token)
-        # Handle user authentication and session management here
-        # Example: check if the user exists in your database and create a session
-        return redirect(url_for('home', _external=True))
+        user = auth.find_user_by_email(user_info["email"])
+        if user:
+            session["user"] = user.id
+            flash("La sesion se inicio correctamente.", "success")
+            return redirect(url_for('home', _external=True))
+        else:
+            #TODO crear una password aleatoria hasheada
+            auth.create_user(name=user_info["given_name"], email=user_info["email"], password=None, username=user_info["email"], lastname=user_info["family_name"], is_confirmed=True, is_active=True)
+            return redirect(url_for('home', _external=True))
     except OAuthError as e:
-        # Handle OAuth error, such as an invalid token
-        flash("OAuth authentication failed: " + str(e), 'error')
+        flash("La autenticacion fallo: ", 'error')
         return redirect(url_for('auth.login'))
 
 @auth_bp.post('/authenticate')
