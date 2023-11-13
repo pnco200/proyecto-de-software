@@ -32,8 +32,10 @@ def google_auth():
             flash("La sesion se inicio correctamente.", "success")
             return redirect(url_for('home', _external=True))
         else:
-            #TODO crear una password aleatoria hasheada
-            auth.create_user(name=user_info["given_name"], email=user_info["email"], password=None, username=user_info["email"], lastname=user_info["family_name"], is_confirmed=True, is_active=True)
+            #TODO hacer una marca en la db, si es registro por google, solo se puede loggear por google
+            auth.create_user(name=user_info["given_name"], email=user_info["email"], 
+                             password=None, username=user_info["email"], lastname=user_info["family_name"], 
+                             is_confirmed=True, is_active=True)
             return redirect(url_for('home', _external=True))
     except OAuthError as e:
         flash("La autenticacion fallo: ", 'error')
