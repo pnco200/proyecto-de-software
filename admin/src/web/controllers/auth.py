@@ -6,6 +6,7 @@ from src.web.controllers.users import user_bp
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.flask_client import OAuthError
 from src.web.helpers.auth import oauth
+from uuid import uuid4
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -19,23 +20,33 @@ def google_login():
     """Me permite loguearme con google
     """
     redirect_uri = url_for('auth.google_auth', _external=True)
-    return oauth.google.authorize_redirect(redirect_uri)
+    nonce = str(uuid4())
+    session['nonce'] = nonce
+    return oauth.google.authorize_redirect(redirect_uri, nonce=nonce)
 
 @auth_bp.route('/google/auth')
 def google_auth():
     try:
-        token = oauth.google.authorize_access_token()
-        user_info = oauth.google.parse_id_token(token)
+        nonce = session.pop('nonce', None)
+        token = oauth.google.authorize_access_token(nonce=nonce)
+        user_info = oauth.google.parse_id_token(token, nonce=nonce) 
         user = auth.find_user_by_email(user_info["email"])
         if user:
-            session["user"] = user.id
-            flash("La sesion se inicio correctamente.", "success")
-            return redirect(url_for('home', _external=True))
+            if not user.is_google:
+                flash("El usuario ya existe, pero no fue creado con google.", "error")
+                return redirect(url_for('auth.login'))
+            else:
+                session["user"] = user.id
+                flash("La sesion se inicio correctamente.", "success")
+                return redirect(url_for('home', _external=True))
         else:
-            #TODO hacer una marca en la db, si es registro por google, solo se puede loggear por google
-            auth.create_user(name=user_info["given_name"], email=user_info["email"], 
+            newUser = auth.create_user_google(name=user_info["given_name"], email=user_info["email"], 
                              password=None, username=user_info["email"], lastname=user_info["family_name"], 
-                             is_confirmed=True, is_active=True)
+                             is_confirmed=True, is_active=True, is_google=True)
+            if newUser:
+                flash("El usuario se creo correctamente.", "success")
+            else:
+                flash("No se pudo crear el usuario.", "error")
             return redirect(url_for('home', _external=True))
     except OAuthError as e:
         flash("La autenticacion fallo: ", 'error')
