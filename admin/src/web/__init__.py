@@ -23,7 +23,6 @@ from src.core.email import email_utils
 from src.core import institutions
 from src.web.helpers.auth import oauth
 from flask_jwt_extended import JWTManager
-#from src.web.controllers.issues import issues
 
 _session = Session()
 
