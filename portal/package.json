@@ -11,8 +11,12 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "axios": "^1.6.2",
+    "axios-mock-adapter": "^1.22.0",
+    "mini-toastr": "^0.8.1",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
+    "vue-notifications": "^1.0.2",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
