@@ -73,6 +73,7 @@ def get_requests_paginated():
 
     for req in paginated_requests:
         request_data = {
+            "service_id": req.ServiceRequest.service_id, #Añadido para poder desde el portal solicitar la informacion de la solicitud especifica
             "name": req.ServiceRequest.name,
             "creation_date": req.ServiceRequest.inserted_at,
             "status": req.service_state_alias.name,
