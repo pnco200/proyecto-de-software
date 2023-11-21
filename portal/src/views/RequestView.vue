@@ -50,7 +50,7 @@ export default {
           }
         }
 
-        const response = await axios.post('https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/me/requests/', formData, {
+        const response = await axios.post('http://localhost:5173/api/me/requests/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `JWT ${333}`,

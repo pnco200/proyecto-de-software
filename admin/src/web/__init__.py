@@ -40,7 +40,7 @@ def create_app(env="development", static_folder="../../static"):
     bcrypt.init_app(app)
     oauth.init_app(app)
     email_utils.init_app(app)
-    CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5173", "http://localhost:5173"]}})
+    CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5000", "http://localhost:5000"]}})
     # BLUEPRINTS
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)

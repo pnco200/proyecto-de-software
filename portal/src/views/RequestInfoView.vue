@@ -23,7 +23,7 @@
       const requestId = this.$route.params.requestId;
   
       try {
-        const response = await axios.get(`https://admin-grupo25.proyecto2023.unlp.edu.ar/api/me/requests/${requestId}`, {
+        const response = await axios.get(`http://localhost:5000/api/me/requests/${requestId}`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'JWT <token>',

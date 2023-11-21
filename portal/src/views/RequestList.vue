@@ -33,7 +33,7 @@
     methods: {
       async fetchSolicitudes() {
         try {
-          const response = await axios.get('https://admin-grupo25.proyecto2023.unlp.edu.ar/api/me/requests', {
+          const response = await axios.get('http://localhost:5000/api/me/requests', {
             params: {
               page: 1,
               per_page: 10,
