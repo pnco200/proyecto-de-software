@@ -29,6 +29,34 @@ def create_user(**kwargs):
     db.session.commit()
     return user
 
+def create_user_google(**kwargs):
+    """Crear usuario con google
+
+    Args:
+        **kwargs (_dict_): Diccionario con los datos del usuario a crear
+
+    Returns:
+        User: Devuelve usuario creado
+    """
+    user = User(**kwargs)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+def create_user_google(**kwargs):
+    """Crear usuario con google
+
+    Args:
+        **kwargs (_dict_): Diccionario con los datos del usuario a crear
+
+    Returns:
+        User: Devuelve usuario creado
+    """
+    user = User(**kwargs)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
 def find_user_by_email(email):
     """Encontrar usuario por mail
 
@@ -77,9 +105,11 @@ def check_user(email,password):
         None: Devuelve None en caso contrario
     """
     user = find_user_by_email(email)
+    if not user:
+        return None
     if not user.password:
         return None
-    if user and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
+    if not user.is_google and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
         return user
     else:
         return None
