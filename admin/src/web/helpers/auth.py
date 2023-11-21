@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import session, abort, request, jsonify
 from authlib.integrations.flask_client import OAuth
+from src.core import auth
 
 oauth = OAuth()
 
@@ -12,7 +13,6 @@ oauth.register(
     }
 )
 
-from src.core import auth
 def is_authenticated(session):
     return session.get("user") is not None
 

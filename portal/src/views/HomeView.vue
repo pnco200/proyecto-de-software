@@ -16,9 +16,10 @@
       <h3>Realizar búsqueda de servicios</h3>
       <p>
         Utiliza nuestra herramienta de búsqueda para encontrar rápidamente los servicios que necesitas. 
-        Ingresa palabras clave, filtra por institución o categoría, y encuentra las soluciones que se 
+        Ingresa palabras clave, filtra por categoría, y encuentra las soluciones que se 
         adaptan a tus necesidades.
       </p>
+      <router-link to="/services">Buscar servicios</router-link>
     </div>
     <div class="item">
       <h3>Ver los servicios que ofrece cada institución</h3>
@@ -37,7 +38,6 @@
       </p>
     </div>
     
-    <router-link to="/buscar-servicios">Buscar servicios</router-link>
   </div>
   
 </template>
