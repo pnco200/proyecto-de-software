@@ -27,7 +27,7 @@
   <script>
   import Cookies from 'js-cookie';
   import axios from 'axios';
-  
+
   export default {
     data() {
       return {
@@ -46,18 +46,14 @@
                   user: this.username,
                   password: this.password,
                 });
-
-                if(response.ok){
+                if(response.status == 200){
                   Cookies.set('token', response.data.result);
                   alert("El logeo fue exitoso")
                   this.$router.push({ name: 'home' });
-                }else{
-                  throw new Error('Error al iniciar sesion');
                 }
-
             } catch (error) {
                 console.error('Login failed:', error.message);
-                alert(error.message)
+                alert("Error al iniciar sesion")
                 return
             }
         }
