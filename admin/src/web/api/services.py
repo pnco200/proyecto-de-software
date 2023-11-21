@@ -2,29 +2,27 @@ from flask import Blueprint, jsonify, request
 from src.core import services as servicesQueries
 from src.core.configuration import get_rows_per_page
 
-api_service_bp = Blueprint("service_api", __name__, url_prefix="/api/services/")
+api_service_bp = Blueprint("service_api", __name__, url_prefix="/api/services")
 
 
 
 @api_service_bp.get('/search')
 def getServices():
-    print(request.args.get('type'))
     keyword = request.args.get('q')
     if keyword is None or keyword == '':
         return jsonify({'error': 'Se requiere el parametro q'}), 400
 
-    service_type = request.args.get('type')
+    service_type = request.args.get('type') 
+    if service_type != "ANALISIS" and service_type != "CONSULTORIA" and service_type != "DESARROLLO":
+        service_type = None
     per_page = request.args.get('per_page', get_rows_per_page(), type=int)
     page = request.args.get('page', 1, type=int)
-
-
     queryRes = servicesQueries.get_service_by_keyword_and_type(keyword=keyword, service_type=service_type, per_page=per_page, page=page)
 
     if(queryRes == False):
         return jsonify({'error': 'Parametros Invalidos'}), 400
     services = queryRes[0]
     total_count = queryRes[1]
-
     service_data = []
     for service in services:
         service_data.append({
@@ -35,7 +33,8 @@ def getServices():
             'description': service.description,
             'key_words': service.key_words,
             'enabled': service.enabled,
-            'institution_id': service.institution_id,
+            'institution_name': service.institution.name,
+            'institution_id': service.institution.id,
         })
 
     result = {
@@ -46,7 +45,6 @@ def getServices():
     }
 
     return jsonify(result)
-
 
 @api_service_bp.get('/<int:service_id>')
 def get_service_by_id(service_id):

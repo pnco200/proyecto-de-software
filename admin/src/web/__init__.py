@@ -23,6 +23,8 @@ from src.core.email import email_utils
 from src.core import institutions
 from src.web.helpers.auth import oauth
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+#from src.web.controllers.issues import issues
 
 _session = Session()
 
@@ -38,7 +40,7 @@ def create_app(env="development", static_folder="../../static"):
     bcrypt.init_app(app)
     oauth.init_app(app)
     email_utils.init_app(app)
-    
+    CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5173", "http://localhost:5173"]}})
     # BLUEPRINTS
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
