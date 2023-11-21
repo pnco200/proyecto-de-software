@@ -33,6 +33,9 @@ def google_auth():
         user_info = oauth.google.parse_id_token(token, nonce=nonce) 
         user = auth.find_user_by_email(user_info["email"])
         if user:
+            if not user.is_active:
+                flash("Su cuenta se encuentra bloqueada!", "error")
+                return redirect(url_for("auth.login"))
             if not user.is_google:
                 flash("El usuario ya existe, pero no fue creado con google.", "error")
                 return redirect(url_for('auth.login'))
