@@ -11,7 +11,7 @@ def list_users():
     query = query.filter(~User.id.in_(subquery))
     return query.all()
     
-def create_user(**kwargs):
+def create_user(is_active=False,**kwargs):
     """Crear usuario
 
     Args:
@@ -24,7 +24,7 @@ def create_user(**kwargs):
         hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
         kwargs.update(password=hash.decode("utf-8"))
     user = User(**kwargs)
-    user.is_active = False
+    user.is_active = is_active
     db.session.add(user)
     db.session.commit()
     return user
