@@ -29,6 +29,7 @@ def google_login():
 def google_auth():
     try:
         nonce = session.pop('nonce', None)
+        print(nonce)
         token = oauth.google.authorize_access_token(nonce=nonce)
         user_info = oauth.google.parse_id_token(token, nonce=nonce) 
         user = auth.find_user_by_email(user_info["email"])
