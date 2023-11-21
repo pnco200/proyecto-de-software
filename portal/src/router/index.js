@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import RequestView from '../views/RequestView.vue'
-
+import RequestList from '../views/RequestList.vue'
+import RequestInfoView from '../views/RequestInfoView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -19,9 +20,20 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/solicitar-servicio',
-      name: "solicitud",
+      path: '/request-service',
+      name: "request",
       component: RequestView,
+    },
+    {
+      path: '/list-request',
+      name: "RequestList",
+      component: RequestList,
+    },
+    {
+      // Ruta para la vista que muestra el detalle de una solicitud, RequestButton.vue la llama cuando se
+      path:'/info-request',
+      name:"RequestInfo",
+      component:RequestInfoView,
     }
   ]
 })

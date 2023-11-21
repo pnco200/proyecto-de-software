@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Solicitar Servicio</h2>
+    <h2 align="center" >Solicitar Servicio</h2>
 
     <!-- Condicionalmente mostrar el componente RequestForm o RequestCompleteInfo -->
     <RequestForm v-if="modoSolicitud && !solicitudEnviada" @submitRequest="submitRequestToApi" />
@@ -60,11 +60,10 @@ export default {
         this.solicitudObtenida = response.data;
         this.solicitudEnviada = true;
 
-        // Configura la notificación para mostrar un mensaje de éxito
         this.showNotification = true;
         this.notificationMessage = 'Solicitud enviada con éxito';
 
-        // Almacena el estado en el localStorage
+        
         localStorage.setItem('solicitudEnviada', JSON.stringify(this.solicitudEnviada));
         localStorage.setItem('solicitudObtenida', JSON.stringify(this.solicitudObtenida));
         localStorage.setItem('modoSolicitud', JSON.stringify(this.modoSolicitud));
@@ -73,7 +72,6 @@ export default {
       } catch (error) {
         console.error('Error al enviar la solicitud:', error.message);
 
-        // Configura la notificación para mostrar un mensaje de error
         this.showNotification = true;
         this.notificationMessage = 'Error al enviar la solicitud';
       }
@@ -82,8 +80,7 @@ export default {
       this.solicitudEnviada = false;
       this.modoSolicitud = true;
       this.showNotification = false;
-
-      // Almacena el estado en el localStorage
+      
       localStorage.setItem('solicitudEnviada', JSON.stringify(this.solicitudEnviada));
       localStorage.setItem('modoSolicitud', JSON.stringify(this.modoSolicitud));
     },
@@ -120,4 +117,8 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+h2 {
+    color: #007BFF;
+    text-align: center;
+  }
 </style>
