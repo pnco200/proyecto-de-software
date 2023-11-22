@@ -10,6 +10,7 @@ from src.web.controllers.users import user_bp
 from src.web.controllers.configuration import config_bp
 from src.web.controllers.institution import institution_bp
 from src.web.controllers.permissions import permissions_bp
+from src.web.api.configuration import api_configuration_bp
 from src.web.controllers.services import service_bp
 from src.web.api.institutions import api_institution_bp
 from src.web.api.auth import api_auth_bp
@@ -24,6 +25,8 @@ from src.core.email import email_utils
 from src.core import institutions
 from src.web.helpers.auth import oauth
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+#from src.web.controllers.issues import issues
 
 _session = Session()
 
@@ -39,7 +42,7 @@ def create_app(env="development", static_folder="../../static"):
     bcrypt.init_app(app)
     oauth.init_app(app)
     email_utils.init_app(app)
-    
+    CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5173", "http://localhost:5173"]}})
     # BLUEPRINTS
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
@@ -48,12 +51,13 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(permissions_bp)
     app.register_blueprint(service_bp)
     app.register_blueprint(srequest_bp)
-    app.register_blueprint(api_service_bp)
     app.register_blueprint(api_stats_bp)
     #API BLUEPRINTS
     app.register_blueprint(api_institution_bp)
     app.register_blueprint(api_user_bp)
     app.register_blueprint(api_auth_bp)
+    app.register_blueprint(api_service_bp)
+    app.register_blueprint(api_configuration_bp)
 
     def get_user_institutions():
         return institutions.get_user_institutions(session.get("user"), utils.current_selected_institution())
