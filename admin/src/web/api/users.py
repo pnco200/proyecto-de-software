@@ -135,3 +135,29 @@ def add_note_to_request(service_request_id):
         return jsonify(res), 201
     else:
         return jsonify(error='ID no encontrada'), 404
+
+@api_user_bp.get('/request-notes/<int:service_requests_id>')
+@jwt_required()
+def get_request_notes(service_request_id):
+    user_id = get_jwt_identity()
+    user = auth.find_user_by_id(user_id)
+    text = request.json["text"]
+    if not text:
+        return jsonify(error='Parametros Invalidos'), 400
+    user_and_msgs = service_requests.get_request_msgs(service_request_id)[1]
+    final_list =[]
+    if(user_and_msgs):
+        for msg in user_and_msgs:
+         response = {
+            "id": msg.ServiceRequestMessages.id,
+            "user_id" : msg.ServiceRequestMessages.user_id,
+            "service_id": msg.ServiceRequestMessages.service_request_id, 
+            "creation_date": msg.ServiceRequestMessages.inserted_at,
+            "content": msg.ServiceRequestMessages.content
+            }
+         final_list.append(response)
+    final_list = sorted(final_list, key=lambda x: x['creation_date'])
+    response = { 
+        'data': final_list,
+    }
+    return jsonify(response), 200
