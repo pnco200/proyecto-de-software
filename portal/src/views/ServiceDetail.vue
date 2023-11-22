@@ -1,11 +1,11 @@
 <template>
-      <h1>Detalle Servicio</h1>
+    <h1>Hi Servicio</h1>
 
-  </template>
-  
-  <script>
-  
-  export default {
-  };
-  </script>
+</template>
+
+<script>
+
+export default {
+};
+</script>
   
