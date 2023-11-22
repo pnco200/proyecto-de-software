@@ -17,6 +17,9 @@
                 <button type="submit" class="btn btn-primary">Confirmar</button>
               </form>
             </div>
+            <div class="m-3">
+              <img @click="redirigirUsuario" src="../assets/googleLogoOficial.png" alt="Logo">
+            </div>
           </div>
         </div>
       </div>
@@ -34,6 +37,18 @@
         username: '',
         password: '',
       };
+    },
+    created() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token_google');
+    if (token) {
+      if(token == "fail"){
+        alert("Su cuenta se encuentra bloqueada!")
+      }else{
+        Cookies.set('token', token);
+        this.$router.push({ name: 'home' });
+      }
+    }
     },
     methods: {
         async login() {
@@ -57,6 +72,9 @@
                 alert("Error al iniciar sesion")
                 return
             }
+        },
+        redirigirUsuario() {
+          window.location.href = 'http://localhost:5000/auth/google?is_portal=True';
         }
     },
   };

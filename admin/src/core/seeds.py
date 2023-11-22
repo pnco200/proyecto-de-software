@@ -3,71 +3,72 @@ from src.core import institutions, configuration, auth, rol_permission, services
 def run():
     def create_institutions():
         institutions.create_institution(
-            name="Instituto de Matemática e Estatística",
-            information="Instituto de Matemática e Estatística",
-            address="Rua do Matão, 1010 - Cidade Universitária - Butantã - São Paulo - SP",
-            localization="São Paulo - SP",
+            name="Instituto de Matematica e Estatistica",
+            information="Instituto de Matematica e Estatistica",
+            address="Rua do Matao, 1010 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            localization="Sao Paulo - SP",
             web="https://www.ime.usp.br/",
-            keywords="Matemática, Estatística, Computação",
-            attention_time="Segunda à Sexta das 8h às 17h",
+            keywords="Matematica, Estatistica, Computacao",
+            attention_time="Segunda a Sexta das 8h as 17h",
             contact="11 3091-6149",
             is_active=True
         )
         institutions.create_institution(
-            name="Instituto de Física",
-            information="Instituto de Física",
-            address="Rua do Matão, 1371 - Cidade Universitária - Butantã - São Paulo - SP",
-            localization="São Paulo - SP",
+            name="Instituto de Fisica",
+            information="Instituto de Fisica",
+            address="Rua do Matao, 1371 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            localization="Sao Paulo - SP",
             web="https://portal.if.usp.br/",
-            keywords="Física",
-            attention_time="Segunda à Sexta das 8h às 17h",
+            keywords="Fisica",
+            attention_time="Segunda a Sexta das 8h as 17h",
             contact="11 309-6149",
             is_active=True
         )
         institutions.create_institution(
-            name="Instituto de Química",
-            information="Instituto de Química",
-            address="Av. Prof. Lineu Prestes, 748 - Cidade Universitária - Butantã - São Paulo - SP",
-            localization="São Paulo - SP",
+            name="Instituto de Quimica",
+            information="Instituto de Quimica",
+            address="Av. Prof. Lineu Prestes, 748 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            localization="Sao Paulo - SP",
             web="https://www.iq.usp.br/",
-            keywords="Química",
-            attention_time="Segunda à Sexta das 8h às 17h",
+            keywords="Quimica",
+            attention_time="Segunda a Sexta das 8h as 17h",
             contact="11 091-6149",
             is_active=True
         )
         institutions.create_institution(
-            name="Instituto de Biociências",
-            information="Instituto de Biociências",
-            address="Rua do Matão, 277 - Cidade Universitária - Butantã - São Paulo - SP",
-            localization="São Paulo - SP",
+            name="Instituto de Biociencias",
+            information="Instituto de Biociencias",
+            address="Rua do Matao, 277 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            localization="Sao Paulo - SP",
             web="https://ib.usp.br/",
             keywords="Biologia",
-            attention_time="Segunda à Sexta das 8h às 17h",
+            attention_time="Segunda a Sexta das 8h as 17h",
             contact="11 91-6149",
             is_active=True
         )
         institutions.create_institution(
             name="Instituto de Psicologia",
             information="Instituto de Psicologia",
-            address="Av. Prof. Mello Moraes, 1721 - Cidade Universitária - Butantã - São Paulo - SP",
-            localization="São Paulo - SP",
+            address="Av. Prof. Mello Moraes, 1721 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            localization="Sao Paulo - SP",
             web="https://www.ip.usp.br/",
             keywords="Psicologia",
-            attention_time="Segunda à Sexta das 8h às 17h",
+            attention_time="Segunda a Sexta das 8h as 17h",
             contact="11 3091-49",
             is_active=True
         )
         institutions.create_institution(
-            name="Instituto de Ciências Biomédicas",
-            information="Instituto de Ciências Biomédicas",
-            address="Av. Prof. Lineu Prestes, 1524 - Cidade Universitária - Butantã - São Paulo - SP",
-            localization="São Paulo - SP",
+            name="Instituto de Ciencias Biomedicas",
+            information="Instituto de Ciencias Biomedicas",
+            address="Av. Prof. Lineu Prestes, 1524 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            localization="Sao Paulo - SP",
             web="https://icb.usp.br/",
             keywords="Biologia, Medicina",
-            attention_time="Segunda à Sexta das 8h às 17h",
+            attention_time="Segunda a Sexta das 8h as 17h",
             contact="11 3091-9",
             is_active=True
         )
+
     def create_users():
         auth.create_user(
             email="mail1@gmail.com",
@@ -128,55 +129,55 @@ def run():
             rows_per_page=5,
             contact_information="11 3091-6149",
             is_maintenance=False,
-            maintenance_message="",
+            maintenance_message="El sitio se encuentra en mantenimiento",
         )
     def create_services():
-        service1= services.create_service(
-            name="Matemática",
+        service1 = services.create_service(
+            name="Matematica",
             type="ANALISIS",
             centers="IME",
-            description="Matemática",
-            key_words=["Matemática", "Cálculo", "Álgebra", "Geometría", "Análisis"],
+            description="Matematica",
+            key_words=["Matematica", "Calculo", "Algebra", "Geometria", "Analisis"],
             enabled=True,
             institution_id=1
         )
         service2 = services.create_service(
-            name="Física",
+            name="Fisica",
             type="ANALISIS",
             centers="IF",
-            description="Física",
-            key_words=["Física", "Mecánica", "Óptica", "Termodinámica", "Electricidad", "Magnetismo", "Ondas", "Física Moderna", "Física Cuántica", "Relatividad"],
+            description="Fisica",
+            key_words=["Fisica", "Mecanica", "Optica", "Termodinamica", "Electricidad", "Magnetismo", "Ondas", "Fisica Moderna", "Fisica Cuantica", "Relatividad"],
             enabled=True,
-            institution_id=1
+            institution_id=2
         )
         service3 = services.create_service(
-            name="Química",
+            name="Quimica",
             type="ANALISIS",
             centers="IQ",
-            description="Química",
+            description="Quimica",
             key_words=["Quimica"],
             enabled=True,
-            institution_id=1
+            institution_id=3
         )
-        services.create_service(
+        service4 = services.create_service(
             name="Biologia",
             type="ANALISIS",
             centers="IB",
             description="Biologia",
-            key_words=["Quimica","Biologia", "Biología", "Biología Celular", "Biología Molecular", "Genética", "Bioquímica", "Microbiología", "Botánica", "Zoología", "Ecología", "Fisiología", "Anatomía", "Embriología", "Biología Evolutiva", "Biología del Desarrollo", "Bi"],
+            key_words=["Quimica", "Biologia", "Biologia", "Biologia Celular", "Biologia Molecular", "Genetica", "Bioquimica", "Microbiologia", "Botanica", "Zoologia", "Ecologia", "Fisiologia", "Anatomia", "Embriologia", "Biologia Evolutiva", "Biologia del Desarrollo", "Bi"],
             enabled=True,
-            institution_id=1
+            institution_id=3
         )
-        services.create_service(
+        service5 = services.create_service(
             name="Psicologia",
             type="CONSULTORIA",
             centers="IP",
             description="Psicologia",
-            key_words=["Quimica","psico"],
+            key_words=["Quimica", "psico"],
             enabled=True,
             institution_id=5
         )
-        return service1,service2,service3
+        return service1,service2,service3, service4, service5
     def create_roles():
         rol_permission.create_rol(
             name = "Owner"
@@ -563,15 +564,7 @@ def run():
         )
         
     def   create_solcitudes_Example_1(service):
-        user = auth.create_user(
-            email="mail30@gmail.com",
-            name="Jay",
-            lastname="Dem",
-            username="jaye",
-            password="1453",
-            is_confirmed=True,
-            is_active=True
-        )
+        user = auth.get_random_user()
         
         state = service_requests.create_state_request(
             name="inicial",
@@ -595,15 +588,7 @@ def run():
             msg_content = "En lo posible quisiera conocer un costo estimado"            
         )
     def   create_solcitudes_Example_2(service):
-        user = auth.create_user(
-            email="mail10@gmail.com",
-            name="Juanito",
-            lastname="guay",
-            username="juan2",
-            password="2009",
-            is_confirmed=True,
-            is_active=True
-        )
+        user = auth.get_random_user()
         
         state = service_requests.create_state_request(
             name="inicial",
@@ -627,15 +612,7 @@ def run():
             msg_content = "En lo posible quisiera conocer un costo estimado"            
         )
     def   create_solcitudes_Example_3(service):
-        user = auth.create_user(
-            email="mail20@gmail.com",
-            name="roman",
-            lastname="tamar",
-            username="je",
-            password="13456",
-            is_confirmed=True,
-            is_active=True
-        )
+        user = auth.get_random_user()
        
         state = service_requests.create_state_request(
             name="inicial",
@@ -664,12 +641,15 @@ def run():
     create_configurations()
     create_institutions()
     create_users()
-    service1,service2,service3 = create_services()
+    service1,service2,service3, service4, service5 = create_services()
     create_roles()
     create_permissions()
     create_rol_has_these_permission()
-    create_solcitudes_Example_1(service1)##De instituto de fmatematica 
-    create_solcitudes_Example_2(service2)##De instituto de fisica
-    create_solcitudes_Example_3(service3)##De instuto de quimica
+    create_solcitudes_Example_1(service1)
+    create_solcitudes_Example_2(service2)
+    create_solcitudes_Example_3(service3)
+    create_solcitudes_Example_1(service4)
+    create_solcitudes_Example_1(service5)
+
 
 

@@ -204,3 +204,19 @@ def filter_service_requests_paged(page, service_type=None, start_date=None, end_
             query = query.filter_by(state_id=state_entry.id)
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
+
+def get_total_requests_by_institutions():
+    """
+    Devuelve la cantidad total de solicitudes de servicio por institución.
+
+    Returns:
+        list: Lista de tuplas con el nombre de la institución y la cantidad de solicitudes de servicio.
+    """
+    return (
+        db.session.query(Institution.name, db.func.count(ServiceRequest.id))
+        .outerjoin(Service, Service.institution_id == Institution.id)
+        .outerjoin(ServiceRequest, ServiceRequest.service_id == Service.id)
+        .group_by(Institution.name)
+        .all()
+    )
+    return query.all()

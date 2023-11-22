@@ -5,6 +5,7 @@ from src.web.helpers import utils
 from src.web.controllers.users import user_bp
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.flask_client import OAuthError
+from flask_jwt_extended import create_access_token
 from src.web.helpers.auth import oauth
 from uuid import uuid4
 
@@ -20,7 +21,12 @@ def login():
 def google_login():
     """Me permite loguearme con google
     """
-    redirect_uri = url_for('auth.google_auth', _external=True)
+    is_portal = request.args.get('is_portal')
+    redirect_uri = None
+    if is_portal == "True":
+        redirect_uri = url_for('auth.google_auth', _external=True, is_portal="True")
+    else:
+        redirect_uri = url_for('auth.google_auth', _external=True, is_portal="False")
     nonce = str(uuid4())
     session['nonce'] = nonce
     return oauth.google.authorize_redirect(redirect_uri, nonce=nonce)
@@ -29,13 +35,24 @@ def google_login():
 def google_auth():
     try:
         nonce = session.pop('nonce', None)
+        print(nonce)
         token = oauth.google.authorize_access_token(nonce=nonce)
-        user_info = oauth.google.parse_id_token(token, nonce=nonce) 
+        user_info = oauth.google.parse_id_token(token, nonce=nonce)
+        is_portal = True if request.args.get('is_portal') == "True" else False
         user = auth.find_user_by_email(user_info["email"])
+        if user and is_portal:
+            if user.is_active:
+                access_token = create_access_token(identity=user.id)
+                return redirect("http://localhost:5173/login?token_google=" + access_token)
+            else:
+                return redirect("http://localhost:5173/login?token_google=fail")
         if user:
+            if not user.is_active:
+                flash("Su cuenta se encuentra bloqueada!", "error")
+                return redirect(url_for("auth.login"))
             if not user.is_google:
                 flash("El usuario ya existe, pero no fue creado con google.", "error")
-                return redirect(url_for('auth.login'))
+                return redirect(url_for("auth.login"))
             else:
                 session["user"] = user.id
                 flash("La sesion se inicio correctamente.", "success")
