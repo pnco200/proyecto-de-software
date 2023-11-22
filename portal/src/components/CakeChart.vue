@@ -18,7 +18,6 @@ const fetchData = async () => {
         return processResponse(data)
     } catch (error) {
         console.error('Error fetching or processing data:', error)
-        // Handle error or return a default value
         return { labels: [], datasets: [] }
     }
 }
