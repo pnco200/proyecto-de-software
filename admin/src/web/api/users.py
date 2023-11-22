@@ -48,7 +48,7 @@ def get_user_requests(service_request_id):
     return jsonify(service_request_parsed), 200
 
 
-@api_user_bp.get('/requests')
+@api_user_bp.get('/requests-paginated')
 @jwt_required()
 def get_requests_paginated():
     user_id = get_jwt_identity()
@@ -73,6 +73,8 @@ def get_requests_paginated():
 
     for req in paginated_requests:
         request_data = {
+            "id": req.ServiceRequest.id,
+            "user_id" : req.ServiceRequest.user_id,
             "service_id": req.ServiceRequest.service_id, #Añadido para poder desde el portal solicitar la informacion de la solicitud especifica
             "name": req.ServiceRequest.name,
             "creation_date": req.ServiceRequest.inserted_at,
@@ -82,7 +84,7 @@ def get_requests_paginated():
         final_list.append(request_data)
 
 
-    response = {
+    response = { 
         'data': final_list,
         'page': page,
         'per_page': per_page,
@@ -90,7 +92,7 @@ def get_requests_paginated():
     }
     return jsonify(response), 200
 
-@api_user_bp.post('/requests/')
+@api_user_bp.post('/requests-created')
 @jwt_required()
 def create_request():
     user_id = get_jwt_identity()

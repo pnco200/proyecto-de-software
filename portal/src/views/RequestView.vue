@@ -21,6 +21,7 @@ import RequestForm from '@/components/RequestForm.vue';
 import RequestCompleteInfo from '@/components/RequestCompleteInfo.vue';
 import Notification from '@/components/Notification.vue';
 import axios from 'axios';
+import Cookies from 'js-cookie'
 
 export default {
   components: {
@@ -39,6 +40,11 @@ export default {
   },
   methods: {
     async submitRequestToApi(requestData) {
+      const jwtToken = Cookies.get('token')
+      if (jwtToken) {
+        // Configurar el encabezado de autorización con el token JWT
+        axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+
       try {
         const formData = new FormData();
         formData.append('serviceId', requestData.serviceId);
@@ -50,10 +56,9 @@ export default {
           }
         }
 
-        const response = await axios.post('http://localhost:5173/api/me/requests/', formData, {
+        const response = await axios.post('http://localhost:5173/api/me/requests-created', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': `JWT ${333}`,
           },
         });
 
@@ -75,7 +80,9 @@ export default {
         this.showNotification = true;
         this.notificationMessage = 'Error al enviar la solicitud';
       }
-    },
+      }else {
+        console.error('No se encontró un token en las cookies.')};
+      },
     resetSolicitud() {
       this.solicitudEnviada = false;
       this.modoSolicitud = true;
@@ -86,6 +93,7 @@ export default {
     },
   },
 };
+
 </script>
 
 

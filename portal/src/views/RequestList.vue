@@ -5,7 +5,7 @@
       <h2>Listado de Solicitudes de Servicio</h2>
   
       <ul v-if="solicitudes.length">
-        <ListItemComponent
+        <RequestListElement
           v-for="solicitud in solicitudes"
           :key="solicitud.id"
           :solicitud="solicitud"
@@ -21,6 +21,8 @@
   <script>
   import ListItemComponent from '@/components/RequestListElement.vue'; // Ajusta la ruta según tu estructura de archivos
   import axios from 'axios'
+  import Cookies from 'js-cookie'
+
   export default {
     data() {
       return {
@@ -32,8 +34,11 @@
     },
     methods: {
       async fetchSolicitudes() {
+        const jwtToken = Cookies.get('token')
+        if (jwtToken) {
+        // Configurar el encabezado de autorización con el token JWT  
         try {
-          const response = await axios.get('http://localhost:5000/api/me/requests', {
+          const response = await axios.get('http://localhost:5000/api/me/requests-paginated', {
             params: {
               page: 1,
               per_page: 10,
@@ -42,7 +47,7 @@
             },
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'JWT <token>',
+              'Authorization': `Bearer ${jwtToken}`,
             },
           });
   
@@ -50,6 +55,9 @@
         } catch (error) {
           console.error('Error al obtener las solicitudes:', error.message);
         }
+      }else{
+        console.error('No se encontró un token en las cookies.')
+      };
       },
       handleDetailsClick(solicitud) {
         console.log('Detalles de la solicitud:', solicitud);

@@ -42,7 +42,7 @@
                     alert("Debe completar ambos campos!")
                     return
                 }
-                const response = await axios.post('http://localhost:5000/api/auth', {
+                const response = await axios.post('http://localhost:5000/api/auth/', {
                   user: this.username,
                   password: this.password,
                  

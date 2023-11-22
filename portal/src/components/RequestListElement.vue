@@ -1,11 +1,11 @@
 <template>
   <li>
-    <h4>{{ solicitud.title }} - {{ solicitud.creation_date }}</h4>
+    <h4>{{ solicitud.name }} - {{ solicitud.creation_date }}</h4>
     <p>{{ solicitud.status }}</p>
     <p>{{ solicitud.observations }}</p>
 
-    <ButtonComponent @buttonClick="handleButtonClick" />
-    <ButtonRequestnote @buttonClick="handleButtonRequestnoteClick" />
+    <ButtonComponent :solicitud="solicitud" @buttonClick="handleButtonClick" />
+    <ButtonRequestnote :solicitud="solicitud" @buttonClick="handleButtonRequestnoteClick" />
   </li>
 </template>
 

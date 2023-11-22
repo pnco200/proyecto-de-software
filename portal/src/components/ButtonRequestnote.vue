@@ -1,7 +1,7 @@
 <!-- src/components/ButtonComponent.vue -->
 <!-- Componente boton que llama a la vista que muestra con otro componente la informacion completa de la solicitud-->
 <template>
-    <router-link :to="{ name: 'info-request', params: { requestId: solicitud.id } }">
+    <router-link :to="{ name: 'notes-request', params: { requestInfo: solicitud } }">
       <button>Detalles</button>
     </router-link>
   </template>

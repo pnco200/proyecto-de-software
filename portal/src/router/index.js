@@ -7,6 +7,7 @@ import ServiceDetail from '../views/ServiceDetail.vue'
 import RequestView from '../views/RequestView.vue'
 import RequestList from '../views/RequestList.vue'
 import RequestInfoView from '../views/RequestInfoView.vue'
+import RequestNotes from '../views/RequestNotes.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -53,6 +54,11 @@ const router = createRouter({
       path:'/info-request',
       name:"RequestInfo",
       component:RequestInfoView,
+    },
+    {
+      path:'/notes-request',
+      name:"RequestNotes",
+      component: RequestNotes,
     }
   ]
 })

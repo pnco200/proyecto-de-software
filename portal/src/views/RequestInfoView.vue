@@ -10,7 +10,7 @@
   import RequestCompleteInfo from '@/components/RequestCompleteInfo.vue';
   import Notification from '@/components/Notification.vue';
   import axios from 'axios';
-  
+  import Cookies from 'js-cookie'
   export default {
     data() {
       return {
@@ -21,12 +21,14 @@
     },
     async created() {
       const requestId = this.$route.params.requestId;
-  
+      const jwtToken = Cookies.get('token')
+      if (jwtToken) {
+        // Configurar el encabezado de autorización con el token JWT  
       try {
         const response = await axios.get(`http://localhost:5000/api/me/requests/${requestId}`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'JWT <token>',
+            'Authorization': `Bearer ${jwtToken}`,
           },
         });
   
@@ -36,6 +38,9 @@
         this.showNotification = true;
         this.notificationMessage = 'Error al obtener detalles de la solicitud';
       }
+    }else{
+      console.error('No se encontró un token en las cookies.');
+    }
     },
     methods: {
       handleNotificationClose() {
