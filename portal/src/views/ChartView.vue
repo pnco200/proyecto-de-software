@@ -1,16 +1,16 @@
 <template>
-    <div>
-      <testComponent />
-    </div>
-  </template>
+	<div>
+		<testComponent />
+	</div>
+</template>
   
-  <script>
-  import testComponent from '@/components/BarChart.vue'
-  
-  export default {
-    name: 'ChartView',
-    components: {
-      testComponent
-    }
-  }
-  </script>
+<script lang="js">
+import testComponent from '@/components/BarChart.vue'
+
+export default {
+	name: 'ChartView',
+	components: {
+		testComponent
+	}
+}
+</script>

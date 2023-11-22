@@ -147,7 +147,7 @@ def run():
             description="Física",
             key_words=["Física", "Mecánica", "Óptica", "Termodinámica", "Electricidad", "Magnetismo", "Ondas", "Física Moderna", "Física Cuántica", "Relatividad"],
             enabled=True,
-            institution_id=1
+            institution_id=2
         )
         service3 = services.create_service(
             name="Química",
@@ -156,18 +156,18 @@ def run():
             description="Química",
             key_words=["Quimica"],
             enabled=True,
-            institution_id=1
+            institution_id=3
         )
-        services.create_service(
+        service4 = services.create_service(
             name="Biologia",
             type="ANALISIS",
             centers="IB",
             description="Biologia",
             key_words=["Quimica","Biologia", "Biología", "Biología Celular", "Biología Molecular", "Genética", "Bioquímica", "Microbiología", "Botánica", "Zoología", "Ecología", "Fisiología", "Anatomía", "Embriología", "Biología Evolutiva", "Biología del Desarrollo", "Bi"],
             enabled=True,
-            institution_id=1
+            institution_id=3
         )
-        services.create_service(
+        service5 = services.create_service(
             name="Psicologia",
             type="CONSULTORIA",
             centers="IP",
@@ -176,7 +176,7 @@ def run():
             enabled=True,
             institution_id=5
         )
-        return service1,service2,service3
+        return service1,service2,service3, service4, service5
     def create_roles():
         rol_permission.create_rol(
             name = "Owner"
@@ -563,15 +563,7 @@ def run():
         )
         
     def   create_solcitudes_Example_1(service):
-        user = auth.create_user(
-            email="mail30@gmail.com",
-            name="Jay",
-            lastname="Dem",
-            username="jaye",
-            password="1453",
-            is_confirmed=True,
-            is_active=True
-        )
+        user = auth.get_random_user()
         
         state = service_requests.create_state_request(
             name="inicial",
@@ -595,15 +587,7 @@ def run():
             msg_content = "En lo posible quisiera conocer un costo estimado"            
         )
     def   create_solcitudes_Example_2(service):
-        user = auth.create_user(
-            email="mail10@gmail.com",
-            name="Juanito",
-            lastname="guay",
-            username="juan2",
-            password="2009",
-            is_confirmed=True,
-            is_active=True
-        )
+        user = auth.get_random_user()
         
         state = service_requests.create_state_request(
             name="inicial",
@@ -627,15 +611,7 @@ def run():
             msg_content = "En lo posible quisiera conocer un costo estimado"            
         )
     def   create_solcitudes_Example_3(service):
-        user = auth.create_user(
-            email="mail20@gmail.com",
-            name="roman",
-            lastname="tamar",
-            username="je",
-            password="13456",
-            is_confirmed=True,
-            is_active=True
-        )
+        user = auth.get_random_user()
        
         state = service_requests.create_state_request(
             name="inicial",
@@ -664,12 +640,15 @@ def run():
     create_configurations()
     create_institutions()
     create_users()
-    service1,service2,service3 = create_services()
+    service1,service2,service3, service4, service5 = create_services()
     create_roles()
     create_permissions()
     create_rol_has_these_permission()
-    create_solcitudes_Example_1(service1)##De instituto de fmatematica 
-    create_solcitudes_Example_2(service2)##De instituto de fisica
-    create_solcitudes_Example_3(service3)##De instuto de quimica
+    create_solcitudes_Example_1(service1)
+    create_solcitudes_Example_2(service2)
+    create_solcitudes_Example_3(service3)
+    create_solcitudes_Example_1(service4)
+    create_solcitudes_Example_1(service5)
+
 
 

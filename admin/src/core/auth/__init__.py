@@ -3,6 +3,11 @@ from src.core.model.model import User, RolUsuario
 from src.core.configuration import get_rows_per_page
 from src.core.bcrypt import bcrypt
 from src.core import rol_permission
+def get_random_user():
+    """Obtener usuario aleatorio
+    para las seeds"""
+    return User.query.order_by(db.func.random()).first() 
+
 def list_users():
     query = User.query
 

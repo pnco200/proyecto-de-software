@@ -14,6 +14,7 @@ from src.web.controllers.services import service_bp
 from src.web.api.institutions import api_institution_bp
 from src.web.api.auth import api_auth_bp
 from src.web.api.services import api_service_bp
+from src.web.api.stats import api_stats_bp
 from src.web.controllers.services_requests import srequest_bp
 from src.web.helpers import auth
 from src.web.helpers import utils
@@ -48,7 +49,7 @@ def create_app(env="development", static_folder="../../static"):
     app.register_blueprint(service_bp)
     app.register_blueprint(srequest_bp)
     app.register_blueprint(api_service_bp)
-
+    app.register_blueprint(api_stats_bp)
     #API BLUEPRINTS
     app.register_blueprint(api_institution_bp)
     app.register_blueprint(api_user_bp)
