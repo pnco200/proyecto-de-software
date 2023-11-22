@@ -15,6 +15,8 @@
   </template>
   
   <script>
+  import axios from 'axios'
+  import Cookies from 'js-cookie'
   export default {
     props: {
       solicitud: Object,
@@ -24,6 +26,10 @@
         messages: [], // La lista de mensajes que obtienes de la API
       };
     },
+    created() {
+    // Llama a la API para obtener mensajes asociados a la solicitud
+    this.fetchMessages();
+   },
     computed: {
       filteredMessages() {
         // Filtra los mensajes según el user_id de la solicitud
@@ -31,6 +37,26 @@
       },
     },
     methods: {
+      async fetchMessages() {
+         const jwtToken = Cookies.get('token')
+         if(jwtToken){
+        try {
+        // Utiliza this.solicitud.id para enviar el ID de la solicitud a la API
+        const response = await axios.get(`http://localhost:5000/api/me/request-notes/${this.solicitud.id}`,{
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwtToken}`,
+            },
+        });
+        
+        this.messages = response.data;
+      } catch (error) {
+        console.error('Error al obtener mensajes:', error);
+      }
+    }else{
+      console.log('no hay jwt token para utilizar')
+    }
+    },
       isMyMessage(message) {
         // Verifica si el mensaje es del usuario que hizo la solicitud
         return message.user_id === this.solicitud.user_id;
