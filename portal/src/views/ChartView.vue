@@ -1,16 +1,16 @@
 <template>
 	<div>
-		<testComponent />
+		<cakeChart/>
 	</div>
 </template>
   
 <script lang="js">
-import testComponent from '@/components/BarChart.vue'
+import cakeChart from '@/components/CakeChart.vue'
 
 export default {
 	name: 'ChartView',
 	components: {
-		testComponent
+		cakeChart
 	}
 }
 </script>

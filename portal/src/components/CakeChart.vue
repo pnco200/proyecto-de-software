@@ -39,7 +39,7 @@ const processResponse = (data) => {
 }
 
 export default defineComponent({
-    name: 'testComponent',
+    name: 'cakeChart',
     components: { DoughnutChart },
 
     setup() {
