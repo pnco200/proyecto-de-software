@@ -219,4 +219,22 @@ def get_total_requests_by_institutions():
         .group_by(Institution.name)
         .all()
     )
-    return query.all()
+
+def get_top_institutions_less_time_per_request():
+    """
+    Devuelve las 10 instituciones con el menor tiempo promedio por solicitud de servicio.
+
+    Returns:
+        list: Lista de tuplas con el nombre de la institución y el tiempo promedio por solicitud de servicio.
+    """
+    return (
+        db.session.query(Institution.name, db.func.avg(ServiceRequest.updated_at - ServiceRequest.inserted_at))
+        .outerjoin(Service, Service.institution_id == Institution.id)
+        .outerjoin(ServiceRequest, ServiceRequest.service_id == Service.id)
+        .join(ServiceState, ServiceState.id == ServiceRequest.state_id)
+        .filter(ServiceState.name == "finalizada")
+        .group_by(Institution.name)
+        .order_by(db.func.avg(ServiceRequest.updated_at - ServiceRequest.inserted_at).asc())
+        .limit(10)
+        .all()
+    )
