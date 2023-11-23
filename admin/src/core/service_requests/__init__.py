@@ -125,12 +125,31 @@ def get_request_msgs(id):
     return list
 
 def create_service_request(**kwargs):
-    sr = ServiceRequest(**kwargs)
-    state = create_state_request(
-        name = 'inicial'
+    # Extraer la información necesaria de kwargs
+    service_id = kwargs.get('service_id')
+    user_id = kwargs.get('user_id')
+    observations = kwargs.get('observations')
+    archive = kwargs.get('archive')
+
+    # Leer el contenido binario del archivo
+    file_data = archive.read() if archive else None
+
+    # Crear el estado (supongo que es una función que ya tienes definida)
+    state = create_state_request(name='inicial')
+
+    # Crear la instancia de ServiceRequest
+    sr = ServiceRequest(
+        service_id=service_id,
+        user_id=user_id,
+        observations=observations,
+        archive=file_data,
+        state_id=state.id
     )
+
+    # Agregar a la sesión y hacer commit
     db.session.add(sr)
     db.session.commit()
+
     return sr
 
 def create_state_request(**kwargs):

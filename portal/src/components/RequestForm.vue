@@ -1,122 +1,91 @@
 <template>
-  <form class="request-form" @submit.prevent="submitRequest">
-    <label for="serviceId">ID de Servicio:</label>
-    <input v-model="serviceId" type="text" id="serviceId" required>
+  <div class="request-form">
+    <h3>Complete el formulario de solicitud</h3>
 
-    <label for="description">Descripción:</label>
-    <textarea v-model="description" id="description" required></textarea>
+    <!-- Formulario -->
+    <form @submit.prevent="submitForm">
+      <!-- Campo de service_id (readonly y con valor predeterminado) -->
+      <label for="serviceId">ID del servicio: {{ serviceId }}</label>
 
-    <label for="files">Adjuntar Archivos:</label>
-    <input class="file-input" type="file" ref="files" @change="validateFile" accept=".txt, .pdf, .docx" multiple>
-    <p id="fileSizeError" style="color: red; display: none;">El archivo debe ser menor a 50 MB.</p>
-    <p id="fileCountError" style="color: red; display: none;">Selecciona solo un archivo.</p>
+      <!-- Campo de description -->
+      <label for="description">Descripción:</label>
+      <textarea v-model="formData.description" required></textarea>
 
-    <button type="submit">Enviar Solicitud</button>
-  </form>
+      <!-- Campo de archivo -->
+      <label for="file">Adjuntar archivo (opcional):</label>
+      <input type="file" @change="handleFileChange" />
+
+      <!-- Botón de enviar -->
+      <button type="submit">Enviar Solicitud</button>
+    </form>
+  </div>
 </template>
 
 <script>
 export default {
+  props: {
+    serviceId: {
+      type: Number,
+      required: true
+    },
+  },
   data() {
     return {
-      serviceId: '',
-      description: '',
-      files: null,
+      formData: {
+        serviceId: this.serviceId,  // Establecer el valor predeterminado con la prop recibida
+        description: '',
+        files: null,
+      },
     };
   },
   methods: {
-    submitRequest() {
-      // Verificar si se han seleccionado archivos
-      if (!this.$refs.files.files || this.$refs.files.files.length !== 1) {
-        document.getElementById('fileCountError').style.display = 'block';
-        return;
-      } else {
-        document.getElementById('fileCountError').style.display = 'none';
-      }
-
-      // Verificar el tamaño del archivo
-      const maxFileSizeInBytes = 50 * 1024 * 1024; // 50 MB
-      if (this.$refs.files.files[0].size > maxFileSizeInBytes) {
-        document.getElementById('fileSizeError').style.display = 'block';
-        return;
-      } else {
-        document.getElementById('fileSizeError').style.display = 'none';
-      }
-
-      // Emitir el evento con los datos del formulario
-      this.$emit('submitRequest', {
-        serviceId: this.serviceId,
-        description: this.description,
-        files: this.$refs.files.files,
-      });
+    handleFileChange(event) {
+      // Permitir que se elija un solo archivo
+      this.formData.files = event.target.files.length > 0 ? event.target.files[0] : null;
     },
-    validateFile() {
-      const fileSizeError = document.getElementById('fileSizeError');
-      const fileCountError = document.getElementById('fileCountError');
+    submitForm() {
+      // Emitir evento al componente padre con los datos del formulario
+      this.$emit('submitRequest', this.formData);
 
-      // Verificar el tamaño del archivo en el evento change
-      const maxFileSizeInBytes = 50 * 1024 * 1024; // 50 MB
-
-      if (this.$refs.files.files.length !== 1) {
-        fileCountError.style.display = 'block';
-      } else {
-        fileCountError.style.display = 'none';
-      }
-
-      for (let i = 0; i < this.$refs.files.files.length; i++) {
-        if (this.$refs.files.files[i].size > maxFileSizeInBytes) {
-          this.$refs.files.value = ''; // Limpiar el input si el archivo es demasiado grande
-          fileSizeError.style.display = 'block';
-          return;
-        } else {
-          fileSizeError.style.display = 'none';
-        }
-      }
+      // Restablecer el formulario después de enviar la solicitud
+      this.formData = {
+        serviceId: this.serviceId,  // Mantener el valor predeterminado
+        description: '',
+        files: null,
+      };
     },
   },
 };
 </script>
 
 <style scoped>
+/* Estilos específicos para el formulario */
 .request-form {
-  max-width: 400px;
-  margin: 0 auto;
+  background-color: #ccf5d1;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 8px;
 }
 
+/* Estilos para etiquetas y campos */
 label {
   display: block;
   margin-bottom: 5px;
-  color: #007BFF;
-  text-align: center;
 }
 
 input,
-textarea {
-  width: 100%;
-  padding: 8px;
+textarea,
+button {
   margin-bottom: 10px;
 }
 
-.file-input {
-  margin-bottom: 20px;
-}
-
+/* Estilos para el botón de enviar */
 button {
-  background-color: #007BFF;
+  background-color: #4caf50;
   color: white;
-  padding: 10px;
+  padding: 10px 20px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color:#007BFF;
-  text-align: center;
-}
-
-label{
-  color: #007BFF;
-  text-align: center;
 }
 </style>

@@ -1,10 +1,9 @@
 <template>
   <div class="request-complete-info">
-    <h3>{{ solicitud.title }}</h3>
-    <p class="description">{{ solicitud.description }}</p>
+    <h3>ID :{{ solicitud.id}}</h3>
+    <p class="description">Descripción : {{ solicitud.observations}}</p>
     <div class="info">
-      <p><strong>Fecha de Creación:</strong> {{ solicitud.creation_date }}</p>
-      <p><strong>Fecha de Cierre:</strong> {{ solicitud.close_date }}</p>
+      <p><strong>Fecha de Creación:</strong> {{ solicitud.inserted_at}}</p>
       <p><strong>Estado:</strong> {{ solicitud.status }}</p>
     </div>
     <!-- Otros detalles de la solicitud -->

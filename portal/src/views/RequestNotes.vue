@@ -42,7 +42,7 @@
          if(jwtToken){
         try {
         // Utiliza this.solicitud.id para enviar el ID de la solicitud a la API
-        const response = await axios.get(`http://localhost:5000/api/me/request-notes/${this.solicitud.id}`,{
+        const response = await axios.get(`http://localhost:5000/api/me/request/notes/`,{
           headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${jwtToken}`,

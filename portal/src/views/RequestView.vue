@@ -1,16 +1,28 @@
 <template>
   <div>
-    <h2 align="center" >Solicitar Servicio</h2>
+    <h2 align="center">Solicitar Servicio {{ $route.params.serviceId}}</h2>
+
 
     <!-- Condicionalmente mostrar el componente RequestForm o RequestCompleteInfo -->
-    <RequestForm v-if="modoSolicitud && !solicitudEnviada" @submitRequest="submitRequestToApi" />
-    <RequestCompleteInfo v-else :solicitud="solicitudObtenida" />
+    <RequestForm
+      v-if="modoSolicitud && !solicitudEnviada"
+      :serviceId="$route.params.serviceId"
+      @submitRequest="submitRequestToApi"
+    />
+    <RequestCompleteInfo
+      v-else
+      :solicitud="solicitudObtenida"
+    />
 
     <!-- Notificación flotante -->
-    <Notification v-if="showNotification" :message="notificationMessage" @close="showNotification = false" />
+    <Notification
+      v-if="showNotification"
+      :message="notificationMessage"
+      @close="showNotification = false"
+    />
 
     <!-- Botón para solicitar otro servicio -->
-    <button v-if="solicitudEnviada" @click="resetSolicitud">
+    <button class="custom-button" v-if="solicitudEnviada" @click="resetSolicitud">
       Solicitar Otro Servicio
     </button>
   </div>
@@ -21,7 +33,7 @@ import RequestForm from '@/components/RequestForm.vue';
 import RequestCompleteInfo from '@/components/RequestCompleteInfo.vue';
 import Notification from '@/components/Notification.vue';
 import axios from 'axios';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 export default {
   components: {
@@ -40,65 +52,68 @@ export default {
   },
   methods: {
     async submitRequestToApi(requestData) {
-      const jwtToken = Cookies.get('token')
+      const jwtToken = Cookies.get('token');
+      
       if (jwtToken) {
-        // Configurar el encabezado de autorización con el token JWT
-        axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+        try {
+          const formData = {
+            service_id: requestData.serviceId,
+            description: requestData.description,
+          };
 
-      try {
-        const formData = new FormData();
-        formData.append('serviceId', requestData.serviceId);
-        formData.append('description', requestData.description);
-
-        if (requestData.files) {
-          for (let i = 0; i < requestData.files.length; i++) {
-            formData.append('files', requestData.files[i]);
+          if(requestData.files){
+            formData["file"]=requestData.files;
+          } else {
+            formData["file"]=null;
           }
+
+          const response = await axios.post(
+            'http://localhost:5000/api/me/created-request',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwtToken}`,
+              },
+            }
+          );
+
+          this.solicitudObtenida = response.data;
+          this.solicitudEnviada = true;
+
+          this.showNotification = true;
+          this.notificationMessage = 'Solicitud enviada con éxito';
+
+          localStorage.setItem('solicitudEnviada', JSON.stringify(this.solicitudEnviada));
+          localStorage.setItem('solicitudObtenida', JSON.stringify(this.solicitudObtenida));
+          localStorage.setItem('modoSolicitud', JSON.stringify(this.modoSolicitud));
+
+          console.log('Solicitud enviada con éxito:', response.data);
+        } catch (error) {
+          console.error('Error al enviar la solicitud:', error.message);
+
+          // Mostrar el mensaje de error proveniente de la respuesta del servidor
+          this.showNotification = true;
+          this.notificationMessage = error.response.data.message || 'Error al enviar la solicitud';
         }
-
-        const response = await axios.post('http://localhost:5173/api/me/requests-created', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        this.solicitudObtenida = response.data;
-        this.solicitudEnviada = true;
-
-        this.showNotification = true;
-        this.notificationMessage = 'Solicitud enviada con éxito';
-
-        
-        localStorage.setItem('solicitudEnviada', JSON.stringify(this.solicitudEnviada));
-        localStorage.setItem('solicitudObtenida', JSON.stringify(this.solicitudObtenida));
-        localStorage.setItem('modoSolicitud', JSON.stringify(this.modoSolicitud));
-
-        console.log('Solicitud enviada con éxito:', response.data);
-      } catch (error) {
-        console.error('Error al enviar la solicitud:', error.message);
-
-        this.showNotification = true;
-        this.notificationMessage = 'Error al enviar la solicitud';
+      } else {
+        console.error('No se encontró un token en las cookies.');
       }
-      }else {
-        console.error('No se encontró un token en las cookies.')};
-      },
+    },
+
     resetSolicitud() {
       this.solicitudEnviada = false;
       this.modoSolicitud = true;
       this.showNotification = false;
-      
+
       localStorage.setItem('solicitudEnviada', JSON.stringify(this.solicitudEnviada));
       localStorage.setItem('modoSolicitud', JSON.stringify(this.modoSolicitud));
     },
   },
 };
-
 </script>
 
-
-/* Estilos específicos de la vista */
-<style >
+<style>
 /* Estilos específicos de la vista */
 .solicitar-servicio {
   display: flex;
@@ -109,7 +124,9 @@ export default {
 }
 
 /* Estilos específicos de los componentes */
-.RequestForm, .RequestCompleteInfo, .Notification {
+.RequestForm,
+.RequestCompleteInfo,
+.Notification {
   background-color: #ccf5d1; /* Tonalidad de verde para los componentes */
   padding: 20px;
   margin: 10px;
@@ -124,9 +141,19 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin:0 auto;
+}
+.custom-button {
+  background-color: #4caf50; /* Verde más oscuro para el botón */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 auto; /* Centra horizontalmente el botón */
 }
 h2 {
-    color: #007BFF;
-    text-align: center;
-  }
+  color: #007BFF;
+  text-align: center;
+}
 </style>

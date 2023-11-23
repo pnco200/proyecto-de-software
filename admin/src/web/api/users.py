@@ -53,6 +53,7 @@ def get_user_requests(service_request_id):
 def get_requests_paginated():
     user_id = get_jwt_identity()
     user = auth.find_user_by_id(user_id)
+    
     params = request.args.to_dict()
     page = 1
     per_page = None
@@ -92,33 +93,40 @@ def get_requests_paginated():
     }
     return jsonify(response), 200
 
-@api_user_bp.post('/requests-created')
+@api_user_bp.post('/created-request')
 @jwt_required()
 def create_request():
     user_id = get_jwt_identity()
     user = auth.find_user_by_id(user_id)
     data = request.json
+    print(data)
     if "service_id" not in data or "description" not in data:
+        
         return jsonify(error='Parametros Invalidos'), 400
 
     service_id = data["service_id"]
     description = data["description"]
 
-    resulting_request = create_service_request(service_id=service_id, user_id=user.id, observations=description, archive=None)
+    resulting_request = create_service_request(service_id=service_id, user_id=user.id, observations=description, archive=data["file"])
     
     if not resulting_request:
+        
         return jsonify(error='ID de servicio invalido'), 400
-    
+    state = service_requests.get_state_by_id(resulting_request.state_id)
+    fecha = resulting_request.inserted_at.strftime("%Y-%m-%d %H:%M:%S")
+
     response = {
         "id": resulting_request.id,
         "service_id": resulting_request.service_id,
         "user_id": resulting_request.user_id,
         "observations": resulting_request.observations,
-        "inserted_at": resulting_request.inserted_at,
+        "inserted_at": fecha,
+        "status":state[0].name,
     }
+    print(response)
     return jsonify(response), 201
 
-@api_user_bp.post('/requests/<int:service_request_id>/notes')
+@api_user_bp.post('/requests/<int:service_request_id>/add-notes')
 @jwt_required()
 def add_note_to_request(service_request_id):
     user_id = get_jwt_identity()
@@ -136,28 +144,36 @@ def add_note_to_request(service_request_id):
     else:
         return jsonify(error='ID no encontrada'), 404
 
-@api_user_bp.get('/request-notes/<int:service_requests_id>')
+@api_user_bp.get('/request/<int:request_id>/notes')
 @jwt_required()
-def get_request_notes(service_request_id):
-    user_id = get_jwt_identity()
-    user = auth.find_user_by_id(user_id)
-    text = request.json["text"]
-    if not text:
-        return jsonify(error='Parametros Invalidos'), 400
-    user_and_msgs = service_requests.get_request_msgs(service_request_id)[1]
-    final_list =[]
-    if(user_and_msgs):
-        for msg in user_and_msgs:
-         response = {
-            "id": msg.ServiceRequestMessages.id,
-            "user_id" : msg.ServiceRequestMessages.user_id,
-            "service_id": msg.ServiceRequestMessages.service_request_id, 
-            "creation_date": msg.ServiceRequestMessages.inserted_at,
-            "content": msg.ServiceRequestMessages.content
-            }
-         final_list.append(response)
-    final_list = sorted(final_list, key=lambda x: x['creation_date'])
-    response = { 
-        'data': final_list,
-    }
-    return jsonify(response), 200
+def get_request_notes(request_id):
+    try:
+        user_id = get_jwt_identity()
+        user = auth.find_user_by_id(user_id)
+        if not user:
+            return jsonify(error='Usuario no encontrado'), 404
+
+        user_and_msgs = service_requests.get_request_msgs(3)[1]
+        print(user_and_msgs)
+        final_list = []
+
+        if user_and_msgs:
+            for msg in user_and_msgs:
+                response = {
+                    "id": msg.id,
+                    "user_id": msg.user_id,
+                    "service_id": msg.service_request_id,
+                    "creation_date": msg.inserted_at,
+                    "content": msg.content
+                }
+                final_list.append(response)
+
+            final_list = sorted(final_list, key=lambda x: x['creation_date'])
+            response = {'data': final_list}
+            return jsonify(response), 200
+        else:
+            return jsonify(error='Mensajes no encontrados'), 404
+    except Exception as e:
+        # Log the exception for debugging purposes
+        print(f"Error in get_request_notes: {str(e)}")
+        return jsonify(error='Error interno del servidor'), 500
