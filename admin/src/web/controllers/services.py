@@ -3,7 +3,7 @@ from src.core import services
 from src.web.helpers.utils import current_selected_institution
 from src.web.helpers import permissions
 from src.core.rol_permission import get_role_id_by_name, get_roles_for_user
-
+from src.web.helpers.auth import generate_csrf_token, check_csrf_token
 service_bp = Blueprint('services', __name__, url_prefix='/services')
 
 
@@ -36,7 +36,8 @@ def create_service_form():
     """
         Muestra el form de creacion de servicios
     """
-    return render_template("services/create.html")
+    csrf_token = generate_csrf_token()
+    return render_template("services/create.html", csrf_token=csrf_token)
 
 @service_bp.post("/create")
 @permissions.permission_required_in_Institution(["service_create"])
@@ -44,6 +45,10 @@ def create_service():
     """
         Me permite crear un servicio
     """
+    if not check_csrf_token(request.form):
+        flash("Token CSRF inválido", "error")
+        return redirect(url_for('auth.login'))
+
     key_words_string = request.form.get('key_words')
     if key_words_string:
         key_words_array = [word.strip() for word in key_words_string.split(",")]
@@ -92,6 +97,7 @@ def update_service_form(service_id):
     """
         Muestra el form de actualizacion de servicios
     """
+    csrf_token = generate_csrf_token()
     service = services.get_service(service_id)
     return render_template("services/update.html", service=service)
 
@@ -101,6 +107,10 @@ def update_service(service_id):
     """
         Me permite actualizar un servicio
     """
+    if not check_csrf_token(request.form):
+        flash("Token CSRF inválido", "error")
+        return redirect(url_for('auth.login'))
+
     key_words_string = request.form.get('key_words')
     if key_words_string:
         key_words_array = [word.strip() for word in key_words_string.split(",")]

@@ -9,6 +9,7 @@
 
                 <h2>Modificar Estado</h2>
                 <form method="post" action="{{url_for('servicesRequests.change_state',request_id=request_id)}}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <select name="new_state">
                         <option value="inicial">Inicial</option>
                         <option value="aceptada">Aceptada</option>
