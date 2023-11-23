@@ -1,26 +1,26 @@
 <template>
-    <div class="m-3">
+    <div class="info-section">
       <h1>Busqueda de servicios</h1>
   
       <div class="mb-3">
-      <div class="row">
-        <div class="col-md-2">
-          <label class="ml-2 mr-2">Palabra Clave</label>
-          <input v-model="filters.keywords" class="form-control form-control-sm" />
-        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <label class="ml-2 mr-2">Palabra Clave</label>
+            <input v-model="filters.keywords" class="form-control form-control-sm" />
+          </div>
 
-        <div class="col-md-2">
-          <label class="ml-2 mr-2">Tipo de servicio</label>
-          <select v-model="filters.serviceType" class="form-control form-control-sm">
-            <option value="TODOS">TODOS</option>
-            <option value="ANALISIS">ANALISIS</option>
-            <option value="CONSULTORIA">CONSULTORIA</option>
-            <option value="DESARROLLO">DESARROLLO</option>
-          </select>
-        </div>
-        <div class="col-md-2">
-          <button @click="fetchServices" class="btn btn-primary btn-sm mt-4">Buscar</button>
-        </div>
+          <div class="col-md-2">
+            <label class="ml-2 mr-2">Tipo de servicio</label>
+            <select v-model="filters.serviceType" class="form-control form-control-sm">
+              <option value="TODOS">TODOS</option>
+              <option value="ANALISIS">ANALISIS</option>
+              <option value="CONSULTORIA">CONSULTORIA</option>
+              <option value="DESARROLLO">DESARROLLO</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button @click="fetchServices" class="btn btn-primary btn-sm mt-4">Buscar</button>
+          </div>
       </div>
     </div>
       <div v-if="services.length > 0">

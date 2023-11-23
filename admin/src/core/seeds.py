@@ -6,7 +6,10 @@ def run():
             name="Instituto de Matematica",
             information="Instituto de Matematica e Estatistica",
             address="Rua do Matao, 1010 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://www.ime.usp.br/",
             keywords="Matematica, Estatistica, Computacao",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -17,7 +20,10 @@ def run():
             name="Instituto de Fisica",
             information="Instituto de Fisica",
             address="Rua do Matao, 1371 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://portal.if.usp.br/",
             keywords="Fisica",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -28,7 +34,10 @@ def run():
             name="Instituto de Quimica",
             information="Instituto de Quimica",
             address="Av. Prof. Lineu Prestes, 748 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://www.iq.usp.br/",
             keywords="Quimica",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -39,7 +48,10 @@ def run():
             name="Instituto de Biociencias",
             information="Instituto de Biociencias",
             address="Rua do Matao, 277 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://ib.usp.br/",
             keywords="Biologia",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -50,7 +62,10 @@ def run():
             name="Instituto de Psicologia",
             information="Instituto de Psicologia",
             address="Av. Prof. Mello Moraes, 1721 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://www.ip.usp.br/",
             keywords="Psicologia",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -61,7 +76,10 @@ def run():
             name="Instituto de Ciencias Biomedicas",
             information="Instituto de Ciencias Biomedicas",
             address="Av. Prof. Lineu Prestes, 1524 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://icb.usp.br/",
             keywords="Biologia, Medicina",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -72,7 +90,10 @@ def run():
             name="Instituto de Computação",
             information="Instituto de Ciências Matemáticas e de Computação",
             address="Av. Trabalhador São-carlense, 400 - Centro - São Carlos - SP",
-            localization="São Carlos - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://www.icmc.usp.br/",
             keywords="Matemática, Computação",
             attention_time="Segunda à Sexta das 8h às 17h",
