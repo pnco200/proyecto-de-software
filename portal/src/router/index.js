@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import ServiceListView from '../views/ServiceListView.vue'
 import ServiceDetail from '../views/ServiceDetail.vue'
-
+import ChartView from '../views/ChartView.vue'
 import RequestView from '../views/RequestView.vue'
 import RequestList from '../views/RequestList.vue'
 import RequestInfoView from '../views/RequestInfoView.vue'
@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path:'/stats',
       name: 'stats',
-      component: () => import('../views/ChartView.vue')
+      component: ChartView
     },
     {
       path: '/login',

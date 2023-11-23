@@ -6,7 +6,7 @@ from src.web.controllers.users import user_bp
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.flask_client import OAuthError
 from flask_jwt_extended import create_access_token
-from src.web.helpers.auth import oauth
+from src.web.helpers.auth import oauth, generate_csrf_token, check_csrf_token
 from uuid import uuid4
 
 ##DUDAS: PROTEJO PARA QUE SI EL USUARIO QUIERE MANDARLE AL SV EL USERNAME Y LA PASSWORD DE UNA , PARA MI NO PPRQUE CUAL SERIA EL PROBLEMA. DESPUES, SI EL SUPERADMIN CREA EL USER HAY QUE CONFIRMARLO=
@@ -15,7 +15,8 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 @auth_bp.get('/')
 def login():
     """Muestra el form de login"""
-    return render_template("auth/login.html")
+    csrf_token = generate_csrf_token()
+    return render_template("auth/login.html", csrf_token=csrf_token)
 
 @auth_bp.route('/google')
 def google_login():
@@ -43,9 +44,9 @@ def google_auth():
         if user and is_portal:
             if user.is_active:
                 access_token = create_access_token(identity=user.id)
-                return redirect("http://localhost:5173/login?token_google=" + access_token)
+                return redirect("http://127.0.0.1:5173/login?token_google=" + access_token)
             else:
-                return redirect("http://localhost:5173/login?token_google=fail")
+                return redirect("http://127.0.0.1:5173/login?token_google=fail")
         if user:
             if not user.is_active:
                 flash("Su cuenta se encuentra bloqueada!", "error")
@@ -74,6 +75,12 @@ def google_auth():
 @auth_bp.post('/complete_register')
 def complete_register():
     params = request.form
+
+    if not check_csrf_token(params):
+        flash("Token CSRF invalido", "error")
+        return redirect(url_for("auth.login"))
+    
+
     if not params["token"] or not params["username"] or not params["password"]:
         flash("Falta completar un campo. Vuelva a intentar", "error")
         return redirect(url_for("auth.confirm_email"), token=params["token"])
@@ -92,6 +99,10 @@ def complete_register():
 def authenticate():
     """"Me autentica"""
     params = request.form
+    if not check_csrf_token(params):
+        flash("Token CSRF invalido", "error")
+        return redirect(url_for("auth.login"))
+
     user = auth.check_user(params["email"], params["password"])
     if not user:
         flash("Email o clave incorrecta.", "error")
@@ -127,8 +138,9 @@ def confirm_email():
         if user.password or user.username:
             flash("El correo fue exitosamente confirmado.", "success")
         else:
+            csrf_token = generate_csrf_token()
             flash("El correo fue exitosamente confirmado. Complete la informacion de su cuenta", "success")
-            return render_template("auth/complete_register.html", token=token)
+            return render_template("auth/complete_register.html", token=token, csrf_token=csrf_token)
     else:
         flash("No se pudo confirmar el correo.", "error")
     return redirect(url_for("auth.login"))
@@ -137,7 +149,8 @@ def confirm_email():
 @auth_bp.get('/register')
 def register_form():
     """"Muestra el form de registro"""
-    return render_template("auth/register.html")
+    csrf_token = generate_csrf_token()
+    return render_template("auth/register.html", csrf_token=csrf_token)
 
 @auth_bp.post('/register')
 def register():

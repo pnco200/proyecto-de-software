@@ -165,3 +165,4 @@ admin/src/web/config.py
 config.py
 /.vscode
 admin/flask_session
+portal/.vscode

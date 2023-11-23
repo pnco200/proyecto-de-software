@@ -37,72 +37,115 @@
         proceso para que puedas obtener los servicios que necesitas de manera eficiente.
       </p>
     </div>
+    <div class="item">
+      <h3>Ver estadisticas</h3>
+      <p>
+        Explora las diferentes estadisticas que se generan a partir de los servicios ofrecidos por
+        las instituciones asociadas.
+      </p>
+      <router-link to="/stats">Ver estadisticas</router-link>
+    </div>
     
   </div>
+  <footer >
+    <!-- Show the contact information using  contactInformation()-->
+    Información de contacto: {{ contact_information }}
+  </footer>
   
 </template>
 
   
 <script lang="js">
 import { defineComponent } from 'vue'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'HomeView',
-  components: { },
-  
+  data () {
+    return {
+      contact_information: ''
+    }
+  },
+  methods: {
+    async contactInformation () {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/api/configuration/getconfig')
+        this.contact_information = response.data.contact_information
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  },
+  mounted () {
+    this.contactInformation()
+  }
 })
 </script>
 <style scoped>
-  body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Establecer la altura mínima de la página para que el contenido ocupe al menos toda la altura de la ventana */
+  display: flex;
+  flex-direction: column;
+}
 
-  .container {
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Hacer que el contenedor ocupe el espacio restante en la página */
+}
 
-  h1 {
-    color: #007BFF;
-    text-align: center;
-  }
+h1 {
+  color: #007BFF;
+  text-align: center;
+}
 
-  h2, h3 {
-    color: #333;
-  }
+h2, h3 {
+  color: #333;
+}
 
-  p {
-    line-height: 1.6;
-    padding: 1%;
-  }
+p {
+  line-height: 1.6;
+  padding: 1%;
+}
 
-  .item {
-    margin-top: 20px;
-  }
+.item {
+  margin-top: 20px;
+}
 
-  .item h3 {
-    color: #007BFF;
-    margin-bottom: 10px;
-  }
-  a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #007BFF;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-  a:hover {
-    background-color: #0069D9;
-  }
+.item h3 {
+  color: #007BFF;
+  margin-bottom: 10px;
+}
+
+a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+a:hover {
+  background-color: #0069D9;
+}
+
+footer {
+  padding: 20px;
+  background-color: #007BFF;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+}
 </style>

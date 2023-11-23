@@ -4,6 +4,7 @@
 <body>
     <h2 class="h2" align="center">Completar el registro</h2>
     <form method="POST" action="{{url_for('auth.complete_register')}}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" class="form-control" id="token" name="token" 
                 value={{token}}>
         <div class="mb-3">

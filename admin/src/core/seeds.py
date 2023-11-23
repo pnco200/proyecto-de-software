@@ -3,10 +3,13 @@ from src.core import institutions, configuration, auth, rol_permission, services
 def run():
     def create_institutions():
         institutions.create_institution(
-            name="Instituto de Matematica e Estatistica",
+            name="Instituto de Matematica",
             information="Instituto de Matematica e Estatistica",
             address="Rua do Matao, 1010 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://www.ime.usp.br/",
             keywords="Matematica, Estatistica, Computacao",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -17,7 +20,10 @@ def run():
             name="Instituto de Fisica",
             information="Instituto de Fisica",
             address="Rua do Matao, 1371 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://portal.if.usp.br/",
             keywords="Fisica",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -28,7 +34,10 @@ def run():
             name="Instituto de Quimica",
             information="Instituto de Quimica",
             address="Av. Prof. Lineu Prestes, 748 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://www.iq.usp.br/",
             keywords="Quimica",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -39,7 +48,10 @@ def run():
             name="Instituto de Biociencias",
             information="Instituto de Biociencias",
             address="Rua do Matao, 277 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://ib.usp.br/",
             keywords="Biologia",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -50,7 +62,10 @@ def run():
             name="Instituto de Psicologia",
             information="Instituto de Psicologia",
             address="Av. Prof. Mello Moraes, 1721 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://www.ip.usp.br/",
             keywords="Psicologia",
             attention_time="Segunda a Sexta das 8h as 17h",
@@ -61,13 +76,33 @@ def run():
             name="Instituto de Ciencias Biomedicas",
             information="Instituto de Ciencias Biomedicas",
             address="Av. Prof. Lineu Prestes, 1524 - Cidade Universitaria - Butanta - Sao Paulo - SP",
-            localization="Sao Paulo - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
             web="https://icb.usp.br/",
             keywords="Biologia, Medicina",
             attention_time="Segunda a Sexta das 8h as 17h",
             contact="11 3091-9",
             is_active=True
         )
+        institutions.create_institution(
+            name="Instituto de Computação",
+            information="Instituto de Ciências Matemáticas e de Computação",
+            address="Av. Trabalhador São-carlense, 400 - Centro - São Carlos - SP",
+            localization= [
+                "-23.5614",
+                "-46.7308"
+            ],
+            web="https://www.icmc.usp.br/",
+            keywords="Matemática, Computação",
+            attention_time="Segunda à Sexta das 8h às 17h",
+            contact="16 3373-9",
+            is_active=True
+        )
+
+
+
 
     def create_users():
         auth.create_user(
@@ -177,7 +212,34 @@ def run():
             enabled=True,
             institution_id=5
         )
-        return service1,service2,service3, service4, service5
+        service6 = services.create_service(
+            name="biociencia",
+            type="CONSULTORIA",
+            centers="IP",
+            description="biocientifico",
+            key_words=["Quimica"],
+            enabled=True,
+            institution_id=4
+        )
+        service7 = services.create_service(
+            name="Biomedicina aplicada",
+            type="CONSULTORIA",
+            centers="IP",
+            description="Bio",
+            key_words=["Quimica","Bio"],
+            enabled=True,
+            institution_id=6
+        )        
+        service8 = services.create_service(
+            name="Computo",
+            type="CONSULTORIA",
+            centers="IP",
+            description="Computos terrenales",
+            key_words=["Computacion"],
+            enabled=True,
+            institution_id=7
+        )
+        return service1,service2,service3, service4, service5, service6, service7, service8
     def create_roles():
         rol_permission.create_rol(
             name = "Owner"
@@ -191,7 +253,12 @@ def run():
         rol_permission.create_rol(
             name = "Operator"
         )
-    
+    def create_state_finalizada():
+        return service_requests.create_state_request(
+            name="finalizada",
+            state_message = "Fin"
+        )
+
     def create_permissions():
         rol_permission.create_permission(
             name="user_index"
@@ -577,6 +644,9 @@ def run():
             observations ="quiero que se le mida correctamente las dimensiones de los aspectos mas importantes",
             archive = None
         )
+
+        service_requests.set_new_state_seeds(create_state_finalizada(), solicitude.id)
+
         message = service_requests.create_user_message(
             user_id = solicitude.user_id,
             service_request_id = solicitude.id,
@@ -641,7 +711,7 @@ def run():
     create_configurations()
     create_institutions()
     create_users()
-    service1,service2,service3, service4, service5 = create_services()
+    service1,service2,service3, service4, service5, service6, service7, service8 = create_services()
     create_roles()
     create_permissions()
     create_rol_has_these_permission()
@@ -650,6 +720,21 @@ def run():
     create_solcitudes_Example_3(service3)
     create_solcitudes_Example_1(service4)
     create_solcitudes_Example_1(service5)
+    create_solcitudes_Example_1(service5)
+    create_solcitudes_Example_1(service5)
+    create_solcitudes_Example_1(service1)
+    create_solcitudes_Example_1(service1)
+    create_solcitudes_Example_1(service2)
+    create_solcitudes_Example_1(service2)
+    create_solcitudes_Example_1(service6)
+    create_solcitudes_Example_1(service6)
+    create_solcitudes_Example_1(service7)
+    create_solcitudes_Example_1(service7)
+    create_solcitudes_Example_1(service8)
+
+
+
+
 
 
 
