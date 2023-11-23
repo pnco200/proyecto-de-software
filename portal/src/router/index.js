@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import ServiceListView from '../views/ServiceListView.vue'
 import ServiceDetail from '../views/ServiceDetail.vue'
-
+import ChartView from '../views/ChartView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,7 +16,7 @@ const router = createRouter({
     {
       path:'/stats',
       name: 'stats',
-      component: () => import('../views/ChartView.vue')
+      component: ChartView
     },
     {
       path: '/login',
