@@ -78,14 +78,13 @@
         totalPages: 1,
       };
     },
+    async created() {
+      await this.fetchServices();
+    },
     methods: {
       async fetchServices(newPage = 1) {
         try {
-            if(!this.filters.keywords){
-                alert('Debe ingresar las palabras claves')
-                return;
-            }
-          const response = await axios.get('http://127.0.0.1:5000//api/services/search', {
+          const response = await axios.get('http://127.0.0.1:5000/api/services/search', {
             params: {
               q: this.filters.keywords,
               type: this.filters.serviceType,
@@ -107,5 +106,3 @@
     },
   };
   </script>
-  
-  <!-- http://127.0.0.1:5000/ -->
