@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, session, abort, request, url_for, 
 from src.core import institutions
 from src.web.helpers.utils import is_valid_length, is_valid_email
 from src.web.helpers import permissions
+from src.web.helpers.auth import generate_csrf_token, check_csrf_token
 
 institution_bp = Blueprint('institution', __name__, url_prefix='/institution')
 
@@ -18,7 +19,8 @@ def home():
 @permissions.has_permission(["institution_create"])
 def register_form():
     """"Muestra el form de registro"""
-    return render_template("institutions/register.html")
+    csrf_token = generate_csrf_token()
+    return render_template("institutions/register.html", csrf_token=csrf_token)
 
 @institution_bp.route('/confirm_delete/<int:institution_id>', methods=['GET', 'POST'])
 @permissions.has_permission(["institution_destroy"])
@@ -33,6 +35,9 @@ def confirm_delete(institution_id):
     """
     
     if request.method == 'POST':
+        if not check_csrf_token(request.form):
+            flash("Token CSRF invalido", "error")
+        
         institution = institutions.delete_institution(institution_id)
         if institution:
             flash("La institucion se ha eliminado correctamente.", "success")
@@ -40,7 +45,8 @@ def confirm_delete(institution_id):
         else:
             flash("No se ha podido eliminar la institucion.", "error")
             return redirect(url_for("institution.home"))
-    return render_template('institutions/confirm_delete.html', institution_id=institution_id)
+    csrf_token = generate_csrf_token()
+    return render_template('institutions/confirm_delete.html', institution_id=institution_id, csrf_token=csrf_token)
 
 @institution_bp.post('/select_institution')
 @permissions.has_permission(["institution_show"]) #Utilizamos el show para que puedan ver el select de la navbar de sus instituciones pero NO todo el listado de instituciones
@@ -131,9 +137,11 @@ def getInstitution(institution_id):
     Returns:
         template: template de actualizacion de institucion 
     """
+    csrf_token = generate_csrf_token()
+
     institutionToUpdate = institutions.get_institution_by_id(institution_id)
     print(institutionToUpdate.is_active)
-    return render_template("institutions/update.html", institution=institutionToUpdate)
+    return render_template("institutions/update.html", institution=institutionToUpdate, csrf_token=csrf_token)
 
 @institution_bp.post('/update/<int:institution_id>')
 @permissions.has_permission(["institution_update"])
@@ -145,6 +153,10 @@ def updateInstitution(institution_id):
 
     """
     params = request.form
+    if not check_csrf_token(params):
+        flash("Token CSRF invalido", "error")
+        return redirect(url_for("institution.home"))
+
     is_active = True if params.get('is_active') == 'on' else False
     
     required_params = ["name", "information", "address", "localization", "web", "keywords", "attention_time", "contact"]
