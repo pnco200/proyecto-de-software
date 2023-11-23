@@ -17,7 +17,7 @@
       console.log(data)
       return processResponse(data)
     } catch (error) {
-      console.error('Error fetching or processing data:', error)
+      alert('Error al traer la informacion:', error)
       return { labels: [], datasets: [] }
     }
   }

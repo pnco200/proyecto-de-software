@@ -238,3 +238,20 @@ def get_top_institutions_less_time_per_request():
         .limit(10)
         .all()
     )
+
+def get_most_requested_services():
+    """
+    Devuelve los 10 servicios más solicitados y su institucion.
+
+    Returns:
+        list: Lista de tuplas con el nombre del servicio y la cantidad de solicitudes de servicio.
+    """
+    return (
+        db.session.query(Service.name, Institution.name, db.func.count(ServiceRequest.id))
+        .outerjoin(ServiceRequest, ServiceRequest.service_id == Service.id)
+        .outerjoin(Institution, Institution.id == Service.institution_id)
+        .group_by(Service.name, Institution.name)
+        .order_by(db.func.count(ServiceRequest.id).desc())
+        .limit(10)
+        .all()
+    )

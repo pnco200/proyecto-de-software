@@ -35,3 +35,17 @@ def get_most_efficient():
             'TiempoTotalSecs': d[1].total_seconds()
         })
     return jsonify(parsed_data)
+
+@api_stats_bp.get('/most-requested-services')
+def get_most_requests():
+    data = service_requests.get_most_requested_services()
+
+    parsed_data = []
+    for d in data:
+        parsed_data.append({
+            'Servicio': d[0],
+            'Institucion': d[1],
+            'Solicitudes': d[2]
+        })
+
+    return jsonify(parsed_data)
