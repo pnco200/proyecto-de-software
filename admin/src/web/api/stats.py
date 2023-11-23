@@ -17,3 +17,35 @@ def get_requests_institutions():
         })
 
     return jsonify(parsed_data)
+
+@api_stats_bp.get('/efficient-institutions')
+def get_most_efficient():
+    data = service_requests.get_top_institutions_less_time_per_request()
+    print(data)
+
+    parsed_data = []
+    for d in data:
+        dias = d[1].total_seconds()//86400
+        horas = d[1].total_seconds()%86400 // 3600 
+        minutos = d[1].total_seconds()%3600 // 60
+        str_time = f'{dias} dias, {horas} horas, {minutos} minutos'
+        parsed_data.append({
+            'Institucion': d[0],
+            'TiempoEnDias': str_time,
+            'TiempoTotalSecs': d[1].total_seconds()
+        })
+    return jsonify(parsed_data)
+
+@api_stats_bp.get('/most-requested-services')
+def get_most_requests():
+    data = service_requests.get_most_requested_services()
+
+    parsed_data = []
+    for d in data:
+        parsed_data.append({
+            'Servicio': d[0],
+            'Institucion': d[1],
+            'Solicitudes': d[2]
+        })
+
+    return jsonify(parsed_data)
