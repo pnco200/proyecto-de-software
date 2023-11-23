@@ -1,7 +1,7 @@
 <template>
     <div class="chart-container">
       <div class="chart-section">
-        <h4>Cantidad de solicitudes por Instituto</h4>
+        <h4>Cantidad de solicitudes por Institutocion</h4>
         <CakeChart />
       </div>
       <div class="chart-section">

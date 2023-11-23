@@ -24,7 +24,7 @@
   const processResponse = (data) => {
   const sortedData = data.sort((a, b) => a.TiempoTotalSecs - b.TiempoTotalSecs)
 
-  const labels = sortedData.map((item) => `${item.Institucion} - ${item.TiempoEnDias}`)
+  const labels = sortedData.map((item) => `${item.Institucion} - ${item.TiempoEnDias} dias`)
   const values = sortedData.map((item) => item.TiempoTotalSecs)
 
   return {

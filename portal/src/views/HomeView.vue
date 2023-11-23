@@ -37,9 +37,17 @@
         proceso para que puedas obtener los servicios que necesitas de manera eficiente.
       </p>
     </div>
+    <div class="item">
+      <h3>Ver estadisticas</h3>
+      <p>
+        Explora las diferentes estadisticas que se generan a partir de los servicios ofrecidos por
+        las instituciones asociadas.
+      </p>
+      <router-link to="/stats">Ver estadisticas</router-link>
+    </div>
     
   </div>
-  <footer>
+  <footer >
     <!-- Show the contact information using  contactInformation()-->
     Información de contacto: {{ contact_information }}
   </footer>
@@ -138,8 +146,6 @@ footer {
   background-color: #007BFF;
   color: #fff;
   text-align: center;
-  width: 100%; /* Hacer que el pie de página ocupe todo el ancho */
-  position: fixed; /* Fijar el pie de página en la parte inferior */
-  bottom: 0; /* Alinear el pie de página en la parte inferior */
+  width: 100%;
 }
 </style>

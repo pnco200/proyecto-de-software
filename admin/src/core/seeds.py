@@ -3,7 +3,7 @@ from src.core import institutions, configuration, auth, rol_permission, services
 def run():
     def create_institutions():
         institutions.create_institution(
-            name="Instituto de Matematica e Estatistica",
+            name="Instituto de Matematica",
             information="Instituto de Matematica e Estatistica",
             address="Rua do Matao, 1010 - Cidade Universitaria - Butanta - Sao Paulo - SP",
             localization="Sao Paulo - SP",
@@ -69,7 +69,7 @@ def run():
             is_active=True
         )
         institutions.create_institution(
-            name="Instituto de Ciências Matemáticas e de Computação",
+            name="Instituto de Computação",
             information="Instituto de Ciências Matemáticas e de Computação",
             address="Av. Trabalhador São-carlense, 400 - Centro - São Carlos - SP",
             localization="São Carlos - SP",

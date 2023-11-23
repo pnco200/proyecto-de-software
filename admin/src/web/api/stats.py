@@ -31,7 +31,7 @@ def get_most_efficient():
         str_time = f'{dias} dias, {horas} horas, {minutos} minutos'
         parsed_data.append({
             'Institucion': d[0],
-            'TiempoEnDias': str_time,
+            'TiempoEnDias': dias,
             'TiempoTotalSecs': d[1].total_seconds()
         })
     return jsonify(parsed_data)
