@@ -28,9 +28,11 @@
         {% endif %}
         <button type="submit" class="btn btn-primary">Registrarse</button>     
     </form>
-    <a href="{{url_for('auth.google_login')}}">
-        <img src="/static/img/googleLogoOficial.png" alt="Botón de Imagen" class="img-fluid" style="margin-top: 1rem;">
-    </a>
+    {% if not is_superadmin() %}
+        <a href="{{url_for('auth.google_login')}}">
+            <img src="/static/img/googleLogoOficial.png" alt="Botón de Imagen" class="img-fluid" style="margin-top: 1rem;">
+        </a>
+    {% endif %}
 </body>
 {% endblock %}
 
