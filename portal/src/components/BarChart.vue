@@ -12,9 +12,8 @@ Chart.register(...registerables)
 
 const fetchData = async () => {
     try {
-        const response = await axios.get('http://localhost:5000/api/stats/requests-institutions')
+        const response = await axios.get('http://127.0.0.1:5000/api/stats/requests-institutions')
         const data = response.data
-        console.log(data)
         return processResponse(data)
     } catch (error) {
         console.error('Error fetching or processing data:', error)

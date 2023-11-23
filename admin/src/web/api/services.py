@@ -10,8 +10,7 @@ api_service_bp = Blueprint("service_api", __name__, url_prefix="/api/services")
 def getServices():
     keyword = request.args.get('q')
     if keyword is None or keyword == '':
-        return jsonify({'error': 'Se requiere el parametro q'}), 400
-
+        keyword=None
     service_type = request.args.get('type') 
     if service_type != "ANALISIS" and service_type != "CONSULTORIA" and service_type != "DESARROLLO":
         service_type = None

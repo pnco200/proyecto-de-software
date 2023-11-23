@@ -43,9 +43,9 @@ def google_auth():
         if user and is_portal:
             if user.is_active:
                 access_token = create_access_token(identity=user.id)
-                return redirect("http://localhost:5173/login?token_google=" + access_token)
+                return redirect("http://127.0.0.1:5173/login?token_google=" + access_token)
             else:
-                return redirect("http://localhost:5173/login?token_google=fail")
+                return redirect("http://127.0.0.1:5173/login?token_google=fail")
         if user:
             if not user.is_active:
                 flash("Su cuenta se encuentra bloqueada!", "error")

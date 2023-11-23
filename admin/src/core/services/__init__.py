@@ -128,7 +128,8 @@ def get_service_by_keyword_and_type(keyword, service_type=None, per_page=None, p
     query = Service.query
 
     try:
-        query = query.filter(func.array_to_string(Service.key_words, ', ').ilike(f'%{keyword}%'))
+        if keyword:
+            query = query.filter(func.array_to_string(Service.key_words, ', ').ilike(f'%{keyword}%'))
         if service_type is not None:
             query = query.filter(Service.type == service_type)
         query = query.join(Institution).options(joinedload(Service.institution))
