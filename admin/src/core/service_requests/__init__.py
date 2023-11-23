@@ -7,7 +7,8 @@ from src.core.services import Service
 from src.core.service_requests.service_request import ServiceRequest, ServiceRequestMessages,ServiceState
 from sqlalchemy.orm import joinedload, aliased
 from src.core.configuration import get_rows_per_page
-
+import random
+from datetime import datetime, timedelta
 def list_requests_paged_by_institution(page, institution_id):
     per_page = get_rows_per_page()
     service_alias = aliased(Service, name="service_alias")
@@ -235,7 +236,7 @@ def get_top_institutions_less_time_per_request():
         .filter(ServiceState.name == "finalizada")
         .group_by(Institution.name)
         .order_by(db.func.avg(ServiceRequest.updated_at - ServiceRequest.inserted_at).asc())
-        .limit(10)
+        .limit(5)
         .all()
     )
 
@@ -252,6 +253,17 @@ def get_most_requested_services():
         .outerjoin(Institution, Institution.id == Service.institution_id)
         .group_by(Service.name, Institution.name)
         .order_by(db.func.count(ServiceRequest.id).desc())
-        .limit(10)
+        .limit(5)
         .all()
     )
+
+def set_new_state_seeds(state, request_id):
+    request_actual = ServiceRequest.query.filter_by(id=request_id).first()
+    request_actual.state_id = state.id
+
+    random_days = random.randint(0, 50)
+    random_timedelta = timedelta(days=random_days)
+
+    request_actual.updated_at = datetime.utcnow() + random_timedelta
+
+    db.session.commit()
