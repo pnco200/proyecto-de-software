@@ -16,6 +16,8 @@
                 </router-link>
             </div>
             <div v-else>
+                <span @click="see_requests">Ver Solicitudes  </span>
+                
                 <span @click="close_session">Cerrar Sesion</span>
             </div>
         </div>
@@ -76,6 +78,9 @@ form {
             this.logged = this.check_login()
             this.$router.push({ name: 'home' });
         },
+        see_requests(){
+            this.$router.push({ name: 'RequestList' });
+        }
     },
   };
 </script>

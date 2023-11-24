@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div class="solicitar-servicio">
     <h2 align="center">Solicitar Servicio {{ $route.params.serviceId}}</h2>
-
 
     <!-- Condicionalmente mostrar el componente RequestForm o RequestCompleteInfo -->
     <RequestForm
-      v-if="modoSolicitud && !solicitudEnviada"
+      v-if="!solicitudEnviada"
       :serviceId="$route.params.serviceId"
       @submitRequest="submitRequestToApi"
     />
@@ -20,11 +19,6 @@
       :message="notificationMessage"
       @close="showNotification = false"
     />
-
-    <!-- Botón para solicitar otro servicio -->
-    <button class="custom-button" v-if="solicitudEnviada" @click="resetSolicitud">
-      Solicitar Otro Servicio
-    </button>
   </div>
 </template>
 
@@ -43,9 +37,8 @@ export default {
   },
   data() {
     return {
-      solicitudEnviada: JSON.parse(localStorage.getItem('solicitudEnviada')) || false,
-      solicitudObtenida: JSON.parse(localStorage.getItem('solicitudObtenida')) || null,
-      modoSolicitud: JSON.parse(localStorage.getItem('modoSolicitud')) || true,
+      solicitudEnviada: false,
+      solicitudObtenida: null,
       showNotification: false,
       notificationMessage: '',
     };
@@ -53,7 +46,7 @@ export default {
   methods: {
     async submitRequestToApi(requestData) {
       const jwtToken = Cookies.get('token');
-      
+
       if (jwtToken) {
         try {
           const formData = {
@@ -61,10 +54,10 @@ export default {
             description: requestData.description,
           };
 
-          if(requestData.files){
-            formData["file"]=requestData.files;
+          if (requestData.files) {
+            formData["file"] = requestData.files;
           } else {
-            formData["file"]=null;
+            formData["file"] = null;
           }
 
           const response = await axios.post(
@@ -84,10 +77,6 @@ export default {
           this.showNotification = true;
           this.notificationMessage = 'Solicitud enviada con éxito';
 
-          localStorage.setItem('solicitudEnviada', JSON.stringify(this.solicitudEnviada));
-          localStorage.setItem('solicitudObtenida', JSON.stringify(this.solicitudObtenida));
-          localStorage.setItem('modoSolicitud', JSON.stringify(this.modoSolicitud));
-
           console.log('Solicitud enviada con éxito:', response.data);
         } catch (error) {
           console.error('Error al enviar la solicitud:', error.message);
@@ -100,60 +89,32 @@ export default {
         console.error('No se encontró un token en las cookies.');
       }
     },
-
-    resetSolicitud() {
-      this.solicitudEnviada = false;
-      this.modoSolicitud = true;
-      this.showNotification = false;
-
-      localStorage.setItem('solicitudEnviada', JSON.stringify(this.solicitudEnviada));
-      localStorage.setItem('modoSolicitud', JSON.stringify(this.modoSolicitud));
-    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 /* Estilos específicos de la vista */
 .solicitar-servicio {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #e0f7e9; /* Color verde muy claro */
+  background-color: #e0f7e9; /* Color celeste azulado muy claro */
 }
 
 /* Estilos específicos de los componentes */
 .RequestForm,
 .RequestCompleteInfo,
 .Notification {
-  background-color: #ccf5d1; /* Tonalidad de verde para los componentes */
+  background-color: #ccf5d1; /* Tonalidad de celeste azulado para los componentes */
   padding: 20px;
   margin: 10px;
   border-radius: 8px;
 }
 
-/* Estilos para el botón */
-button {
-  background-color: #4caf50; /* Verde más oscuro para el botón */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin:0 auto;
-}
-.custom-button {
-  background-color: #4caf50; /* Verde más oscuro para el botón */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 0 auto; /* Centra horizontalmente el botón */
-}
 h2 {
-  color: #007BFF;
+  color: #007BFF; /* Azul */
   text-align: center;
 }
 </style>

@@ -8,7 +8,7 @@ import RequestView from '../views/RequestView.vue'
 import RequestList from '../views/RequestList.vue'
 import RequestInfoView from '../views/RequestInfoView.vue'
 import RequestNotes from '../views/RequestNotes.vue'
-import prueba from '../views/prueba.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -58,19 +58,14 @@ const router = createRouter({
     },
     {
       // Ruta para la vista que muestra el detalle de una solicitud, RequestButton.vue la llama cuando se
-      path:'/info-request',
+      path:'/info-request/:requestId',
       name:"RequestInfo",
       component:RequestInfoView,
     },
     {
-      path:'/notes-request',
+      path:'/notes-request/:requestId',
       name:"RequestNotes",
       component: RequestNotes,
-    },
-    {
-      path:'/prueba',
-      name:'prueba',
-      component: prueba,
     }
   ]
 })

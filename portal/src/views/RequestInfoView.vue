@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h2>Detalles de Solicitud</h2>
+      <h2 align="center">Detalles de Solicitud</h2>
       <RequestCompleteInfo :solicitud="solicitudDetails" />
       <Notification v-if="showNotification" :message="notificationMessage" @close="handleNotificationClose" />
     </div>

@@ -1,8 +1,6 @@
-<!-- src/components/ButtonComponent.vue -->
-<!-- Componente boton que llama a la vista que muestra con otro componente la informacion completa de la solicitud-->
 <template>
-  <router-link :to="{ name: 'info-request', params: { requestId: solicitud.id } }">
-    <button>Detalles</button>
+  <router-link :to="{ name: 'RequestInfo', params: { requestId: solicitud.id } }">
+    <button class="details-button">Detalles</button>
   </router-link>
 </template>
 
@@ -15,5 +13,16 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos específicos del botón si es necesario */
+.details-button {
+  background-color: #ffffff; /* Blanco */
+  color: #000000; /* Texto negro */
+  border: 1px solid #e0e0e0; /* Borde gris claro */
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.details-button:hover {
+  background-color: #f0f0f0; /* Fondo gris claro al pasar el ratón */
+}
 </style>

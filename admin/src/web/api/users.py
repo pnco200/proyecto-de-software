@@ -34,14 +34,15 @@ def get_user_requests(service_request_id):
     service_request = query.ServiceRequest
     service_service = query.service_alias
     service_state = query.request_state
-
+    fecha = service_request.inserted_at.strftime("%Y-%m-%d %H:%M:%S")
     service_request_parsed = {
         "id": service_request.id,
-        "request_name": service_request.name,
+        "user_id" : service_request.user_id,
         "service_id": service_request.service_id,
         "observations": service_request.observations,
-        "inserted_at": service_request.inserted_at,
-        "state_name": service_state.name,
+        "inserted_at": fecha,
+        "status": service_state.name,
+        "file":service_request.archive,
         "state_message": service_state.state_message,
     }
     
@@ -71,20 +72,21 @@ def get_requests_paginated():
     paginated_requests = service_requests.list_requests_paged_by_user(page=page, per_page=per_page, user_id=user.id)
     total_count = len(service_requests.list_all_requests_by_user(user_id=user.id))
     final_list = []
-
+    
     for req in paginated_requests:
+        fecha =req.ServiceRequest.inserted_at.strftime("%d-%m-%Y %H:%M:%S")
         request_data = {
             "id": req.ServiceRequest.id,
             "user_id" : req.ServiceRequest.user_id,
             "service_id": req.ServiceRequest.service_id, #Añadido para poder desde el portal solicitar la informacion de la solicitud especifica
             "name": req.ServiceRequest.name,
-            "creation_date": req.ServiceRequest.inserted_at,
+            "creation_date":fecha ,
             "status": req.service_state_alias.name,
             "observations": req.ServiceRequest.observations
         }
         final_list.append(request_data)
 
-
+    
     response = { 
         'data': final_list,
         'page': page,
@@ -99,7 +101,6 @@ def create_request():
     user_id = get_jwt_identity()
     user = auth.find_user_by_id(user_id)
     data = request.json
-    print(data)
     if "service_id" not in data or "description" not in data:
         
         return jsonify(error='Parametros Invalidos'), 400

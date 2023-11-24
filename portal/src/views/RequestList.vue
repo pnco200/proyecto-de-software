@@ -1,76 +1,116 @@
-<!-- src/components/SolicitudesListComponent.vue -->
-
 <template>
-    <div>
-      <h2>Listado de Solicitudes de Servicio</h2>
-  
-      <ul v-if="solicitudes.length">
-        <RequestListElement
-          v-for="solicitud in solicitudes"
-          :key="solicitud.id"
-          :solicitud="solicitud"
-          @detailsClick="handleDetailsClick"
-        />
-        <!--Aca le pasa la info al componente-->
-      </ul>
-  
-      <p v-else>No hay solicitudes de servicio.</p>
-    </div>
-  </template>
-  
-  <script>
-  import ListItemComponent from '@/components/RequestListElement.vue'; // Ajusta la ruta según tu estructura de archivos
-  import axios from 'axios'
-  import Cookies from 'js-cookie'
+  <div>
+    <h2 align="center">Listado de Solicitudes de Servicio</h2>
 
-  export default {
-    data() {
-      return {
-        solicitudes: [],
-      };
-    },
-    mounted() {
-      this.fetchSolicitudes();
-    },
-    methods: {
-      async fetchSolicitudes() {
-        const jwtToken = Cookies.get('token')
-        if (jwtToken) {
-        // Configurar el encabezado de autorización con el token JWT  
+    <div align="center">
+      <label>
+        Ordenar por fecha:
+        <input type="checkbox" v-model="orderByDate" @change="fetchSolicitudes" />
+      </label>
+
+      <label>
+        Filtrar por estado:
+        <select v-model="selectedStatus" @change="fetchSolicitudes">
+          <option value="">Todos</option>
+          <option value="inicial">Inicial</option>
+          <option value="aceptada">Aceptada</option>
+          <option value="en_proceso">En Proceso</option>
+          <option value="finalizada">Finalizada</option>
+          <option value="cancelada">Cancelada</option>
+        </select>
+      </label>
+    </div>
+
+    <ul align="center" v-if="solicitudes.length > 0">
+      <RequestListElement
+        v-for="solicitud in solicitudes"
+        :key="solicitud.id"
+        :solicitud="solicitud"
+        @detailsClick="handleDetailsClick"
+      />
+      <!--Aca le pasa la info al componente-->
+    </ul>
+
+    <p v-else>No hay solicitudes de servicio.</p>
+
+    <div align="center">
+      <button @click="prevPage" :disabled="currentPage === 1">Anterior</button>
+      <span>{{ currentPage }}</span>
+      <button @click="nextPage" :disabled="currentPage * perPage >= total">Siguiente</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import RequestListElement from '@/components/RequestListElement.vue';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+export default {
+  data() {
+    return {
+      solicitudes: [],
+      currentPage: 1,
+      perPage: 10,
+      total: 0,
+      orderByDate: false,
+      selectedStatus: '',
+    };
+  },
+  mounted() {
+    this.fetchSolicitudes();
+  },
+  methods: {
+    async fetchSolicitudes() {
+      const jwtToken = Cookies.get('token');
+      if (jwtToken) {
         try {
           const response = await axios.get('http://localhost:5000/api/me/requests-paginated', {
             params: {
-              page: 1,
-              per_page: 10,
-              sort: 'creation_date',
+              page: this.currentPage,
+              per_page: this.perPage,
+              sort: this.orderByDate ? 'creation_date' : '',
               order: 'desc',
+              status: this.selectedStatus,
             },
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${jwtToken}`,
             },
           });
-  
-          this.solicitudes = response.data;
+
+          this.solicitudes = response.data.data;
+          this.total = response.data.total;
         } catch (error) {
           console.error('Error al obtener las solicitudes:', error.message);
         }
-      }else{
-        console.error('No se encontró un token en las cookies.')
-      };
-      },
-      handleDetailsClick(solicitud) {
-        console.log('Detalles de la solicitud:', solicitud);
-        // Aquí puedes realizar acciones adicionales al hacer clic en el botón "Detalles"
-      },
+      } else {
+        console.error('No se encontró un token en las cookies.');
+      }
     },
-    components: {
-      ListItemComponent,
+    handleDetailsClick(solicitud) {
+      console.log('Detalles de la solicitud:', solicitud);
     },
-  };
-  </script>
-  
-  <style>
-  /* Estilos específicos de la lista si es necesario */
-  </style>
-  
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage -= 1;
+        this.fetchSolicitudes();
+      }
+    },
+
+    nextPage() {
+      if (this.currentPage * this.perPage < this.total) {
+        this.currentPage += 1;
+        this.fetchSolicitudes();
+      }
+    },
+  },
+  components: {
+    RequestListElement,
+  },
+};
+</script>
+
+<style>
+/* Estilos específicos de la lista si es necesario */
+</style>
