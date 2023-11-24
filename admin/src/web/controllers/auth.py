@@ -151,8 +151,9 @@ def confirm_email():
 @auth_bp.get('/register')
 def register_form():
     """"Muestra el form de registro"""
+    is_portal = request.args.get('is_portal')
     csrf_token = generate_csrf_token()
-    return render_template("auth/register.html", csrf_token=csrf_token)
+    return render_template("auth/register.html", csrf_token=csrf_token, is_portal=is_portal)
 
 @auth_bp.post('/register')
 def register():
@@ -173,13 +174,16 @@ def register():
         existing_user = auth.find_user_by_email(params["email"])
     if existing_user:
         flash("El mail o nombre de usuario ya esta registrado.", "error")
-        return redirect(url_for("auth.register"))
+        return redirect(url_for("auth.register"), is_portal=params['is_portal'])
     token = email_utils.send_confirmation_email(params["email"])
 
     if not token:
         flash("Ocurrio un error al crear el email de confirmacion.", "error")
-        return redirect(url_for("auth.register"))
+        return redirect(url_for("auth.register"), is_portal=params['is_portal'])
     
     auth.create_user(name=params["name"], email=params["email"], password=params["password"] if is_superadmin else None,username=params["username"] if is_superadmin else None,confirm_token=token, lastname=params["lastname"])
     flash("El usuario se creo correctamente. Revise su bandeja de entrada para terminar el registro.", "success")
-    return redirect(url_for("auth.login"))
+    if params['is_portal']=="True":
+        return redirect('http://127.0.0.1:5173')
+    else:
+        return redirect(url_for("auth.login"))
