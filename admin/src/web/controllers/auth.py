@@ -63,7 +63,7 @@ def google_auth():
                              password=None, username=user_info["email"], lastname=user_info["family_name"], 
                              is_confirmed=True, is_active=True, is_google=True)
             if is_portal:
-                return redirect("http://127.0.0.1:5173")
+                return redirect("https://grupo25.proyecto2023.linti.unlp.edu.ar")
             elif newUser:
                 flash("El usuario se creo correctamente.", "success")
             else:
