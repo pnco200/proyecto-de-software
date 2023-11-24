@@ -12,7 +12,7 @@ Chart.register(...registerables)
 
 const fetchData = async () => {
     try {
-        const response = await axios.get('http://localhost:5000/api/stats/most-requested-services')
+        const response = await axios.get('https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/stats/most-requested-services')
         const data = response.data
         console.log(data)
         return processResponse(data)

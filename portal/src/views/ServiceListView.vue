@@ -84,7 +84,7 @@
     methods: {
       async fetchServices(newPage = 1) {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/api/services/search', {
+          const response = await axios.get('https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/services/search', {
             params: {
               q: this.filters.keywords,
               type: this.filters.serviceType,

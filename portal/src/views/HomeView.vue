@@ -69,7 +69,7 @@ export default defineComponent({
   methods: {
     async contactInformation () {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/configuration/getconfig')
+        const response = await axios.get('https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/configuration/getconfig')
         this.contact_information = response.data.contact_information
       } catch (error) {
         console.log(error)

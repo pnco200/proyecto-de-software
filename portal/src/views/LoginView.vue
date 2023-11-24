@@ -81,7 +81,7 @@ export default {
                     alert('Debe completar ambos campos!')
                     return
                 }
-                const response = await axios.post('http://127.0.0.1:5000/api/auth/', {
+                const response = await axios.post('https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/auth/', {
                     user: this.username,
                     password: this.password
                 })
@@ -97,10 +97,10 @@ export default {
             }
         },
         redirigirUsuario() {
-            window.location.href = 'http://127.0.0.1:5000/auth/google?is_portal=True'
+            window.location.href = 'https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/auth/google?is_portal=True'
         },
         redirigirRegistro() {
-            window.location.href = 'http://127.0.0.1:5000/auth/register'
+            window.location.href = 'https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/auth/register'
         }
     }
 }

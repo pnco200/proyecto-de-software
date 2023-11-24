@@ -59,7 +59,7 @@
     methods: {
       getService() {
         axios
-          .get(`http://127.0.0.1:5000/api/services/${this.service_id}`)
+          .get(`https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/services/${this.service_id}`)
           .then((response) => {
             this.service = response.data;
             this.getInstitucion();
@@ -71,7 +71,7 @@
       },
       getInstitucion() {
         axios
-          .get(`http://127.0.0.1:5000/api/institutions/${this.service.institution_id}`)
+          .get(`https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/institutions/${this.service.institution_id}`)
           .then((response) => {
             this.institucion = response.data;
             this.longitud = this.institucion.localization[0];
