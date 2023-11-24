@@ -5,7 +5,7 @@ from src.core import service_requests
 from src.core import auth
 from src.core.service_requests import get_request_detaile, get_state_by_id, create_service_request
 from flask_jwt_extended import jwt_required,get_jwt_identity
-
+from datetime import datetime
 api_user_bp = Blueprint("user_api", __name__, url_prefix="/api/me/")
 
 @api_user_bp.get('/profile')
@@ -56,6 +56,7 @@ def get_requests_paginated():
     user = auth.find_user_by_id(user_id)
     
     params = request.args.to_dict()
+    print(params)
     page = 1
     per_page = None
     try:
@@ -72,20 +73,27 @@ def get_requests_paginated():
     paginated_requests = service_requests.list_requests_paged_by_user(page=page, per_page=per_page, user_id=user.id)
     total_count = len(service_requests.list_all_requests_by_user(user_id=user.id))
     final_list = []
-    
     for req in paginated_requests:
-        fecha =req.ServiceRequest.inserted_at.strftime("%d-%m-%Y %H:%M:%S")
         request_data = {
             "id": req.ServiceRequest.id,
             "user_id" : req.ServiceRequest.user_id,
             "service_id": req.ServiceRequest.service_id, #Añadido para poder desde el portal solicitar la informacion de la solicitud especifica
             "name": req.ServiceRequest.name,
-            "creation_date":fecha ,
+            "creation_date":req.ServiceRequest.inserted_at ,
             "status": req.service_state_alias.name,
             "observations": req.ServiceRequest.observations
         }
-        final_list.append(request_data)
-
+        if('status' in params and params['status']):
+            if(params['status']==request_data['status']):
+                final_list.append(request_data)       
+        else:
+            final_list.append(request_data)
+            
+    
+    if('order' in params):         
+        final_list = sorted(final_list, key=lambda x: x['creation_date'])
+    for fecha in final_list:
+        fecha['creation_date']= fecha['creation_date'].strftime("%Y-%m-%d %H:%M:%S")
     
     response = { 
         'data': final_list,

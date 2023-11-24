@@ -4,13 +4,13 @@
 
     <div align="center">
       <label>
-        Ordenar por fecha:
-        <input type="checkbox" v-model="orderByDate" @change="fetchSolicitudes" />
+       <strong> Ordenar por fecha:</strong>
+        <input type="checkbox" v-model="orderByDate" />
       </label>
 
       <label>
-        Filtrar por estado:
-        <select v-model="selectedStatus" @change="fetchSolicitudes">
+        <strong> por estado:</strong>
+        <select v-model="selectedStatus">
           <option value="">Todos</option>
           <option value="inicial">Inicial</option>
           <option value="aceptada">Aceptada</option>
@@ -19,6 +19,9 @@
           <option value="cancelada">Cancelada</option>
         </select>
       </label>
+
+      <!-- Botón que activa el filtrado y ordenamiento -->
+      <button @click="fetchSolicitudes">Aplicar Filtros</button>
     </div>
 
     <ul align="center" v-if="solicitudes.length > 0">
@@ -28,7 +31,7 @@
         :solicitud="solicitud"
         @detailsClick="handleDetailsClick"
       />
-      <!--Aca le pasa la info al componente-->
+      <!-- Aca le pasa la info al componente -->
     </ul>
 
     <p v-else>No hay solicitudes de servicio.</p>
@@ -42,9 +45,9 @@
 </template>
 
 <script>
-import RequestListElement from '@/components/RequestListElement.vue';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import RequestListElement from "@/components/RequestListElement.vue";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 export default {
   data() {
@@ -54,7 +57,7 @@ export default {
       perPage: 10,
       total: 0,
       orderByDate: false,
-      selectedStatus: '',
+      selectedStatus: "",
     };
   },
   mounted() {
@@ -62,34 +65,38 @@ export default {
   },
   methods: {
     async fetchSolicitudes() {
-      const jwtToken = Cookies.get('token');
+      const jwtToken = Cookies.get("token");
       if (jwtToken) {
         try {
-          const response = await axios.get('http://localhost:5000/api/me/requests-paginated', {
-            params: {
-              page: this.currentPage,
-              per_page: this.perPage,
-              sort: this.orderByDate ? 'creation_date' : '',
-              order: 'desc',
-              status: this.selectedStatus,
-            },
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${jwtToken}`,
-            },
-          });
+          const response = await axios.get(
+            "http://localhost:5000/api/me/requests-paginated",
+            {
+              params: {
+                page: this.currentPage,
+                per_page: this.perPage,
+                sort: this.orderByDate ? "creation_date" : "",
+                status: this.selectedStatus,
+                order: this.orderByDate,
+              },
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwtToken}`,
+              },
+            }
+          );
 
           this.solicitudes = response.data.data;
           this.total = response.data.total;
         } catch (error) {
-          console.error('Error al obtener las solicitudes:', error.message);
+          console.error("Error al obtener las solicitudes:", error.message);
+          alert(error.message)
         }
       } else {
-        console.error('No se encontró un token en las cookies.');
+        console.error("No se encontró un token en las cookies.");
       }
     },
     handleDetailsClick(solicitud) {
-      console.log('Detalles de la solicitud:', solicitud);
+      console.log("Detalles de la solicitud:", solicitud);
     },
     prevPage() {
       if (this.currentPage > 1) {
@@ -97,7 +104,6 @@ export default {
         this.fetchSolicitudes();
       }
     },
-
     nextPage() {
       if (this.currentPage * this.perPage < this.total) {
         this.currentPage += 1;
