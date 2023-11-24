@@ -9,19 +9,28 @@ from sqlalchemy.orm import joinedload, aliased
 from src.core.configuration import get_rows_per_page
 import random
 from datetime import datetime, timedelta
-def list_requests_paged_by_institution(page, institution_id):
+def list_requests_paged_by_institution(page, institution_id, service_type=None, start_date=None, end_date=None, service_state=None):
     per_page = get_rows_per_page()
     service_alias = aliased(Service, name="service_alias")
     user_alias = aliased(User, name="user_alias")
-    request = (db.session.query(ServiceRequest,service_alias,user_alias)
+    query = (db.session.query(ServiceRequest,service_alias,user_alias)
             .join(service_alias,service_alias.id == ServiceRequest.service_id)
             .join(user_alias, user_alias.id ==ServiceRequest.user_id)
             .filter(service_alias.institution_id == institution_id)
-            .paginate(page=page, per_page=per_page, error_out=False)
     )
-    ##dejo por si acaso
+    if service_type:
+        query = query.filter(service_alias.type == service_type)
+    
+    if start_date and end_date:
+        query = query.filter(ServiceRequest.inserted_at.between(start_date, end_date))
 
-    return request
+    # if service_state:
+    #     state = ServiceState.query.filter_by(name=service_state).first()
+    #     if state:
+    #         query = query.filter(ServiceRequest.state_id == state.id)
+    
+    return query.paginate(page=page, per_page=per_page, error_out=False)
+
 def set_new_state(state,request_id):
     request_actual = ServiceRequest.query.filter_by(id=request_id).first()
     request_actual.state_id = state.id

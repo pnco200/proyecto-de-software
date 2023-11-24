@@ -2,10 +2,41 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
+
 <body>
     <div class="container mt-5">
         <div class="user-list">
             <h1 class="mb-4">Lista de solicitudes servicios</h1>
+            <form method="GET" action="{{ url_for('servicesRequests.list_service_request') }}">
+                <label for="tipo_servicio">Tipo de Servicio:</label>
+                <select name="tipo_servicio" id="tipo_servicio">
+                    <option value="" selected disabled hidden>Seleccionar</option>
+                    <option value="DESARROLLO">Desarrollo</option>
+                    <option value="ANALISIS">Análisis</option>
+                    <option value="CONSULTORIA">Consultoría</option>
+                </select>
+                <br>
+                <label for="start_date">Fecha de Inicio:</label>
+                <input type="date" name="start_date">
+                <br>
+                <label for="end_date">Fecha de Fin:</label>
+                <input type="date" name="end_date">
+                <br>
+                <label for="service_state">Estado de Solicitud:</label>
+                <select name="service_state" id="service_state">
+                    <option value="" selected disabled hidden>Seleccionar</option>
+                    <option value="aceptada">Aceptada</option>
+                    <option value="rechazada">Rechazada</option>
+                    <option value="en_proceso">En Proceso</option>
+                    <option value="finalizada">Finalizada</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
+                <br>
+                <!-- <label for="email">Usuario que realizó la Solicitud:</label>
+                <input type="email" name="email" placeholder="Ingrese el email...">
+                <br> -->
+                <button type="submit">Aplicar filtros</button>
+            </form>
             <br><br>
             {% if request.total == 0 %}
                 <div class="alert alert-warning text-center mt-5">

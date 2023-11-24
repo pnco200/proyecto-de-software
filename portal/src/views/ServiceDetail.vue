@@ -32,7 +32,11 @@
   
       <div class="map-container">
         <div class="map">
-          <MapComponent :key="componentkey" :coordinates="[latitud, longitud]" />
+          <MapComponent 
+            :key="componentkey" 
+            :coordinates="[latitud, longitud]" 
+            :contact_information="institucion.contact"
+          />
         </div>
       </div>
     </div>
