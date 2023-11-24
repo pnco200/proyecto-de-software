@@ -91,6 +91,8 @@
               page: newPage,
             },
           });
+
+
           this.services = response.data.data;
           this.page = response.data.page;
           let totalPages = Math.floor(response.data.total/response.data.per_page);

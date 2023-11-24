@@ -34,7 +34,11 @@
   
       <div class="map-container">
         <div class="map">
-          <MapComponent :coordinates="[latitud, longitud]" />
+          <MapComponent 
+            :key="componentkey" 
+            :coordinates="[latitud, longitud]" 
+            :contact_information="institucion.contact"
+          />
         </div>
       </div>
     </div>
@@ -53,6 +57,7 @@
         institucion: {},
         longitud: 0,
         latitud: 0,
+        componentkey: 0,
       };
     },
     components: {
@@ -70,14 +75,16 @@
           .catch((error) => {
             console.log(error);
           });
+
       },
       getInstitucion() {
         axios
           .get(`http://127.0.0.1:5000/api/institutions/${this.service.institution_id}`)
           .then((response) => {
             this.institucion = response.data;
-            this.longitud = this.institucion[0];
-            this.latitud = this.institucion[1];
+            this.longitud = this.institucion.localization[0];
+            this.latitud = this.institucion.localization[1];
+            this.componentkey += 1;
           });
       },
     },

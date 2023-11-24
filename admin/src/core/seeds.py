@@ -5,10 +5,10 @@ def run():
         institutions.create_institution(
             name="Instituto de Matematica",
             information="Instituto de Matematica e Estatistica",
-            address="Rua do Matao, 1010 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            address="Buenos Aires",
             localization= [
-                "-23.5614",
-                "-46.7308"
+                "-34.6118", 
+                "-58.4173"
             ],
             web="https://www.ime.usp.br/",
             keywords="Matematica, Estatistica, Computacao",
@@ -19,10 +19,10 @@ def run():
         institutions.create_institution(
             name="Instituto de Fisica",
             information="Instituto de Fisica",
-            address="Rua do Matao, 1371 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            address="Cordoba",
             localization= [
-                "-23.5614",
-                "-46.7308"
+                "-31.4201",
+                "-64.1888"
             ],
             web="https://portal.if.usp.br/",
             keywords="Fisica",
@@ -33,10 +33,10 @@ def run():
         institutions.create_institution(
             name="Instituto de Quimica",
             information="Instituto de Quimica",
-            address="Av. Prof. Lineu Prestes, 748 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            address="Mendoza",
             localization= [
-                "-23.5614",
-                "-46.7308"
+                "-32.8908",
+                "-68.8272"
             ],
             web="https://www.iq.usp.br/",
             keywords="Quimica",
@@ -47,10 +47,10 @@ def run():
         institutions.create_institution(
             name="Instituto de Biociencias",
             information="Instituto de Biociencias",
-            address="Rua do Matao, 277 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            address="Resistencia",
             localization= [
-                "-23.5614",
-                "-46.7308"
+                "-27.4661",
+                "-58.8300"
             ],
             web="https://ib.usp.br/",
             keywords="Biologia",
@@ -61,10 +61,10 @@ def run():
         institutions.create_institution(
             name="Instituto de Psicologia",
             information="Instituto de Psicologia",
-            address="Av. Prof. Mello Moraes, 1721 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            address="Salta",
             localization= [
-                "-23.5614",
-                "-46.7308"
+                "-24.7821",
+                "-65.4125"
             ],
             web="https://www.ip.usp.br/",
             keywords="Psicologia",
@@ -75,10 +75,10 @@ def run():
         institutions.create_institution(
             name="Instituto de Ciencias Biomedicas",
             information="Instituto de Ciencias Biomedicas",
-            address="Av. Prof. Lineu Prestes, 1524 - Cidade Universitaria - Butanta - Sao Paulo - SP",
+            address="La Rioja",
             localization= [
-                "-23.5614",
-                "-46.7308"
+                "-29.4689",
+                "-66.8509"
             ],
             web="https://icb.usp.br/",
             keywords="Biologia, Medicina",
@@ -89,10 +89,10 @@ def run():
         institutions.create_institution(
             name="Instituto de Computação",
             information="Instituto de Ciências Matemáticas e de Computação",
-            address="Av. Trabalhador São-carlense, 400 - Centro - São Carlos - SP",
+            address="San Carlos de Bariloche",
             localization= [
-                "-23.5614",
-                "-46.7308"
+                "-41.1335",
+                "-71.3107"
             ],
             web="https://www.icmc.usp.br/",
             keywords="Matemática, Computação",
