@@ -62,7 +62,9 @@ def google_auth():
             newUser = auth.create_user_google(name=user_info["given_name"], email=user_info["email"], 
                              password=None, username=user_info["email"], lastname=user_info["family_name"], 
                              is_confirmed=True, is_active=True, is_google=True)
-            if newUser:
+            if is_portal:
+                return redirect("http://127.0.0.1:5173")
+            elif newUser:
                 flash("El usuario se creo correctamente.", "success")
             else:
                 flash("No se pudo crear el usuario.", "error")
