@@ -100,7 +100,7 @@ export default {
             window.location.href = 'https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/auth/google?is_portal=True'
         },
         redirigirRegistro() {
-            window.location.href = 'https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/auth/register?is_portal=True'
+            window.location.href = 'https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/auth/register'
         }
     }
 }
