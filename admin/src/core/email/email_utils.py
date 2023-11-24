@@ -15,11 +15,11 @@ def init_app(app):
     global mail
     mail = Mail(app)
 
-def send_confirmation_email(email : str, is_portal):
+def send_confirmation_email(email : str):
     """"Envio de Mail de confirmacion"""
     try:
         token = str(uuid.uuid4())
-        final_url = "https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/auth/confirmemail?token=" + token + "&is_portal="+is_portal
+        final_url = "https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/auth/confirmemail?token=" + token
         message = Message("Mail de confirmacion para tu cuenta de CIDEPINT", recipients=[email])
         message.body = "Hola! Para terminar el registro, debes confirmar tu cuenta de CIDEPINT Clickea en el siguiente link para terminar el proceso: " + final_url
         message.sender = "Grupo CIDEPINT <grupo25ps@gmail.com>"
