@@ -77,6 +77,7 @@ def google_auth():
 @auth_bp.post('/complete_register')
 def complete_register():
     params = request.form
+    is_portal = params["is_portal"]
 
     if not check_csrf_token(params):
         flash("Token CSRF invalido", "error")
@@ -85,17 +86,19 @@ def complete_register():
 
     if not params["token"] or not params["username"] or not params["password"]:
         flash("Falta completar un campo. Vuelva a intentar", "error")
-        return redirect(url_for("auth.confirm_email"), token=params["token"])
+        return redirect(url_for("auth.confirm_email"), token=params["token"], is_portal=is_portal)
     existing_user = auth.find_user_by_username(params["username"])
     if existing_user:
         flash("Ese nombre de usuario ya existe.", "error")
-        return redirect(url_for("auth.confirm_email"), token=params["token"])
+        return redirect(url_for("auth.confirm_email"), token=params["token"], is_portal=is_portal)
     if auth.update_username_and_password(params["token"],params["username"], params["password"]):
         flash("Informacion actualizada correctamente.", "success")
     else:
         flash("Ocurrio un error inesperado. Vuelva a intentar", "error")
-
-    return redirect(url_for("auth.login"))
+    if is_portal == "True":
+        return redirect('https://grupo25.proyecto2023.linti.unlp.edu.ar')
+    else:
+        return redirect(url_for("auth.login"))
 
 @auth_bp.post('/authenticate')
 def authenticate():
@@ -135,6 +138,8 @@ def logout():
 @auth_bp.get('/confirmemail')
 def confirm_email():
     token = request.args.get('token')
+    is_portal = request.args.get('is_portal')
+
     user = auth.confirm_email(token)
     if user:
         if user.password or user.username:
@@ -142,7 +147,7 @@ def confirm_email():
         else:
             csrf_token = generate_csrf_token()
             flash("El correo fue exitosamente confirmado. Complete la informacion de su cuenta", "success")
-            return render_template("auth/complete_register.html", token=token, csrf_token=csrf_token)
+            return render_template("auth/complete_register.html", token=token, csrf_token=csrf_token, is_portal=is_portal)
     else:
         flash("No se pudo confirmar el correo.", "error")
     return redirect(url_for("auth.login"))
@@ -162,7 +167,7 @@ def register():
     
     if not utils.is_valid_email(params["email"]):
         flash("El email ingresado no es valido.", "error")
-        return redirect(url_for("auth.register"))
+        return redirect(url_for("auth.register"), params['is_portal'])
     
     existing_user = None
     is_superadmin = False
@@ -175,7 +180,7 @@ def register():
     if existing_user:
         flash("El mail o nombre de usuario ya esta registrado.", "error")
         return redirect(url_for("auth.register"), is_portal=params['is_portal'])
-    token = email_utils.send_confirmation_email(params["email"])
+    token = email_utils.send_confirmation_email(params["email"], params['is_portal'])
 
     if not token:
         flash("Ocurrio un error al crear el email de confirmacion.", "error")
@@ -183,7 +188,4 @@ def register():
     
     auth.create_user(name=params["name"], email=params["email"], password=params["password"] if is_superadmin else None,username=params["username"] if is_superadmin else None,confirm_token=token, lastname=params["lastname"])
     flash("El usuario se creo correctamente. Revise su bandeja de entrada para terminar el registro.", "success")
-    if params['is_portal']=="True":
-        return redirect('http://127.0.0.1:5173')
-    else:
-        return redirect(url_for("auth.login"))
+    return redirect(url_for("auth.login"))
