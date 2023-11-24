@@ -100,7 +100,7 @@ export default {
             window.location.href = 'http://127.0.0.1:5000/auth/google?is_portal=True'
         },
         redirigirRegistro() {
-            window.location.href = 'http://127.0.0.1:5000/auth/register?is_portal=True'
+            window.location.href = 'http://127.0.0.1:5000/auth/register'
         }
     }
 }
