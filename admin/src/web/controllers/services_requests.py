@@ -9,7 +9,12 @@ srequest_bp = Blueprint('servicesRequests', __name__, url_prefix='/srequests')
 @permissions.permission_required_in_Institution(["request_index"])
 def list_service_request():
     page = request.args.get('page', type=int, default=1)
-    list = service_requests.list_requests_paged_by_institution(page, current_selected_institution())    
+    service_type = request.args.get('tipo_servicio',type=str,)
+    start_date = request.args.get('start_date',type=str)
+    end_date = request.args.get('end_date',type=str)
+    service_state = request.args.get('service_state',type=str)
+    email = request.args.get('email',type=str)
+    list = service_requests.list_requests_paged_by_institution(page, current_selected_institution(), service_type, start_date, end_date, service_state, email) 
     return render_template("services_requests/index.html", request=list, page=page)
 
 
