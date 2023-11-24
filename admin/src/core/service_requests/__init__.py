@@ -7,7 +7,8 @@ from src.core.services import Service
 from src.core.service_requests.service_request import ServiceRequest, ServiceRequestMessages,ServiceState
 from sqlalchemy.orm import joinedload, aliased
 from src.core.configuration import get_rows_per_page
-
+import random
+from datetime import datetime, timedelta
 def list_requests_paged_by_institution(page, institution_id):
     per_page = get_rows_per_page()
     service_alias = aliased(Service, name="service_alias")
@@ -204,3 +205,65 @@ def filter_service_requests_paged(page, service_type=None, start_date=None, end_
             query = query.filter_by(state_id=state_entry.id)
 
     return query.paginate(page=page, per_page=per_page, error_out=False)
+
+def get_total_requests_by_institutions():
+    """
+    Devuelve la cantidad total de solicitudes de servicio por institución.
+
+    Returns:
+        list: Lista de tuplas con el nombre de la institución y la cantidad de solicitudes de servicio.
+    """
+    return (
+        db.session.query(Institution.name, db.func.count(ServiceRequest.id))
+        .outerjoin(Service, Service.institution_id == Institution.id)
+        .outerjoin(ServiceRequest, ServiceRequest.service_id == Service.id)
+        .group_by(Institution.name)
+        .all()
+    )
+
+def get_top_institutions_less_time_per_request():
+    """
+    Devuelve las 10 instituciones con el menor tiempo promedio por solicitud de servicio.
+
+    Returns:
+        list: Lista de tuplas con el nombre de la institución y el tiempo promedio por solicitud de servicio.
+    """
+    return (
+        db.session.query(Institution.name, db.func.avg(ServiceRequest.updated_at - ServiceRequest.inserted_at))
+        .outerjoin(Service, Service.institution_id == Institution.id)
+        .outerjoin(ServiceRequest, ServiceRequest.service_id == Service.id)
+        .join(ServiceState, ServiceState.id == ServiceRequest.state_id)
+        .filter(ServiceState.name == "finalizada")
+        .group_by(Institution.name)
+        .order_by(db.func.avg(ServiceRequest.updated_at - ServiceRequest.inserted_at).asc())
+        .limit(5)
+        .all()
+    )
+
+def get_most_requested_services():
+    """
+    Devuelve los 10 servicios más solicitados y su institucion.
+
+    Returns:
+        list: Lista de tuplas con el nombre del servicio y la cantidad de solicitudes de servicio.
+    """
+    return (
+        db.session.query(Service.name, Institution.name, db.func.count(ServiceRequest.id))
+        .outerjoin(ServiceRequest, ServiceRequest.service_id == Service.id)
+        .outerjoin(Institution, Institution.id == Service.institution_id)
+        .group_by(Service.name, Institution.name)
+        .order_by(db.func.count(ServiceRequest.id).desc())
+        .limit(5)
+        .all()
+    )
+
+def set_new_state_seeds(state, request_id):
+    request_actual = ServiceRequest.query.filter_by(id=request_id).first()
+    request_actual.state_id = state.id
+
+    random_days = random.randint(0, 50)
+    random_timedelta = timedelta(days=random_days)
+
+    request_actual.updated_at = datetime.utcnow() + random_timedelta
+
+    db.session.commit()

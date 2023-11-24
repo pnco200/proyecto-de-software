@@ -6,6 +6,7 @@
     <a href="{{ url_for('institution.home') }}" class="btn btn-primary btn-sm ml-2" style="position: relative; margin-bottom: 1rem; left: 0rem;">Volver al Listado</a>
 
     <form method="POST" action="{{url_for('institution.register')}}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="mb-3">
             <h6>Nombre de la institucion:</h6>
             <input type="text" class="form-control" id="name" name="name" 

@@ -52,3 +52,27 @@ def get_institutions():
     }
 
     return jsonify(response), 200
+
+@api_institution_bp.get('/<int:institution_id>')
+def get_institution_by_id(institution_id):
+    if not institution_id:
+        return jsonify({'error': 'Parametro Invalido'}), 400
+
+    institution = institutionsQueries.get_institution_by_id(id=institution_id)
+
+
+    if not institution:
+        return {}, 200
+    institution_data = {
+        'id': institution.id,
+        'name': institution.name,
+        'information': institution.information,
+        'address': institution.address,
+        'localization': institution.localization,
+        'web': institution.web,
+        'keywords': institution.keywords,
+        'attention_time': institution.attention_time,
+        'contact': institution.contact,
+        'is_active': institution.is_active
+    }
+    return jsonify(institution_data), 200

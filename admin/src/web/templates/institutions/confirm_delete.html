@@ -5,6 +5,7 @@
 
     <h1>CONFIRMAR ELIMINACION DE INSTITUCION</h1>
     <form method="post" action="{{ url_for('institution.confirm_delete', institution_id=institution_id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <button type="submit" class="btn btn-primary btn-sm ml-2">SI, ELIMINAR</button>
     </form>
     

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.core import service_requests
 from src.web.helpers.utils import current_selected_institution
 from src.web.helpers import permissions
+from src.web.helpers.auth import generate_csrf_token, check_csrf_token
 srequest_bp = Blueprint('servicesRequests', __name__, url_prefix='/srequests')
 
 @srequest_bp.get('/')
@@ -27,10 +28,11 @@ def see_request_msgs(request_id):
         """
         Mostrara los mensajes relacionados con una solicitud
         """
+        csrf_token = generate_csrf_token()
         user_and_msgs = service_requests.get_request_msgs(request_id)
     
         user_and_msgs[1] = sorted(user_and_msgs[1], key=lambda msg: msg.inserted_at)
-        return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs)
+        return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs, csrf_token= csrf_token)
 
 
 
@@ -40,6 +42,10 @@ def send_msg():
     """
         Estos permitiran que se envie un mensaje al cliente en la solicitud
     """
+    if not check_csrf_token(request.form):
+        flash("Token CSRF inválido", "error")
+        return redirect(url_for('auth.login'))
+
     nuevo_mensaje = request.form.get('nuevo_mensaje')
     service_request = request.form.get('service_request')
     
@@ -53,14 +59,16 @@ def send_msg():
         user_id=0
     )
     return redirect(url_for('servicesRequests.see_request_msgs', request_id=service_request))
+
 @srequest_bp.get('/see_state_request/<int:request_id>/<int:state_id>')
 @permissions.permission_required_in_Institution(["request_show"])
 def see_state_request(request_id,state_id):
     """
        Mostrara el estado de la solicitud y se podra cambiar
     """
+    csrf_token = generate_csrf_token()
     state = service_requests.get_state_by_id(state_id)  
-    return render_template('services_requests/state.html', state = state,request_id = request_id)
+    return render_template('services_requests/state.html', state = state,request_id = request_id, csrf_token= csrf_token)
 
 @srequest_bp.post('/change_state/<int:request_id>')
 @permissions.permission_required_in_Institution(["request_update"])
@@ -68,6 +76,11 @@ def change_state(request_id):
     """
        cambia el estado con los parametros pasados
     """
+
+    if not check_csrf_token(request.form):
+        flash("Token CSRF inválido", "error")
+        return redirect(url_for('auth.login'))
+
     nuevo_mensaje = request.form.get('new_observations')
     estado = request.form.get('new_state')
     new_state = service_requests.create_state_request(

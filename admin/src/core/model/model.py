@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime
 from src.core.database import db
 
@@ -12,6 +13,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, unique=False, default=True)
     confirm_token = db.Column(db.String(255), unique=False, default=None)
     password = db.Column(db.String(255))
+    is_google = db.Column(db.Boolean, unique=False, default=False)
     updated_at=db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
@@ -25,7 +27,7 @@ class Institution(db.Model):
     name = db.Column(db.String(50), unique=True)
     information = db.Column(db.String(250), unique=False)
     address = db.Column(db.String(250), unique=False)
-    localization = db.Column(db.String(50), unique=False)
+    localization =  db.Column(ARRAY(db.String(50)), unique=False)
     web = db.Column(db.String(250), unique=False)
     keywords = db.Column(db.String(500), unique=False)
     attention_time = db.Column(db.String(250), unique=False)

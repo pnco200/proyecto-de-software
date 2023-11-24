@@ -2,12 +2,17 @@ from flask import Blueprint, jsonify, request
 from web.helpers.apivalidations import requires_auth
 from src.core.configuration import get_rows_per_page
 from src.core import service_requests
+from src.core import auth
 from src.core.service_requests import get_request_detaile, get_state_by_id, create_service_request
+from flask_jwt_extended import jwt_required,get_jwt_identity
+
 api_user_bp = Blueprint("user_api", __name__, url_prefix="/api/me/")
 
 @api_user_bp.get('/profile')
-@requires_auth()
-def get_user_profile(user):
+@jwt_required()
+def get_user_profile():
+    user_id = get_jwt_identity()
+    user = auth.find_user_by_id(user_id)
     profile = {
         "name": user.name,
         "email": user.email,
@@ -18,9 +23,10 @@ def get_user_profile(user):
     return jsonify(profile), 200
 
 @api_user_bp.get('/requests/<int:service_request_id>')
-@requires_auth()
-def get_user_requests(user, service_request_id):
-    print(service_request_id)
+@jwt_required()
+def get_user_requests(service_request_id):
+    user_id = get_jwt_identity()
+    user = auth.find_user_by_id(user_id)
     query = get_request_detaile(service_request_id)
     if not query:
         return jsonify({"error": "ID de solicitud inválido"}), 400
@@ -43,8 +49,10 @@ def get_user_requests(user, service_request_id):
 
 
 @api_user_bp.get('/requests')
-@requires_auth()
-def get_requests_paginated(user):
+@jwt_required()
+def get_requests_paginated():
+    user_id = get_jwt_identity()
+    user = auth.find_user_by_id(user_id)
     params = request.args.to_dict()
     page = 1
     per_page = None
@@ -65,6 +73,7 @@ def get_requests_paginated(user):
 
     for req in paginated_requests:
         request_data = {
+            "service_id": req.ServiceRequest.service_id, #Añadido para poder desde el portal solicitar la informacion de la solicitud especifica
             "name": req.ServiceRequest.name,
             "creation_date": req.ServiceRequest.inserted_at,
             "status": req.service_state_alias.name,
@@ -82,8 +91,10 @@ def get_requests_paginated(user):
     return jsonify(response), 200
 
 @api_user_bp.post('/requests/')
-@requires_auth()
-def create_request(user):
+@jwt_required()
+def create_request():
+    user_id = get_jwt_identity()
+    user = auth.find_user_by_id(user_id)
     data = request.json
     if "service_id" not in data or "description" not in data:
         return jsonify(error='Parametros Invalidos'), 400
@@ -106,8 +117,10 @@ def create_request(user):
     return jsonify(response), 201
 
 @api_user_bp.post('/requests/<int:service_request_id>/notes')
-@requires_auth()
-def add_note_to_request(user, service_request_id):
+@jwt_required()
+def add_note_to_request(service_request_id):
+    user_id = get_jwt_identity()
+    user = auth.find_user_by_id(user_id)
     text = request.json["text"]
     if not text:
         return jsonify(error='Parametros Invalidos'), 400

@@ -3,6 +3,11 @@ from src.core.model.model import User, RolUsuario
 from src.core.configuration import get_rows_per_page
 from src.core.bcrypt import bcrypt
 from src.core import rol_permission
+def get_random_user():
+    """Obtener usuario aleatorio
+    para las seeds"""
+    return User.query.order_by(db.func.random()).first() 
+
 def list_users():
     query = User.query
 
@@ -11,7 +16,7 @@ def list_users():
     query = query.filter(~User.id.in_(subquery))
     return query.all()
     
-def create_user(**kwargs):
+def create_user(is_active=False,**kwargs):
     """Crear usuario
 
     Args:
@@ -20,8 +25,38 @@ def create_user(**kwargs):
     Returns:
         User: Devuelve usuario creado
     """
-    hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
-    kwargs.update(password=hash.decode("utf-8"))
+    if kwargs["password"]:
+        hash = bcrypt.generate_password_hash(kwargs["password"].encode('utf-8'))
+        kwargs.update(password=hash.decode("utf-8"))
+    user = User(**kwargs)
+    user.is_active = is_active
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+def create_user_google(**kwargs):
+    """Crear usuario con google
+
+    Args:
+        **kwargs (_dict_): Diccionario con los datos del usuario a crear
+
+    Returns:
+        User: Devuelve usuario creado
+    """
+    user = User(**kwargs)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+def create_user_google(**kwargs):
+    """Crear usuario con google
+
+    Args:
+        **kwargs (_dict_): Diccionario con los datos del usuario a crear
+
+    Returns:
+        User: Devuelve usuario creado
+    """
     user = User(**kwargs)
     db.session.add(user)
     db.session.commit()
@@ -75,7 +110,11 @@ def check_user(email,password):
         None: Devuelve None en caso contrario
     """
     user = find_user_by_email(email)
-    if user and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
+    if not user:
+        return None
+    if not user.password:
+        return None
+    if not user.is_google and bcrypt.check_password_hash(user.password, str(password).encode("utf-8")):
         return user
     else:
         return None
@@ -135,6 +174,17 @@ def change_user_status(user_id):
     if(not user): ## TO DO--> ADD OR IF USER IS SUPER ADMIN
         return False
     user.is_active = not user.is_active
+    db.session.commit()
+    return True
+
+def update_username_and_password(token, username, password):
+    user = User.query.filter_by(confirm_token=token).first()
+    if(not user):
+        return False
+    hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+    user.password = hash.decode("utf-8")
+    user.username = username
+    user.is_active = True
     db.session.commit()
     return True
 
