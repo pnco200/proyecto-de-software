@@ -13,8 +13,8 @@ def list_service_request():
     start_date = request.args.get('start_date',type=str)
     end_date = request.args.get('end_date',type=str)
     service_state = request.args.get('service_state',type=str)
-    email = request.args.get('email',type=str)
-    list = service_requests.list_requests_paged_by_institution(page, current_selected_institution(), service_type, start_date, end_date, service_state, email) 
+    # user_name = request.args.get('user_name',type=str)
+    list = service_requests.list_requests_paged_by_institution(page, current_selected_institution(), service_type, start_date, end_date, service_state) 
     return render_template("services_requests/index.html", request=list, page=page)
 
 

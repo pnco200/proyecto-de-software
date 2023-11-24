@@ -9,7 +9,7 @@ from sqlalchemy.orm import joinedload, aliased
 from src.core.configuration import get_rows_per_page
 import random
 from datetime import datetime, timedelta
-def list_requests_paged_by_institution(page, institution_id, service_type=None, start_date=None, end_date=None, email=None, service_state=None):
+def list_requests_paged_by_institution(page, institution_id, service_type=None, start_date=None, end_date=None, service_state=None):
     per_page = get_rows_per_page()
     service_alias = aliased(Service, name="service_alias")
     user_alias = aliased(User, name="user_alias")
@@ -23,10 +23,7 @@ def list_requests_paged_by_institution(page, institution_id, service_type=None, 
     
     if start_date and end_date:
         query = query.filter(ServiceRequest.inserted_at.between(start_date, end_date))
-    
-    # if email:
-    #     query = query.filter(user_alias.email == email)
-    
+
     # if service_state:
     #     state = ServiceState.query.filter_by(name=service_state).first()
     #     if state:
