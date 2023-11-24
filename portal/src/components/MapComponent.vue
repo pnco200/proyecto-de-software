@@ -37,9 +37,9 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch  } from "vue";
 
-const props = defineProps (["coordinates"])
+const props = defineProps(["coordinates"]);
 
 const coordinate = ref(props.coordinates);
 const center = coordinate.value;
