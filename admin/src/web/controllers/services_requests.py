@@ -34,9 +34,11 @@ def see_request_msgs(request_id):
         Mostrara los mensajes relacionados con una solicitud
         """
         csrf_token = generate_csrf_token()
-        user_and_msgs = service_requests.get_request_msgs(request_id)
-    
-        user_and_msgs[1] = sorted(user_and_msgs[1], key=lambda msg: msg.inserted_at)
+        msgs = service_requests.get_request_msgs(request_id)
+        msgs_sorted = sorted(msgs,key=lambda msg: msg.inserted_at)
+        user = service_requests.get_user_from_request(request_id)
+        service = service_requests.get_service_from_request(request_id)
+        user_and_msgs = [user,msgs_sorted,service]
         return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs, csrf_token= csrf_token)
 
 
@@ -87,7 +89,7 @@ def change_state(request_id):
         return redirect(url_for('auth.login'))
 
     nuevo_mensaje = request.form.get('new_observations')
-    estado = request.form.get('new_state')
+    estado = request.form.get('new_state')    
     new_state = service_requests.create_state_request(
         name = estado,
         state_message = nuevo_mensaje

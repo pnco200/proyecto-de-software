@@ -1,7 +1,7 @@
 <template>
   <div class="request-complete-info">
     <h3>ID :{{ solicitud.id}}</h3>
-    <p class="description">Descripción/Observacion suya: {{ solicitud.observations}}</p>
+    <p class="description"><strong>Descripción/Observacion suya</strong> : {{ solicitud.observations}}</p>
     <div class="info">
       <p><strong>Fecha de Creación:  </strong> {{ solicitud.inserted_at}}</p>
       <p><strong>Estado:  </strong> {{ solicitud.status }}</p>
