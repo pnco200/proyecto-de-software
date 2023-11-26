@@ -109,7 +109,7 @@
       },
       async fetchTypes() {
         try {
-          const response = await axios.get('http://127.0.0.1:5000/api/services/types');
+          const response = await axios.get('https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/services/types');
 
           this.types = Object.keys(response.data);
           console.log(response.data)

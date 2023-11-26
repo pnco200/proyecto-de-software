@@ -46,7 +46,7 @@ export default {
       if (jwtToken) {
         try {
           // Utiliza this.solicitud.id para enviar el ID de la solicitud a la API
-          const response = await axios.get(`http://localhost:5000/api/me/request/${this.$route.params.requestId}/notes`, {
+          const response = await axios.get(`https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/me/request/${this.$route.params.requestId}/notes`, {
             
             headers: {
               'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default {
           try {
             // Primero, enviar el mensaje a la segunda API
             await axios.post(
-              `http://localhost:5000/api/me/requests/${this.$route.params.requestId}/add-notes`,
+              `https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/me/requests/${this.$route.params.requestId}/add-notes`,
               {
                 text: this.newMessage,
               },

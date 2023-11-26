@@ -70,7 +70,7 @@ export default {
       if (jwtToken) {
         try {
           const response = await axios.get(
-            "http://localhost:5000/api/me/requests-paginated",
+            "https://admin-grupo25.proyecto2023.linti.unlp.edu.ar/api/me/requests-paginated",
             {
               params: {
                 page: this.currentPage,
