@@ -39,7 +39,7 @@ def see_request_msgs(request_id):
         user = service_requests.get_user_from_request(request_id)
         service = service_requests.get_service_from_request(request_id)
         user_and_msgs = [user,msgs_sorted,service]
-        return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs, csrf_token= csrf_token)
+        return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs,request_id=request_id, csrf_token= csrf_token)
 
 
 

@@ -26,13 +26,13 @@ export default {
       this.$emit('detailsClick', this.solicitud);
     },
     handleButtonRequestnoteClick() {
-      this.$emit('detailsClick', this.solicitud);
+      this.$emit('notesClick', this.solicitud);
     },
   },
 };
 </script>
 
-<style scoped>
+<style >
 .request-list-element {
   background-color: #e0f7fa; /* Celeste claro */
   border: 1px solid #4fc3f7; /* Azul claro */

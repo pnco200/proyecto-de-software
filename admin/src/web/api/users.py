@@ -162,8 +162,8 @@ def get_request_notes(request_id):
         if not user:
             return jsonify(error='Usuario no encontrado'), 404
 
-        user_and_msgs = service_requests.get_request_msgs(3)[1]
-        print(user_and_msgs)
+        user_and_msgs = service_requests.get_request_msgs(request_id)
+        
         final_list = []
 
         if user_and_msgs:
@@ -173,12 +173,13 @@ def get_request_notes(request_id):
                     "user_id": msg.user_id,
                     "service_id": msg.service_request_id,
                     "creation_date": msg.inserted_at,
-                    "content": msg.content
+                    "content": msg.msg_content
                 }
                 final_list.append(response)
 
             final_list = sorted(final_list, key=lambda x: x['creation_date'])
-            response = {'data': final_list}
+            response = {'data': final_list,'id':user_id}
+            print(final_list)
             return jsonify(response), 200
         else:
             return jsonify(error='Mensajes no encontrados'), 404

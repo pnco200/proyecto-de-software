@@ -30,6 +30,7 @@
         :key="solicitud.id"
         :solicitud="solicitud"
         @detailsClick="handleDetailsClick"
+        @notesClick="handleButtonRequestnoteClick"
       />
       <!-- Aca le pasa la info al componente -->
     </ul>
@@ -97,6 +98,9 @@ export default {
     },
     handleDetailsClick(solicitud) {
       console.log("Detalles de la solicitud:", solicitud);
+    },
+    handleButtonRequestnoteClick(solicitud) {
+      console.log("Notas/mensajes de la solicitud:", solicitud);
     },
     prevPage() {
       if (this.currentPage > 1) {
