@@ -143,7 +143,7 @@ def add_note_to_request(service_request_id):
     text = request.json["text"]
     if not text:
         return jsonify(error='Parametros Invalidos'), 400
-    text_added = service_requests.create_message_request(service_request_id=service_request_id, user_id=user.id, msg_content=text)
+    text_added = service_requests.create_message_request_portal(service_request_id=service_request_id, user_id=user.id, msg_content=text)
     if text_added:
         res = {
             "id": service_request_id,
@@ -173,11 +173,13 @@ def get_request_notes(request_id):
                     "user_id": msg.user_id,
                     "service_id": msg.service_request_id,
                     "creation_date": msg.inserted_at,
-                    "content": msg.msg_content
+                    "content": msg.msg_content,
                 }
                 final_list.append(response)
 
             final_list = sorted(final_list, key=lambda x: x['creation_date'])
+            for fecha in final_list:
+                fecha['creation_date']= fecha['creation_date'].strftime("%Y-%m-%d %H:%M:%S")
             response = {'data': final_list,'id':user_id}
             print(final_list)
             return jsonify(response), 200

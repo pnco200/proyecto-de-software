@@ -184,7 +184,11 @@ def create_message_request(**kwargs):
     except Exception as e:
         print(e)
         return None
-
+def create_message_request_portal(**kwargs):
+    msg = ServiceRequestMessages(**kwargs)
+    db.session.add(msg)
+    db.session.commit()
+    return msg
 def create_user_message(**kwargs):
     msg = ServiceRequestMessages(**kwargs)
     db.session.add(msg)
