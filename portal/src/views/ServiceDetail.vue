@@ -14,7 +14,6 @@
       </div>
   
       <div>
-        <!-- Area para el boton de contactar servicio -->
         <ButtonMakeRequest :id="service_id" />
   
       </div>
