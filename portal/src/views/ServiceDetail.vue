@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-  
+      
       <div class="map-container">
         <div class="map">
           <MapComponent 

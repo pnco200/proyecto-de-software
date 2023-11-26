@@ -1,1 +1,15 @@
 #Grupo25
+URL APLICACION PRIVADA: https://admin-grupo25.proyecto2023.linti.unlp.edu.ar
+URL APLICACION PUBLICA: https://grupo25.proyecto2023.linti.unlp.edu.ar
+
+USUARIO SUPERADMIN: mail1@gmail.com
+CONTRASEÑA : 123456
+
+USUARIO DUEÑO DE INSTITUCION 1: mail2@gmail.com
+CONTRASEÑA: 123456
+
+USUARIO ADMIN DE INSTITUCION 1: mail3@gmail.com
+CONTRASEÑA: 123456
+
+USUARIO OPERADOR DE INSTITUCION 1: mail4@gmail.com
+CONTRASEÑA: 123456
