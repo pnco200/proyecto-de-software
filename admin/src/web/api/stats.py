@@ -7,6 +7,8 @@ api_stats_bp = Blueprint("stats_api", __name__, url_prefix="/api/stats/")
 
 @api_stats_bp.get('/requests-institutions')
 def get_requests_institutions():
+    """Devuelve la cantidad de solicitudes por institucion
+    """
     data = service_requests.get_total_requests_by_institutions()
 
     parsed_data = []
@@ -20,6 +22,8 @@ def get_requests_institutions():
 
 @api_stats_bp.get('/efficient-institutions')
 def get_most_efficient():
+    """Devuelve el top 5 de instituciones mas eficientes (tiempo de resolucion promedio)
+    """
     data = service_requests.get_top_institutions_less_time_per_request()
     print(data)
 
@@ -38,6 +42,9 @@ def get_most_efficient():
 
 @api_stats_bp.get('/most-requested-services')
 def get_most_requests():
+    """
+        Devuelve el top 5 de servicios mas solicitados
+    """
     data = service_requests.get_most_requested_services()
 
     parsed_data = []
