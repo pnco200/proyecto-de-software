@@ -12,10 +12,8 @@
           <div class="col-md-2">
             <label class="ml-2 mr-2">Tipo de servicio</label>
             <select v-model="filters.serviceType" class="form-control form-control-sm">
-              <option value="TODOS">TODOS</option>
-              <option value="ANALISIS">ANALISIS</option>
-              <option value="CONSULTORIA">CONSULTORIA</option>
-              <option value="DESARROLLO">DESARROLLO</option>
+              <option value="TODOS" selected>TODOS</option>
+              <option v-for="_typ in types" :key="_typ" :value="_typ">{{ _typ }}</option>
             </select>
           </div>
           <div class="col-md-2">
@@ -69,6 +67,7 @@
   export default {
     data() {
       return {
+        types:[],
         filters: {
           keywords: '',
           serviceType: '',
@@ -80,6 +79,8 @@
     },
     async created() {
       await this.fetchServices();
+      await this.fetchTypes();
+
     },
     methods: {
       async fetchServices(newPage = 1) {
@@ -102,7 +103,20 @@
             this.totalPages = totalPages
           }
         } catch (error) {
+          alert("Ocurrio un error al traer los servicios.")
           console.error('Error fetching services:', error);
+        }
+      },
+      async fetchTypes() {
+        try {
+          const response = await axios.get('http://127.0.0.1:5000/api/services/types');
+
+          this.types = Object.keys(response.data);
+          console.log(response.data)
+          this.page = response.data.page;
+        } catch (error) {
+          console.error('Error fetching types:', error);
+          alert("Ocurrio un error al traer los tipos.")
         }
       },
     },

@@ -25,6 +25,7 @@ from src.core.email import email_utils
 from src.core import institutions
 from src.web.helpers.auth import oauth
 from flask_jwt_extended import JWTManager
+from datetime import timedelta
 from flask_cors import CORS
 #from src.web.controllers.issues import issues
 
@@ -35,6 +36,7 @@ def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
     app.config["JWT_SECRET_KEY"] = "gastondev"
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)  # Set to expire in 7 days, for example
     jwt = JWTManager(app)
     # INICIAR DEPENDENCIAS
     _session.init_app(app)
