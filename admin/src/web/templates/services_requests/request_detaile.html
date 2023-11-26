@@ -19,7 +19,8 @@
                             <th>Servicio</th>
                             <th>Usuario</th>
                             <th>Archivo</th>
-                            <th>Observaciones</th>
+                            <th>Observaciones del cliente</th>
+                            <th>Observaciones del servicio</th>
                             <th>Estado Actual</th>
                             <th>Tipo</th>
                             <th>Fecha de solicitud</th>
@@ -40,6 +41,7 @@
                                 {% endif %}
                             </td>
                             <td>{{ request.ServiceRequest.observations }}</td>
+                            <td>{{ request.request_state.state_message }}</td>
                             <td>{{ request.request_state.name}}<a href="{{url_for('servicesRequests.see_state_request', request_id=request.ServiceRequest.id,state_id=request.request_state.id)}}"class="btn btn-primary">Ver estado</a></td>
                             <td>{{ request.service_alias.type.value }}</td>
                             <td>{{ request.ServiceRequest.inserted_at }}</td>
