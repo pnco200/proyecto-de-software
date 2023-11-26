@@ -61,15 +61,17 @@
         <h2>Modificar Estado</h2>
         <form method="post" action="{{url_for('servicesRequests.change_state',request_id=request_id)}}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-            <select name="new_state">
-                <option value="" selected disabled hidden>Seleccionar</option>
-                <option value="inicial">Inicial</option>
+            <select name="new_state" id="new_state">
+                <option value="" disabled hidden>Seleccionar</option>
+                <option value="inicial" >Inicial</option>
                 <option value="aceptada">Aceptada</option>
                 <option value="rechazada">Rechazada</option>
                 <option value="en_proceso">En Proceso</option>
                 <option value="finalizada">Finalizada</option>
                 <option value="cancelada">Cancelada</option>
+                <option value="{{ state.state_request.name }}" selected>{{ state.state_request.name }}</option>
             </select>
+            
             <br>
             <textarea name="new_observations" rows="4" cols="50" placeholder="Ingrese sus observaciones"></textarea>
 

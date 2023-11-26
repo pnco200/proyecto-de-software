@@ -36,13 +36,29 @@ def set_new_state(state,request_id):
     request_actual.state_id = state.id
     db.session.commit()
     pass
-    
+def get_service_from_request(r_id):
+    service = (db.session.query(Service)
+        .join(ServiceRequest, ServiceRequest.service_id == Service.id)
+        .filter(ServiceRequest.id == r_id)
+        .first())
+
+    return service
+
+def get_user_from_request(r_id):
+    user = (db.session.query(User)
+        .join(ServiceRequest, ServiceRequest.user_id == User.id)
+        .filter(ServiceRequest.id == r_id)
+        .first())
+
+    return user
+
 def get_state_by_id(state_id):
     state = aliased(ServiceState,name="state_request")
-    s = (db.session.query(state, ServiceRequest)
-         .join(ServiceRequest,ServiceRequest.state_id==state.id)
-         .first()
-         )
+    s = (db.session.query(state, ServiceState)
+     .join(ServiceState, ServiceState.id == state.id)
+     .filter(ServiceState.id == state_id)
+     .first()
+        )
     return s
 def list_requests_paged_by_user(page, per_page, user_id):
     service_alias = aliased(Service, name="service_alias")
@@ -114,33 +130,40 @@ def get_request_detaile(id):
         return None
 
 def get_request_msgs(id):
-    user_alias = aliased(User,name="user_alias")
-    service_alias = aliased(Service, name="service_alias")
-    service_request = aliased(ServiceRequest,name="s_request")
     msgs = (db.session.query(ServiceRequestMessages)
-            .join(ServiceRequest,ServiceRequest.id==ServiceRequestMessages.service_request_id)
-            .join(service_alias,service_alias.id == ServiceRequest.service_id)
-            .all()
-            )
-    s = (db.session.query(service_alias)
-         .join(service_request,service_request.service_id==service_alias.id)
-         .filter(service_request.id == id)
-         .first()
-         )
-    user = (db.session.query(user_alias)
-            .join(ServiceRequest,ServiceRequest.user_id == user_alias.id)
-            .first()
-            )
-    list =[user,msgs,id,s]
-    return list
+        .join(ServiceRequestMessages.service_request)  # Aquí especificamos la relación
+        .filter(ServiceRequest.id == id)  # Filtramos por el id de la solicitud de servicio
+        .all()
+    )
+    print(msgs)
+    return msgs
 
 def create_service_request(**kwargs):
-    sr = ServiceRequest(**kwargs)
-    state = create_state_request(
-        name = 'inicial'
+    # Extraer la información necesaria de kwargs
+    service_id = kwargs.get('service_id')
+    user_id = kwargs.get('user_id')
+    observations = kwargs.get('observations')
+    archive = kwargs.get('archive')
+
+    # Leer el contenido binario del archivo
+    file_data = archive.read() if archive else None
+
+    # Crear el estado (supongo que es una función que ya tienes definida)
+    state = create_state_request(name='inicial')
+
+    # Crear la instancia de ServiceRequest
+    sr = ServiceRequest(
+        service_id=service_id,
+        user_id=user_id,
+        observations=observations,
+        archive=file_data,
+        state_id=state.id
     )
+
+    # Agregar a la sesión y hacer commit
     db.session.add(sr)
     db.session.commit()
+
     return sr
 
 def create_state_request(**kwargs):
