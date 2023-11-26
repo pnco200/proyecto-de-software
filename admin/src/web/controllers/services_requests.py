@@ -9,7 +9,12 @@ srequest_bp = Blueprint('servicesRequests', __name__, url_prefix='/srequests')
 @permissions.permission_required_in_Institution(["request_index"])
 def list_service_request():
     page = request.args.get('page', type=int, default=1)
-    list = service_requests.list_requests_paged_by_institution(page, current_selected_institution())    
+    service_type = request.args.get('tipo_servicio',type=str,)
+    start_date = request.args.get('start_date',type=str)
+    end_date = request.args.get('end_date',type=str)
+    service_state = request.args.get('service_state',type=str)
+    # user_name = request.args.get('user_name',type=str)
+    list = service_requests.list_requests_paged_by_institution(page, current_selected_institution(), service_type, start_date, end_date, service_state) 
     return render_template("services_requests/index.html", request=list, page=page)
 
 
@@ -29,10 +34,12 @@ def see_request_msgs(request_id):
         Mostrara los mensajes relacionados con una solicitud
         """
         csrf_token = generate_csrf_token()
-        user_and_msgs = service_requests.get_request_msgs(request_id)
-    
-        user_and_msgs[1] = sorted(user_and_msgs[1], key=lambda msg: msg.inserted_at)
-        return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs, csrf_token= csrf_token)
+        msgs = service_requests.get_request_msgs(request_id)
+        msgs_sorted = sorted(msgs,key=lambda msg: msg.inserted_at)
+        user = service_requests.get_user_from_request(request_id)
+        service = service_requests.get_service_from_request(request_id)
+        user_and_msgs = [user,msgs_sorted,service]
+        return render_template("services_requests/request_msgs.html",user_and_msgs = user_and_msgs,request_id=request_id, csrf_token= csrf_token)
 
 
 
@@ -82,7 +89,7 @@ def change_state(request_id):
         return redirect(url_for('auth.login'))
 
     nuevo_mensaje = request.form.get('new_observations')
-    estado = request.form.get('new_state')
+    estado = request.form.get('new_state')    
     new_state = service_requests.create_state_request(
         name = estado,
         state_message = nuevo_mensaje

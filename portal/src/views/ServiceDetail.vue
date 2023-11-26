@@ -14,7 +14,8 @@
       </div>
   
       <div>
-        <!-- Area para el boton de contactar servicio -->
+        <ButtonMakeRequest :id="service_id" />
+  
       </div>
   
       <div class="info-institution">
@@ -32,13 +33,18 @@
   
       <div class="map-container">
         <div class="map">
-          <MapComponent :key="componentkey" :coordinates="[latitud, longitud]" />
+          <MapComponent 
+            :key="componentkey" 
+            :coordinates="[latitud, longitud]" 
+            :contact_information="institucion.contact"
+          />
         </div>
       </div>
     </div>
   </template>
   
   <script>
+  import ButtonMakeRequest from '../components/ButtonMakeRequest.vue';
   import axios from 'axios';
   import MapComponent from '../components/MapComponent.vue';
   
@@ -55,6 +61,7 @@
     },
     components: {
       MapComponent,
+      ButtonMakeRequest,
     },
     methods: {
       getService() {

@@ -20,7 +20,7 @@ def login():
 
 @auth_bp.route('/google')
 def google_login():
-    """Me permite loguearme con google
+    """Me permite comenzar el loggeo / registro con google
     """
     is_portal = request.args.get('is_portal')
     redirect_uri = None
@@ -34,6 +34,7 @@ def google_login():
 
 @auth_bp.route('/google/auth')
 def google_auth():
+    """Me permite continuar con el loggeo / registro con google"""
     try:
         nonce = session.pop('nonce', None)
         print(nonce)
@@ -74,6 +75,8 @@ def google_auth():
 
 @auth_bp.post('/complete_register')
 def complete_register():
+    """"Me permite completar el registro"""
+
     params = request.form
 
     if not check_csrf_token(params):
@@ -97,7 +100,7 @@ def complete_register():
 
 @auth_bp.post('/authenticate')
 def authenticate():
-    """"Me autentica"""
+    """"Me permite autenticarme"""
     params = request.form
     if not check_csrf_token(params):
         flash("Token CSRF invalido", "error")
@@ -132,6 +135,7 @@ def logout():
 
 @auth_bp.get('/confirmemail')
 def confirm_email():
+    """"Me permite confirmar el email"""
     token = request.args.get('token')
     user = auth.confirm_email(token)
     if user:

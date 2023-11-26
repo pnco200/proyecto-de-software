@@ -2,30 +2,84 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
-<body>
-                <h2>Estado Actual: {{state.state_request.name}}</h2>
-                <h5>Observaciones:</h3>
-                <p >{{state.state_request.state_message}}</p>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-                <h2>Modificar Estado</h2>
-                <form method="post" action="{{url_for('servicesRequests.change_state',request_id=request_id)}}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                    <select name="new_state">
-                        <option value="inicial">Inicial</option>
-                        <option value="aceptada">Aceptada</option>
-                        <option value="rechazada">Rechazada</option>
-                        <option value="en_proceso">En Proceso</option>
-                        <option value="finalizada">Finalizada</option>
-                        <option value="cancelada">Cancelada</option>
-                    </select>
-                    <br>
-                    <textarea name="new_observations" rows="4" cols="50" placeholder="Ingrese sus observaciones"></textarea>
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-                    <input type="submit" value="Cambiar Estado">
-                </form>
+        h2 {
+            color: #333;
+        }
+
+        h5 {
+            color: #555;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <body>
+        <h2>Estado Actual: {{state.state_request.name}}</h2>
+        <h5>Observaciones:</h3>
+        <p >{{state.state_request.state_message}}</p>
+
+        <h2>Modificar Estado</h2>
+        <form method="post" action="{{url_for('servicesRequests.change_state',request_id=request_id)}}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <select name="new_state" id="new_state">
+                <option value="" disabled hidden>Seleccionar</option>
+                <option value="inicial" >Inicial</option>
+                <option value="aceptada">Aceptada</option>
+                <option value="rechazada">Rechazada</option>
+                <option value="en_proceso">En Proceso</option>
+                <option value="finalizada">Finalizada</option>
+                <option value="cancelada">Cancelada</option>
+                <option value="{{ state.state_request.name }}" selected>{{ state.state_request.name }}</option>
+            </select>
             
+            <br>
+            <textarea name="new_observations" rows="4" cols="50" placeholder="Ingrese sus observaciones"></textarea>
+
+            <input type="submit" value="Cambiar Estado">
+        </form>
+    
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
 {% endblock %}
