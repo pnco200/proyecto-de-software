@@ -24,10 +24,10 @@ def list_requests_paged_by_institution(page, institution_id, service_type=None, 
     if start_date and end_date:
         query = query.filter(ServiceRequest.inserted_at.between(start_date, end_date))
 
-    # if service_state:
-    #     state = ServiceState.query.filter_by(name=service_state).first()
-    #     if state:
-    #         query = query.filter(ServiceRequest.state_id == state.id)
+    if service_state:
+         state = ServiceState.query.filter_by(name=service_state).first()
+         if state:
+             query = query.filter(ServiceRequest.state_id == state.id)
     
     return query.paginate(page=page, per_page=per_page, error_out=False)
 
