@@ -15,7 +15,6 @@
   
       <div>
         <ButtonMakeRequest :id="service_id" />
-  
       </div>
   
       <div class="info-institution">

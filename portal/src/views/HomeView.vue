@@ -48,7 +48,6 @@
     
   </div>
   <footer >
-    <!-- Show the contact information using  contactInformation()-->
     Información de contacto: {{ contact_information }}
   </footer>
   
@@ -88,7 +87,7 @@ body {
   color: #333;
   margin: 0;
   padding: 0;
-  min-height: 100vh; /* Establecer la altura mínima de la página para que el contenido ocupe al menos toda la altura de la ventana */
+  min-height: 100vh; 
   display: flex;
   flex-direction: column;
 }
@@ -100,7 +99,7 @@ body {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  flex: 1; /* Hacer que el contenedor ocupe el espacio restante en la página */
+  flex: 1; 
 }
 
 h1 {
