@@ -55,10 +55,9 @@
 
   
 <script lang="js">
-import { defineComponent } from 'vue'
 import axios from 'axios'
 
-export default defineComponent({
+export default {
   name: 'HomeView',
   data () {
     return {
@@ -78,7 +77,7 @@ export default defineComponent({
   mounted () {
     this.contactInformation()
   }
-})
+}
 </script>
 <style scoped>
 body {
